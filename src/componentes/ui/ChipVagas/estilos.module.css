@@ -1,0 +1,30 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.chip svg {
+  width: 16px;
+  height: 16px;
+}
+
+.chip[data-situacao="disponivel"] {
+  color: var(--color-success);
+  background: rgba(0, 156, 10, 0.1);
+}
+
+.chip[data-situacao="excedente"] {
+  color: var(--color-error);
+  background: rgba(188, 0, 0, 0.1);
+}
+
+.chip[data-situacao="completo"] {
+  color: var(--color-complete-text);
+  background: var(--color-complete-background);
+}
