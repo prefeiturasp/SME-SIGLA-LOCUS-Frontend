@@ -1,0 +1,49 @@
+/* Linhas clicaveis e zebradas (mockup). Header ja vem de tema (#f8f9fa). */
+.tabela :global(.ant-table-tbody > tr) {
+  cursor: pointer;
+}
+
+.tabela :global(.ant-table-tbody > tr.linhaPar > td) {
+  background: var(--color-striped-background);
+}
+
+/* Icone "info" nos cabecalhos da tabela: azul, 16px. */
+.tabela :global(.ant-table-thead th .anticon),
+.tabela :global(.ant-table-thead th svg) {
+  color: var(--color-blue);
+  font-size: 16px;
+}
+
+/* Barra de paginacao: numeros centralizados na barra, texto do total
+   ancorado a esquerda sem deslocar o centro (mockup). */
+.tabela :global(.ant-pagination) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Contagem total: negrito, 14px, cor do texto principal. Fora do fluxo
+   para nao empurrar os itens de pagina do centro. */
+.tabela :global(.ant-pagination-total-text) {
+  position: absolute;
+  inset-inline-start: 0;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-primary-text);
+}
+
+/* Figma: numeros bem espacados; item ativo com contorno azul e fundo
+   branco (o resto vem dos tokens de Pagination no tema). */
+.tabela :global(.ant-pagination-item) {
+  margin-inline-end: 8px;
+}
+
+.tabela :global(.ant-pagination-item-active) {
+  border-color: var(--color-active-blue);
+}
+
+.tabela :global(.ant-pagination-item-active a) {
+  color: var(--color-active-blue);
+}
