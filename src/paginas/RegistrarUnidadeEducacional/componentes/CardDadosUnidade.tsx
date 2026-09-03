@@ -1,8 +1,7 @@
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Col, Form, Row, Typography } from "antd";
+import { Card, Col, Form, Row, Typography } from "antd";
 import {
   BotaoAcaoInline,
-  CardFormulario,
   InputForm,
   InputFormFlex,
   LinhaCampoCentralizada,
@@ -31,7 +30,7 @@ export function CardDadosUnidade({
   );
 
   return (
-    <CardFormulario>
+    <Card>
       <Title level={4} style={{ marginTop: 0 }}>
         Dados da unidade educacional
       </Title>
@@ -116,7 +115,7 @@ export function CardDadosUnidade({
           </Col>
         </Row>
       </Form>
-    </CardFormulario>
+    </Card>
   );
 }
 

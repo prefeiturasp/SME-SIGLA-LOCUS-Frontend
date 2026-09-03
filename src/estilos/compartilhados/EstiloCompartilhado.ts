@@ -2,7 +2,7 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { Button, Card, Form, Input, Select, Switch, Table } from "antd";
+import { Button, Form, Input, Select, Table } from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
@@ -11,16 +11,6 @@ import {
   type OpcoesNotificacao,
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
-
-/* ======= PrimaryButton ======= */
-
-/** Botao primario padrao (fundo azul institucional). */
-export const PrimaryButton = styled(Button).attrs({ type: "primary" })``;
-
-/* ======= SecondaryButton ======= */
-
-/** Botao secundario padrao (fundo branco, borda/texto azul do tema Ant). */
-export const SecondaryButton = styled(Button).attrs({ type: "default" })``;
 
 /* ======= BotaoExcluir ======= */
 
@@ -40,11 +30,6 @@ export const BotaoExcluir = styled(Button).attrs({
     background: ${({ theme }) => theme.colors.errorBackground} !important;
   }
 `;
-
-/* ======= Toggle ======= */
-
-/** Toggle padrao do Locus (Switch Ant com cor azul do tema). */
-export const Toggle = styled(Switch)``;
 
 /* ======= Tabela ======= */
 
@@ -76,11 +61,6 @@ export const Tabela = styled(Table)`
     margin-inline-end: ${({ theme }) => theme.spacing.sm}px;
   }
 ` as typeof Table;
-
-/* ======= CardFormulario ======= */
-
-/** Card padrao de formulario / secoes de pagina (Gestao + Registrar). */
-export const CardFormulario = styled(Card)``;
 
 /** Area de conteudo padrao das paginas (gap e padding do mockup). */
 export const ConteudoPagina = styled.div`
@@ -251,30 +231,6 @@ export const LinhaCampoCentralizada = styled(LinhaCampoAcao)`
   align-items: center;
 `;
 
-export const GrupoCampo = styled.div`
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 100%;
-`;
-
-export const CampoComAjuda = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  container-type: inline-size;
-`;
-
-export const TextoAjudaCampo = styled.span`
-  display: block;
-  width: 100%;
-  margin-top: ${({ theme }) => theme.spacing.xs}px;
-  font-size: ${({ theme }) => theme.typography.fontSizeCaption}px;
-  line-height: 1.4;
-  color: ${({ theme }) => theme.colors.secondaryText};
-`;
-
 export const FormularioEmLinha = styled.div`
   display: flex;
   width: 100%;
@@ -291,189 +247,9 @@ export const ColunaFormulario = styled.div`
   min-width: 0;
 `;
 
-export const BotaoAcaoInline = styled(SecondaryButton)`
+export const BotaoAcaoInline = styled(Button).attrs({ type: "default" })`
   flex: 0 0 auto;
   white-space: nowrap;
-`;
-
-/* ======= listaCaracteristicas ======= */
-
-export const ItemCaracteristica = styled.div`
-  padding: ${({ theme }) => theme.spacing.md}px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-`;
-
-export const CabecalhoItemCaracteristica = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.md}px;
-`;
-
-export const TituloItemCaracteristica = styled.p`
-  margin: 0;
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primaryText};
-`;
-
-export const DescricaoItemCaracteristica = styled.p`
-  margin: ${({ theme }) => theme.spacing.xs}px 0 0;
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  color: ${({ theme }) => theme.colors.primaryText};
-  line-height: 1.4;
-`;
-
-export const AreaMunicipalizada = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.xs}px;
-  width: 100%;
-
-  ${DescricaoItemCaracteristica} {
-    margin-bottom: ${({ theme }) => theme.spacing.md}px;
-  }
-`;
-
-export const CampoAnoMunicipalizacao = styled(Form.Item)`
-  width: 50%;
-  max-width: 100%;
-  margin-left: ${({ theme }) => theme.spacing.lg}px;
-
-  & .ant-form-item-control,
-  & .ant-form-item-control-input,
-  & .ant-form-item-control-input-content {
-    width: 100%;
-  }
-`;
-
-export const SelectAnoMunicipalizacao = SelectForm;
-
-export const CampoMotivoNaoContabilizacao = styled(Form.Item)`
-  width: 100%;
-  max-width: 1192px;
-  margin-top: ${({ theme }) => theme.spacing.md}px;
-  margin-left: ${({ theme }) => theme.spacing.lg}px;
-
-  & .ant-form-item-control,
-  & .ant-form-item-control-input,
-  & .ant-form-item-control-input-content {
-    width: 100%;
-  }
-`;
-
-/* ======= listaDados ======= */
-
-export const EstadoVazio = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.lg}px;
-  min-height: 120px;
-  padding: 40px ${({ theme }) => theme.spacing.lg}px;
-  border: 1px dashed ${({ theme }) => theme.colors.lightBorder};
-  border-radius: ${({ theme }) => theme.layout.radius}px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: ${({ theme }) => theme.colors.white};
-`;
-
-export const EstadoVazioTitulo = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.sm}px;
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primaryText};
-`;
-
-export const EstadoVazioTexto = styled.p`
-  margin: 0;
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  color: ${({ theme }) => theme.colors.secondaryText};
-`;
-
-export const ListaDados = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.lg}px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.layout.radius}px;
-  overflow: hidden;
-  background: ${({ theme }) => theme.colors.white};
-`;
-
-export const CabecalhoListaDados = styled.div`
-  display: grid;
-  grid-template-columns: minmax(160px, 45%) 120px 1fr;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.lg}px;
-  padding: 12px ${({ theme }) => theme.spacing.md}px;
-  min-height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  background: ${({ theme }) => theme.colors.stripedBackground};
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primaryText};
-
-  @media (max-width: 640px) {
-    grid-template-columns: minmax(120px, 40%) 96px 1fr;
-    gap: ${({ theme }) => theme.spacing.sm}px;
-    padding: 12px;
-  }
-`;
-
-export const CorpoListaDados = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const ItemListaDados = styled.div`
-  display: grid;
-  grid-template-columns: minmax(160px, 45%) 120px 1fr;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.lg}px;
-  padding: 12px ${({ theme }) => theme.spacing.md}px;
-  min-height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.white};
-
-  &:nth-child(even) {
-    background: ${({ theme }) => theme.colors.stripedBackground};
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: minmax(120px, 40%) 96px 1fr;
-    gap: ${({ theme }) => theme.spacing.sm}px;
-    padding: 12px;
-  }
-`;
-
-export const ColunaListaTexto = styled.span`
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  color: ${({ theme }) => theme.colors.primaryText};
-  min-width: 0;
-`;
-
-export const ColunaListaCentralizada = styled.span`
-  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
-  color: ${({ theme }) => theme.colors.primaryText};
-  text-align: center;
-`;
-
-export const ColunaListaAcao = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  min-width: 48px;
 `;
 
 /* ======= CabecalhoPagina ======= */

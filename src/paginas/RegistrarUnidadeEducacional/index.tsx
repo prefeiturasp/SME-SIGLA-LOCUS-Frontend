@@ -1,9 +1,6 @@
+import { Button } from "antd";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
-import {
-  ConteudoPagina,
-  PrimaryButton,
-  SecondaryButton,
-} from "@/estilos";
+import { ConteudoPagina } from "@/estilos";
 import { CardCaracteristicasUnidade } from "./componentes/CardCaracteristicasUnidade";
 import { CardComponentesCurriculares } from "./componentes/CardComponentesCurriculares";
 import { CardDadosUnidade } from "./componentes/CardDadosUnidade";
@@ -37,12 +34,12 @@ export function RegistrarUnidadeEducacional() {
         titulo="Registrar nova Unidade Educacional"
         acoes={
           <>
-            <SecondaryButton onClick={cancelar} disabled={salvando}>
+            <Button type="default" onClick={cancelar} disabled={salvando}>
               Cancelar
-            </SecondaryButton>
-            <PrimaryButton onClick={registrar} loading={salvando}>
+            </Button>
+            <Button type="primary" onClick={registrar} loading={salvando}>
               Registrar UE
-            </PrimaryButton>
+            </Button>
           </>
         }
       />

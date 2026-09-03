@@ -1,12 +1,9 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
-import {
-  ConteudoPagina,
-  PrimaryButton,
-  SecondaryButton,
-} from "@/estilos";
+import { ConteudoPagina } from "@/estilos";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { opcoesComponenteCurricular } from "./dados/dadosEstaticos";
 import { useGestaoUnidades } from "./hooks/useGestaoUnidades";
@@ -33,17 +30,19 @@ export function GestaoUnidadesEducacionais() {
         titulo="Gestão das unidades educacionais"
         acoes={
           <>
-            <PrimaryButton
+            <Button
+              type="primary"
               icon={<AddRoundedIcon fontSize="small" />}
               onClick={() => navigate(CAMINHOS.cadastroRegistrarUE)}
             >
               Registrar UE
-            </PrimaryButton>
-            <SecondaryButton
+            </Button>
+            <Button
+              type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
             >
               Exportar relatório
-            </SecondaryButton>
+            </Button>
           </>
         }
       />

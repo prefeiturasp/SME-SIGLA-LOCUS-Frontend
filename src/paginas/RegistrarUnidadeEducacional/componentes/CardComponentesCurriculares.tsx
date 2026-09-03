@@ -1,20 +1,9 @@
-import { Tooltip, Typography } from "antd";
+import { Card, Table, Tooltip, Typography } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import { IconeExcluir } from "@/componentes/IconeExcluir";
-import {
-  BotaoExcluir,
-  CabecalhoListaDados,
-  CardFormulario,
-  ColunaListaAcao,
-  ColunaListaCentralizada,
-  ColunaListaTexto,
-  CorpoListaDados,
-  EstadoVazio,
-  EstadoVazioTexto,
-  EstadoVazioTitulo,
-  ItemListaDados,
-  ListaDados,
-} from "@/estilos";
+import { BotaoExcluir } from "@/estilos";
 import type { ComponenteCurricularAdicionado } from "../hooks/useRegistrarUnidadeEducacional";
+import { DivSemDados } from "./DivSemDados";
 import { FormularioAdicionarComponenteCurricular } from "./FormularioAdicionarComponenteCurricular";
 
 const { Title, Paragraph } = Typography;
@@ -34,6 +23,40 @@ function formatarModulos(quantidade: number): string {
   return String(quantidade).padStart(2, "0");
 }
 
+function criarColunas(
+  aoRemover: (id: string) => void,
+): ColumnsType<ComponenteCurricularAdicionado> {
+  return [
+    {
+      title: "Componente curricular",
+      dataIndex: "componente",
+      key: "componente",
+    },
+    {
+      title: "Módulos",
+      dataIndex: "quantidadeModulos",
+      key: "quantidadeModulos",
+      align: "center",
+      render: (quantidade: number) => formatarModulos(quantidade),
+    },
+    {
+      title: "",
+      key: "acoes",
+      width: 64,
+      align: "right",
+      render: (_, item) => (
+        <Tooltip title="Excluir componente">
+          <BotaoExcluir
+            icon={<IconeExcluir fontSize="small" />}
+            onClick={() => aoRemover(item.id)}
+            aria-label="Excluir componente"
+          />
+        </Tooltip>
+      ),
+    },
+  ];
+}
+
 export function CardComponentesCurriculares({
   componentes,
   componenteSelecionado,
@@ -45,7 +68,7 @@ export function CardComponentesCurriculares({
   aoRemover,
 }: CardComponentesCurricularesProps) {
   return (
-    <CardFormulario>
+    <Card>
       <Title level={4} style={{ marginTop: 0 }}>
         Componentes curriculares
       </Title>
@@ -64,43 +87,17 @@ export function CardComponentesCurriculares({
       />
 
       {componentes.length === 0 ? (
-        <EstadoVazio>
-          <EstadoVazioTitulo>Nenhum componente adicionado</EstadoVazioTitulo>
-          <EstadoVazioTexto>
-            Selecione um componente curricular e informe a quantidade de
-            módulos.
-          </EstadoVazioTexto>
-        </EstadoVazio>
+        <DivSemDados />
       ) : (
-        <ListaDados>
-          <CabecalhoListaDados role="row">
-            <ColunaListaTexto>Componente curricular</ColunaListaTexto>
-            <ColunaListaCentralizada>Módulos</ColunaListaCentralizada>
-            <ColunaListaAcao aria-hidden />
-          </CabecalhoListaDados>
-
-          <CorpoListaDados>
-            {componentes.map((item) => (
-              <ItemListaDados key={item.id} role="row">
-                <ColunaListaTexto>{item.componente}</ColunaListaTexto>
-                <ColunaListaCentralizada>
-                  {formatarModulos(item.quantidadeModulos)}
-                </ColunaListaCentralizada>
-                <ColunaListaAcao>
-                  <Tooltip title="Excluir componente">
-                    <BotaoExcluir
-                      icon={<IconeExcluir fontSize="small" />}
-                      onClick={() => aoRemover(item.id)}
-                      aria-label="Excluir componente"
-                    />
-                  </Tooltip>
-                </ColunaListaAcao>
-              </ItemListaDados>
-            ))}
-          </CorpoListaDados>
-        </ListaDados>
+        <Table
+          style={{ marginTop: 24 }}
+          rowKey="id"
+          pagination={false}
+          dataSource={componentes}
+          columns={criarColunas(aoRemover)}
+        />
       )}
-    </CardFormulario>
+    </Card>
   );
 }
 

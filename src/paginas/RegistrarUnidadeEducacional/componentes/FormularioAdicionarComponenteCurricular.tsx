@@ -5,7 +5,6 @@ import {
   FormItem,
   InputForm,
   SelectForm,
-  TextoAjudaCampo,
 } from "@/estilos";
 import { opcoesRegistrarUnidadeEducacional } from "../dados/dadosEstaticos";
 
@@ -60,6 +59,7 @@ export function FormularioAdicionarComponenteCurricular({
           label="Quantidade de módulos"
           layout="vertical"
           style={{ marginBottom: 0 }}
+          help="Informe quantas vagas este componente terá. O mínimo é 0."
         >
           <InputForm
             placeholder="Exemplo: 10"
@@ -68,9 +68,6 @@ export function FormularioAdicionarComponenteCurricular({
             inputMode="numeric"
             disabled={!componenteSelecionado}
           />
-          <TextoAjudaCampo>
-            Informe quantas vagas este componente terá. O mínimo é 0.
-          </TextoAjudaCampo>
         </FormItem>
       </Col>
 
