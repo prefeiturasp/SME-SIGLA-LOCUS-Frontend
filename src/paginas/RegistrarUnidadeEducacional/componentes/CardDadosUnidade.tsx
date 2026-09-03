@@ -3,10 +3,10 @@ import { Col, Form, Row, Typography } from "antd";
 import {
   BotaoAcaoInline,
   CardFormulario,
-  InputCampo,
-  InputCampoFlex,
+  InputForm,
+  InputFormFlex,
   LinhaCampoCentralizada,
-  SelectCampo,
+  SelectForm,
 } from "@/estilos";
 import { opcoesRegistrarUnidadeEducacional } from "../dados/dadosEstaticos";
 import type { DadosUnidade } from "../hooks/useRegistrarUnidadeEducacional";
@@ -50,7 +50,7 @@ export function CardDadosUnidade({
               style={{ marginBottom: 16 }}
             >
               <LinhaCampoCentralizada>
-                <InputCampoFlex
+                <InputFormFlex
                   status={erroCodigoLotacao ? "error" : undefined}
                   placeholder="Exemplo: 123"
                   value={dados.codigoLotacao}
@@ -71,7 +71,7 @@ export function CardDadosUnidade({
 
           <Col xs={24} md={12}>
             <Form.Item label="Tipo da unidade" style={{ marginBottom: 16 }}>
-              <SelectCampo
+              <SelectForm
                 aria-label="Tipo da unidade"
                 placeholder="Selecione"
                 allowClear={false}
@@ -87,7 +87,7 @@ export function CardDadosUnidade({
               label="Diretoria Regional de Educação (DRE)"
               style={{ marginBottom: 16 }}
             >
-              <SelectCampo
+              <SelectForm
                 aria-label="Diretoria Regional de Educação (DRE)"
                 placeholder="Selecione"
                 allowClear={false}
@@ -103,7 +103,7 @@ export function CardDadosUnidade({
               label="Nome da unidade educacional"
               style={{ marginBottom: 0 }}
             >
-              <InputCampo
+              <InputForm
                 placeholder={
                   camposPreenchidosAutomaticamente
                     ? undefined

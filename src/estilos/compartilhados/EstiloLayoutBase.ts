@@ -1,4 +1,4 @@
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb as AntBreadcrumb, Layout, Menu } from "antd";
 import styled from "styled-components";
 import { colors, layout, spacing } from "@/estilos/tokens/tokens";
 
@@ -37,9 +37,9 @@ export const LayoutFooter = styled(AntFooter)`
   padding: 0;
 `;
 
-/* ======= TopoBar ======= */
+/* ======= Cabecalho ======= */
 
-export const Topo = styled.div`
+const CabecalhoEstilo = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -53,19 +53,20 @@ export const Topo = styled.div`
   z-index: 2;
 `;
 
-export const TopoEsquerda = styled.div`
+/* Lado esquerdo do cabeçalho: logo da Prefeitura e breadcrumb da rota atual */
+const EsquerdaEstilo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.lg}px;
   min-width: 0;
 `;
 
-export const TopoBrasao = styled.img`
+const Logo = styled.img`
   width: 129px;
   flex-shrink: 0;
 `;
 
-export const BreadcrumbTopo = styled(Breadcrumb)`
+const Breadcrumb = styled(AntBreadcrumb)`
   & .ant-breadcrumb-link,
   & .ant-breadcrumb-link a {
     font-size: 14px;
@@ -80,14 +81,20 @@ export const BreadcrumbTopo = styled(Breadcrumb)`
   }
 `;
 
-export const TopoDireita = styled.div`
+const Esquerda = Object.assign(EsquerdaEstilo, {
+  Logo,
+  Breadcrumb,
+});
+
+/* Lado direito do cabeçalho: dados do usuário logado e ação de sair */
+const DireitaEstilo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md}px;
   flex-shrink: 0;
 `;
 
-export const TopoUsuario = styled.div`
+const UsuarioLogado = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -103,21 +110,21 @@ export const TopoUsuario = styled.div`
   letter-spacing: -0.01em;
 `;
 
-export const TopoUsuarioRf = styled.span`
+const UsuarioRf = styled.span`
   font-family: ${({ theme }) => theme.typography.fontFamilyRoboto};
   font-size: 14px;
   color: ${({ theme }) => theme.colors.headerUserText};
   white-space: nowrap;
 `;
 
-export const TopoUsuarioNome = styled.span`
+const UsuarioNome = styled.span`
   font-family: ${({ theme }) => theme.typography.fontFamilyRoboto};
   font-size: 14px;
   color: ${({ theme }) => theme.colors.headerUserText};
   white-space: nowrap;
 `;
 
-export const BotaoSairTopo = styled.button`
+const BotaoSair = styled.button`
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -130,7 +137,7 @@ export const BotaoSairTopo = styled.button`
   font-size: 14px;
 `;
 
-export const TopoIconeSair = styled.span`
+const IconeSair = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -144,6 +151,19 @@ export const TopoIconeSair = styled.span`
     font-size: 16px;
   }
 `;
+
+const Direita = Object.assign(DireitaEstilo, {
+  UsuarioLogado,
+  UsuarioRf,
+  UsuarioNome,
+  BotaoSair,
+  IconeSair,
+});
+
+export const Cabecalho = Object.assign(CabecalhoEstilo, {
+  Esquerda,
+  Direita,
+});
 
 /* ======= MenuLateral ======= */
 
@@ -243,9 +263,9 @@ export const BotaoSairMenu = styled.button`
   }
 `;
 
-/* ======= RodapeBar ======= */
+/* ======= Rodape ======= */
 
-export const Rodape = styled.div`
+const RodapeEstilo = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -256,14 +276,19 @@ export const Rodape = styled.div`
   background: ${({ theme }) => theme.colors.white};
 `;
 
-export const RodapeBrasao = styled.img`
+const RodapeLogo = styled.img`
   width: 100px;
   height: ${({ theme }) => theme.spacing.xl}px;
   object-fit: contain;
 `;
 
-export const RodapeVersao = styled.span`
+const Versao = styled.span`
   font-family: ${({ theme }) => theme.typography.fontFamilyRoboto};
   font-size: 14px;
   color: ${({ theme }) => theme.colors.footerVersionText};
 `;
+
+export const Rodape = Object.assign(RodapeEstilo, {
+  Logo: RodapeLogo,
+  Versao,
+});

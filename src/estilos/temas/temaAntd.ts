@@ -1,5 +1,5 @@
 import type { ThemeConfig } from "antd";
-import { colors, typography, layout } from "@/estilos/tokens/tokens";
+import { colors, typography, layout, spacing } from "@/estilos/tokens/tokens";
 
 export const temaAntd: ThemeConfig = {
   token: {
@@ -10,14 +10,38 @@ export const temaAntd: ThemeConfig = {
     colorError: colors.error,
     colorText: colors.primaryText,
     colorTextSecondary: colors.secondaryText,
+    colorTextDisabled: colors.secondaryText,
     colorBorder: colors.border,
+    colorBgContainer: colors.white,
     colorBgLayout: colors.appBackground,
+    colorBgContainerDisabled: colors.completeBackground,
     fontFamily: typography.fontFamily,
     fontSize: typography.fontSizeBase,
     borderRadius: layout.radius,
     controlHeight: layout.controlHeight,
+    boxShadowSecondary: layout.cardShadow,
+    boxShadowTertiary: layout.cardShadow,
   },
   components: {
+    Input: {
+      paddingInline: spacing.md,
+      paddingBlock: spacing.sm,
+      hoverBorderColor: colors.border,
+      activeBorderColor: colors.border,
+      activeShadow: "none",
+    },
+    Select: {
+      controlHeight: layout.controlHeight,
+      borderRadius: layout.radius,
+      optionSelectedBg: colors.stripedBackground,
+      colorTextDisabled: colors.secondaryText,
+      colorBgContainerDisabled: colors.completeBackground,
+    },
+    Form: {
+      labelColor: colors.primaryText,
+      labelFontSize: typography.fontSizeBase,
+      labelRequiredMarkColor: colors.error,
+    },
     Layout: {
       headerBg: colors.white,
       headerHeight: layout.headerHeight,
@@ -51,17 +75,21 @@ export const temaAntd: ThemeConfig = {
     },
     Card: {
       boxShadowTertiary: layout.cardShadow,
+      colorBgContainer: colors.white,
     },
     Button: {
       primaryShadow: "none",
       defaultShadow: "none",
       fontWeight: 600,
+      controlHeight: layout.controlHeight,
+      borderRadius: layout.radius,
       defaultBorderColor: colors.blue,
       defaultColor: colors.blue,
       defaultHoverBorderColor: colors.blue,
       defaultHoverColor: colors.blue,
       defaultActiveBorderColor: colors.blue,
       defaultActiveColor: colors.blue,
+      dangerColor: colors.error,
     },
     Switch: {
       colorPrimary: colors.blue,

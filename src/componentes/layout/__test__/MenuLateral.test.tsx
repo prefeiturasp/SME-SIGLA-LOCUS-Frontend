@@ -1,13 +1,16 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { MenuLateral } from "../index";
+import { MenuLateral } from "../MenuLateral";
 import { CAMINHOS } from "@/rotas/caminhos";
+import { ComTema } from "@/testes/renderizarComTema";
 
 function renderComRota(rota: string) {
   return render(
-    <MemoryRouter initialEntries={[rota]}>
-      <MenuLateral />
-    </MemoryRouter>,
+    <ComTema>
+      <MemoryRouter initialEntries={[rota]}>
+        <MenuLateral />
+      </MemoryRouter>
+    </ComTema>,
   );
 }
 
@@ -15,7 +18,7 @@ describe("MenuLateral", () => {
   it("renderiza a logo LOCUS e os seis itens do menu", async () => {
     renderComRota(CAMINHOS.cadastroGestaoUnidades);
 
-    expect(screen.getByRole("img", { name: /locus/i })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Locus" })).toBeInTheDocument();
     for (const rotulo of [
       "Cadastro",
       "Relatórios consultas",

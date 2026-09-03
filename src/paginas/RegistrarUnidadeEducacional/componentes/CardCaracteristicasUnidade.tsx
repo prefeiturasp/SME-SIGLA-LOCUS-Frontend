@@ -8,7 +8,7 @@ import {
   DescricaoItemCaracteristica,
   ItemCaracteristica,
   SelectAnoMunicipalizacao,
-  TextAreaCampo,
+  TextAreaForm,
   TituloItemCaracteristica,
   Toggle,
 } from "@/estilos";
@@ -114,7 +114,7 @@ export function CardCaracteristicasUnidade({
                   help={erroMotivoNaoContabilizacao}
                   style={{ marginBottom: 0 }}
                 >
-                  <TextAreaCampo
+                  <TextAreaForm
                     status={erroMotivoNaoContabilizacao ? "error" : undefined}
                     aria-label="Por que a unidade não deve ser contabilizada?"
                     aria-required

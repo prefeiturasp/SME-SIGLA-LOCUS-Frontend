@@ -1,17 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import { TopoBar } from "../index";
+import { Cabecalho } from "../Cabecalho";
+import { ComTema } from "@/testes/renderizarComTema";
 
 function renderComRota(rota: string) {
   return render(
-    <MemoryRouter initialEntries={[rota]}>
-      <TopoBar />
-    </MemoryRouter>,
+    <ComTema>
+      <MemoryRouter initialEntries={[rota]}>
+        <Cabecalho />
+      </MemoryRouter>
+    </ComTema>,
   );
 }
 
-describe("TopoBar", () => {
+describe("Cabecalho", () => {
   it("mostra a logo da Prefeitura e o breadcrumb da rota de cadastro", () => {
     renderComRota("/cadastro/gestao-unidades-educacionais");
 
@@ -34,9 +37,13 @@ describe("TopoBar", () => {
   it("chama o handler de sair ao clicar no botao Sair", async () => {
     const aoSair = jest.fn();
     render(
-      <MemoryRouter initialEntries={["/cadastro/gestao-unidades-educacionais"]}>
-        <TopoBar aoSair={aoSair} />
-      </MemoryRouter>,
+      <ComTema>
+        <MemoryRouter
+          initialEntries={["/cadastro/gestao-unidades-educacionais"]}
+        >
+          <Cabecalho aoSair={aoSair} />
+        </MemoryRouter>
+      </ComTema>,
     );
 
     await userEvent.click(screen.getByRole("button", { name: /sair/i }));

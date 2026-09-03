@@ -31,7 +31,7 @@ src/
 │   ├── temas/
 │   └── global/
 ├── componentes/    # componentes comuns e reutilizáveis
-│   ├── layout/     # LayoutBase, MenuLateral, TopoBar, RodapeBar
+│   ├── layout/     # LayoutBase, MenuLateral, Cabecalho, Rodape
 │   └── ui/         # CartaoStat, ChipVagas, CabecalhoPagina
 ├── paginas/        # cada tela concentra o que é dela
 │   └── GestaoUnidadesEducacionais/

@@ -1,18 +1,15 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { Col, Grid, Row } from "antd";
 import {
   BotaoAcaoInline,
-  CampoComAjuda,
-  CampoFormulario,
-  CampoFormularioControle,
-  ColunaFormulario,
-  FormularioEmLinha,
-  GrupoCampo,
-  InputCampo,
-  LinhaCampoAcao,
-  SelectCampo,
+  FormItem,
+  InputForm,
+  SelectForm,
   TextoAjudaCampo,
 } from "@/estilos";
 import { opcoesRegistrarUnidadeEducacional } from "../dados/dadosEstaticos";
+
+const { useBreakpoint } = Grid;
 
 export interface FormularioAdicionarComponenteCurricularProps {
   componenteSelecionado?: string;
@@ -31,17 +28,20 @@ export function FormularioAdicionarComponenteCurricular({
   aoAlterarQuantidade,
   aoAdicionar,
 }: FormularioAdicionarComponenteCurricularProps) {
+  const telas = useBreakpoint();
+  const desktop = Boolean(telas.xl);
+
   return (
-    <FormularioEmLinha>
-      <ColunaFormulario>
-        <CampoFormulario
+    <Row gutter={[10, 16]} align="top">
+      <Col xs={24} md={12} xl={9}>
+        <FormItem
           label="Componente curricular"
           layout="vertical"
           validateStatus={erroComponenteCurricular ? "error" : undefined}
           help={erroComponenteCurricular}
           style={{ marginBottom: 0 }}
         >
-          <SelectCampo
+          <SelectForm
             aria-label="Componente curricular"
             status={erroComponenteCurricular ? "error" : undefined}
             placeholder="Selecione"
@@ -52,41 +52,46 @@ export function FormularioAdicionarComponenteCurricular({
             }
             options={opcoesRegistrarUnidadeEducacional.componenteCurricular}
           />
-        </CampoFormulario>
-      </ColunaFormulario>
+        </FormItem>
+      </Col>
 
-      <ColunaFormulario>
-        <CampoFormularioControle
+      <Col xs={24} md={12} xl={9}>
+        <FormItem
           label="Quantidade de módulos"
           layout="vertical"
           style={{ marginBottom: 0 }}
         >
-          <LinhaCampoAcao>
-            <GrupoCampo>
-              <CampoComAjuda>
-                <InputCampo
-                  placeholder="Exemplo: 10"
-                  value={quantidadeModulos}
-                  onChange={(e) => aoAlterarQuantidade(e.target.value)}
-                  inputMode="numeric"
-                  disabled={!componenteSelecionado}
-                />
-                <TextoAjudaCampo>
-                  Quantidade total de vagas previstas para este componente. O
-                  valor mínimo é&nbsp;0
-                </TextoAjudaCampo>
-              </CampoComAjuda>
-            </GrupoCampo>
-            <BotaoAcaoInline
-              icon={<AddRoundedIcon fontSize="small" />}
-              onClick={aoAdicionar}
-            >
-              Adicionar componente
-            </BotaoAcaoInline>
-          </LinhaCampoAcao>
-        </CampoFormularioControle>
-      </ColunaFormulario>
-    </FormularioEmLinha>
+          <InputForm
+            placeholder="Exemplo: 10"
+            value={quantidadeModulos}
+            onChange={(e) => aoAlterarQuantidade(e.target.value)}
+            inputMode="numeric"
+            disabled={!componenteSelecionado}
+          />
+          <TextoAjudaCampo>
+            Informe quantas vagas este componente terá. O mínimo é 0.
+          </TextoAjudaCampo>
+        </FormItem>
+      </Col>
+
+      <Col xs={24} md={24} xl={6}>
+        <FormItem
+          label={desktop ? " " : undefined}
+          colon={false}
+          layout="vertical"
+          style={{ marginBottom: 0 }}
+        >
+          <BotaoAcaoInline
+            block
+            icon={<AddRoundedIcon fontSize="small" />}
+            onClick={aoAdicionar}
+            style={{ minWidth: 220 }}
+          >
+            Adicionar componente
+          </BotaoAcaoInline>
+        </FormItem>
+      </Col>
+    </Row>
   );
 }
 

@@ -4,7 +4,7 @@ import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import { Button, Card, Form, Input, Select, Switch, Table } from "antd";
 import type { TablePaginationConfig } from "antd";
-import { createElement } from "react";
+import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
 import {
   useNotificacao as useNotificacaoHook,
@@ -15,18 +15,12 @@ import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos"
 /* ======= PrimaryButton ======= */
 
 /** Botao primario padrao (fundo azul institucional). */
-export const PrimaryButton = styled(Button).attrs({ type: "primary" })`
-  height: ${({ theme }) => theme.layout.controlHeight}px;
-  border-radius: ${({ theme }) => theme.layout.radius}px;
-`;
+export const PrimaryButton = styled(Button).attrs({ type: "primary" })``;
 
 /* ======= SecondaryButton ======= */
 
 /** Botao secundario padrao (fundo branco, borda/texto azul do tema Ant). */
-export const SecondaryButton = styled(Button).attrs({ type: "default" })`
-  height: ${({ theme }) => theme.layout.controlHeight}px;
-  border-radius: ${({ theme }) => theme.layout.radius}px;
-`;
+export const SecondaryButton = styled(Button).attrs({ type: "default" })``;
 
 /* ======= BotaoExcluir ======= */
 
@@ -41,10 +35,8 @@ export const BotaoExcluir = styled(Button).attrs({
   width: ${({ theme }) => theme.spacing.xl}px;
   height: ${({ theme }) => theme.spacing.xl}px;
   padding: 0;
-  color: ${({ theme }) => theme.colors.error} !important;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.error} !important;
     background: ${({ theme }) => theme.colors.errorBackground} !important;
   }
 `;
@@ -66,12 +58,6 @@ export const Tabela = styled(Table)`
     background: ${({ theme }) => theme.colors.stripedBackground};
   }
 
-  & .ant-table-thead th .anticon,
-  & .ant-table-thead th svg {
-    color: ${({ theme }) => theme.colors.blue};
-    font-size: 16px;
-  }
-
   & .ant-pagination {
     position: relative;
     display: flex;
@@ -84,44 +70,17 @@ export const Tabela = styled(Table)`
     position: absolute;
     inset-inline-start: 0;
     font-weight: 700;
-    font-size: 14px;
-    color: ${({ theme }) => theme.colors.primaryText};
   }
 
   & .ant-pagination-item {
     margin-inline-end: ${({ theme }) => theme.spacing.sm}px;
-  }
-
-  & .ant-pagination-item-active {
-    border-color: ${({ theme }) => theme.colors.activeBlue};
-  }
-
-  & .ant-pagination-item-active a {
-    color: ${({ theme }) => theme.colors.activeBlue};
   }
 ` as typeof Table;
 
 /* ======= CardFormulario ======= */
 
 /** Card padrao de formulario / secoes de pagina (Gestao + Registrar). */
-export const CardFormulario = styled(Card)`
-  box-shadow: ${({ theme }) => theme.layout.cardShadow};
-
-  & .ant-form-item-label > label,
-  & .ant-form-item-label > label .ant-typography,
-  & .ant-form-item-label > label strong {
-    font-weight: 700;
-  }
-
-  & .ant-form-item-explain,
-  & .ant-form-item-explain-connected {
-    font-size: 12px;
-    line-height: 1.4;
-    min-height: auto;
-    margin-top: ${({ theme }) => theme.spacing.xs}px;
-    color: ${({ theme }) => theme.colors.primaryText};
-  }
-`;
+export const CardFormulario = styled(Card)``;
 
 /** Area de conteudo padrao das paginas (gap e padding do mockup). */
 export const ConteudoPagina = styled.div`
@@ -164,7 +123,7 @@ export const Tag = styled.span<{ $variante: VarianteTag }>`
   padding: ${({ theme }) => theme.spacing.xs}px
     ${({ theme }) => theme.spacing.sm}px;
   border-radius: ${({ theme }) => theme.layout.radius}px;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   line-height: 1;
   white-space: nowrap;
 
@@ -203,7 +162,10 @@ export function TagVagas({ saldo }: TagVagasProps) {
 
   return createElement(
     Tag,
-    { $variante: situacao, "data-situacao": situacao },
+    {
+      $variante: situacao,
+      "data-situacao": situacao,
+    } as ComponentProps<typeof Tag> & { "data-situacao": string },
     createElement(Icone, { fontSize: "inherit", "aria-hidden": true }),
     texto,
   );
@@ -249,114 +211,29 @@ export function criarPaginacaoPadrao({
 
 const { TextArea } = Input;
 
-export const InputCampo = styled(Input)`
-  height: ${({ theme }) => theme.layout.controlHeight}px;
-  border-radius: ${({ theme }) => theme.layout.radius}px;
+export const InputForm = styled(Input)`
   width: 100%;
   min-width: 0;
-  border-width: 1px;
-  padding-right: ${({ theme }) => theme.spacing.md}px;
-  padding-left: ${({ theme }) => theme.spacing.md}px;
-  box-sizing: border-box;
-
-  &.ant-input-disabled,
-  &.ant-input-disabled:hover {
-    background-color: ${({ theme }) =>
-      theme.colors.completeBackground} !important;
-    border-color: ${({ theme }) => theme.colors.border} !important;
-    color: ${({ theme }) => theme.colors.secondaryText};
-    cursor: not-allowed;
-  }
 `;
 
-export const InputCampoFlex = styled(InputCampo)`
+export const InputFormFlex = styled(InputForm)`
   flex: 1 1 0;
-
-  &.ant-input-status-error,
-  &.ant-input-status-error:hover,
-  &.ant-input-status-error:focus {
-    border-color: ${({ theme }) => theme.colors.error} !important;
-  }
 `;
 
-export const SelectCampo = styled(Select)`
+export const SelectForm = styled(Select)`
   width: 100%;
-
-  & .ant-select-selector {
-    height: ${({ theme }) => theme.layout.controlHeight}px;
-    border-radius: ${({ theme }) => theme.layout.radius}px;
-    border-width: 1px;
-    padding-right: ${({ theme }) => theme.spacing.md}px;
-    padding-left: ${({ theme }) => theme.spacing.md}px;
-  }
-
-  & .ant-select-selection-item,
-  & .ant-select-selection-placeholder,
-  & .ant-select-selection-search-input {
-    line-height: 38px;
-  }
-
-  &.ant-select-disabled .ant-select-selector {
-    background-color: ${({ theme }) =>
-      theme.colors.completeBackground} !important;
-    border-color: ${({ theme }) => theme.colors.border} !important;
-    color: ${({ theme }) => theme.colors.secondaryText};
-    cursor: not-allowed;
-  }
-
-  &.ant-select-disabled .ant-select-arrow {
-    color: ${({ theme }) => theme.colors.secondaryText};
-  }
-
-  &.ant-select-status-error .ant-select-selector,
-  &.ant-select-status-error:hover .ant-select-selector {
-    border-color: ${({ theme }) => theme.colors.error} !important;
-  }
 `;
 
-export const TextAreaCampo = styled(TextArea)`
+export const TextAreaForm = styled(TextArea)`
   width: 100%;
   max-width: 1192px;
   height: 80px !important;
   min-height: 80px;
   resize: none;
-  border-radius: ${({ theme }) => theme.layout.radius}px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: #fff;
-  padding: ${({ theme }) => theme.spacing.sm}px
-    ${({ theme }) => theme.spacing.md}px;
-  gap: 10px;
-
-  &:focus,
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.border};
-    box-shadow: none;
-  }
 `;
 
-export const CampoFormulario = styled(Form.Item)`
+export const FormItem = styled(Form.Item)`
   width: 100%;
-
-  & .ant-form-item-label > label {
-    font-weight: 700;
-  }
-
-  & .ant-form-item-explain,
-  & .ant-form-item-explain-connected {
-    font-size: 12px;
-    line-height: 1.4;
-    margin-top: ${({ theme }) => theme.spacing.xs}px;
-    color: ${({ theme }) => theme.colors.secondaryText};
-  }
-`;
-
-export const CampoFormularioControle = styled(CampoFormulario)`
-  & .ant-form-item-control,
-  & .ant-form-item-control-input,
-  & .ant-form-item-control-input-content {
-    min-width: 0;
-    max-width: 100%;
-  }
 `;
 
 /* ======= layoutFormulario ======= */
@@ -392,17 +269,10 @@ export const CampoComAjuda = styled.div`
 export const TextoAjudaCampo = styled.span`
   display: block;
   width: 100%;
-  max-width: 100%;
   margin-top: ${({ theme }) => theme.spacing.xs}px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-weight: 400;
-  font-style: normal;
-  font-size: min(12px, 2.61cqi);
-  line-height: 1.2;
-  letter-spacing: 0;
-  color: ${({ theme }) => theme.colors.primaryText};
-  white-space: nowrap;
-  overflow: hidden;
+  font-size: ${({ theme }) => theme.typography.fontSizeCaption}px;
+  line-height: 1.4;
+  color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
 export const FormularioEmLinha = styled.div`
@@ -451,14 +321,14 @@ export const CabecalhoItemCaracteristica = styled.div`
 
 export const TituloItemCaracteristica = styled.p`
   margin: 0;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
 export const DescricaoItemCaracteristica = styled.p`
   margin: ${({ theme }) => theme.spacing.xs}px 0 0;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   color: ${({ theme }) => theme.colors.primaryText};
   line-height: 1.4;
 `;
@@ -484,7 +354,7 @@ export const CampoAnoMunicipalizacao = styled(Form.Item)`
   }
 `;
 
-export const SelectAnoMunicipalizacao = SelectCampo;
+export const SelectAnoMunicipalizacao = SelectForm;
 
 export const CampoMotivoNaoContabilizacao = styled(Form.Item)`
   width: 100%;
@@ -496,21 +366,6 @@ export const CampoMotivoNaoContabilizacao = styled(Form.Item)`
   & .ant-form-item-control-input,
   & .ant-form-item-control-input-content {
     width: 100%;
-  }
-
-  &.ant-form-item-has-error ${TextAreaCampo},
-  &.ant-form-item-has-error ${TextAreaCampo}:hover,
-  &.ant-form-item-has-error ${TextAreaCampo}:focus {
-    border-color: ${({ theme }) => theme.colors.error} !important;
-  }
-
-  &.ant-form-item-has-error .ant-form-item-explain-error {
-    color: ${({ theme }) => theme.colors.error};
-    margin-top: ${({ theme }) => theme.spacing.xs}px;
-  }
-
-  & .ant-form-item-required::before {
-    color: ${({ theme }) => theme.colors.error} !important;
   }
 `;
 
@@ -532,14 +387,14 @@ export const EstadoVazio = styled.div`
 
 export const EstadoVazioTitulo = styled.p`
   margin: 0 0 ${({ theme }) => theme.spacing.sm}px;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
 export const EstadoVazioTexto = styled.p`
   margin: 0;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
@@ -563,7 +418,7 @@ export const CabecalhoListaDados = styled.div`
   width: 100%;
   box-sizing: border-box;
   background: ${({ theme }) => theme.colors.stripedBackground};
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 
@@ -603,13 +458,13 @@ export const ItemListaDados = styled.div`
 `;
 
 export const ColunaListaTexto = styled.span`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   color: ${({ theme }) => theme.colors.primaryText};
   min-width: 0;
 `;
 
 export const ColunaListaCentralizada = styled.span`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   color: ${({ theme }) => theme.colors.primaryText};
   text-align: center;
 `;
@@ -634,7 +489,7 @@ export const PaginaCabecalho = styled.div`
 
 export const PaginaTitulo = styled.h1`
   margin: 0;
-  font-size: 24px;
+  font-size: ${({ theme }) => theme.typography.fontSizeTitle}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
@@ -661,7 +516,7 @@ export const StatCartao = styled.div`
 `;
 
 export const StatValor = styled.span`
-  font-size: 20px;
+  font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
@@ -689,13 +544,13 @@ export const StatIcone = styled.span`
 `;
 
 export const StatRotulo = styled.span`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
 export const StatLegenda = styled.span`
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.fontSizeCaption}px;
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 

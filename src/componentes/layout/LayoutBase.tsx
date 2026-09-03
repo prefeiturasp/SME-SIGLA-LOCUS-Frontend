@@ -7,9 +7,9 @@ import {
   LayoutHeader,
   LayoutRaiz,
 } from "@/estilos";
+import { Cabecalho } from "./Cabecalho";
 import { MenuLateral } from "./MenuLateral";
-import { RodapeBar } from "./RodapeBar";
-import { TopoBar } from "./TopoBar";
+import { Rodape } from "./Rodape";
 
 export function LayoutBase() {
   return (
@@ -17,7 +17,7 @@ export function LayoutBase() {
       <MenuLateral />
       <LayoutCorpo>
         <LayoutHeader>
-          <TopoBar />
+          <Cabecalho />
         </LayoutHeader>
         <LayoutConteudo>
           <LayoutConteudoInterno>
@@ -25,7 +25,7 @@ export function LayoutBase() {
           </LayoutConteudoInterno>
         </LayoutConteudo>
         <LayoutFooter>
-          <RodapeBar />
+          <Rodape />
         </LayoutFooter>
       </LayoutCorpo>
     </LayoutRaiz>

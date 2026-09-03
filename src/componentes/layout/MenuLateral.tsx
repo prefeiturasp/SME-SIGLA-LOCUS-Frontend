@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import logoLocus from "@/assets/Group 7.svg";
+import logoLocus from "@/assets/logo-locus.svg";
 import {
   BotaoSairMenu,
   MenuLateralMenu,

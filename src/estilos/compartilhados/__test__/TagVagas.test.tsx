@@ -1,9 +1,14 @@
 import { render, screen } from "@testing-library/react";
-import { ChipVagas } from "../index";
+import { TagVagas } from "@/estilos";
+import { ComTema } from "@/testes/renderizarComTema";
 
-describe("ChipVagas", () => {
+describe("TagVagas", () => {
   it("mostra '+N disponíveis' em verde quando o saldo e positivo", () => {
-    render(<ChipVagas saldo={5} />);
+    render(
+      <ComTema>
+        <TagVagas saldo={5} />
+      </ComTema>,
+    );
     const chip = screen.getByText("+5 disponíveis");
     expect(chip).toBeInTheDocument();
     expect(chip.closest("[data-situacao]")).toHaveAttribute(
@@ -13,7 +18,11 @@ describe("ChipVagas", () => {
   });
 
   it("mostra '-N excedentes' quando o saldo e negativo", () => {
-    render(<ChipVagas saldo={-4} />);
+    render(
+      <ComTema>
+        <TagVagas saldo={-4} />
+      </ComTema>,
+    );
     const chip = screen.getByText("-4 excedentes");
     expect(chip).toBeInTheDocument();
     expect(chip.closest("[data-situacao]")).toHaveAttribute(
@@ -23,7 +32,11 @@ describe("ChipVagas", () => {
   });
 
   it("mostra 'Completo' quando o saldo e zero", () => {
-    render(<ChipVagas saldo={0} />);
+    render(
+      <ComTema>
+        <TagVagas saldo={0} />
+      </ComTema>,
+    );
     const chip = screen.getByText("Completo");
     expect(chip).toBeInTheDocument();
     expect(chip.closest("[data-situacao]")).toHaveAttribute(
