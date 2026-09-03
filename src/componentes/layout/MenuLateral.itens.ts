@@ -3,8 +3,8 @@ import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import { IconeExcluir } from "@/componentes/IconeExcluir";
 
 export interface ItemMenu {
   key: string;
@@ -43,7 +43,7 @@ export const ITENS_MENU: ItemMenu[] = [
   {
     key: "remocao",
     label: "Remoção",
-    icone: DeleteOutlineOutlinedIcon,
+    icone: IconeExcluir,
     prefix: ["/remocao"],
   },
   {

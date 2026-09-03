@@ -83,4 +83,8 @@ export const layout = {
 
 export const tokens = { colors, typography, spacing, layout } as const;
 
+/** Tema tipado para ThemeProvider do styled-components. */
+export const tema = tokens;
+export type Tema = typeof tema;
+
 export default tokens;

@@ -6,7 +6,7 @@ import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 import Groups3OutlinedIcon from "@mui/icons-material/Groups3Outlined";
 import type { ReactNode } from "react";
 import { Card, Select, Typography } from "antd";
-import { CartaoStat } from "@/componentes/ui/CartaoStat";
+import { CartaoStat } from "@/componentes/CartaoStat";
 import type {
   EstatisticaPainel,
   OpcaoSelecao,

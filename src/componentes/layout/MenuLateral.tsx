@@ -1,14 +1,18 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Layout, Menu } from "antd";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import logoLocus from "@/assets/Group 7.svg";
+import {
+  BotaoSairMenu,
+  MenuLateralMenu,
+  MenuLogo,
+  MenuLogoImagem,
+  MenuRodape,
+  MenuSider,
+} from "@/estilos";
 import { layout as tokensLayout } from "@/estilos/tokens/tokens";
 import { encerrarSessao } from "@/servicos/recursos/autenticacao";
-import logoLocus from "@/assets/logo-locus.svg";
-import { ITENS_MENU, menuItemAtivo } from "./itens";
-import estilos from "./estilos.module.css";
-
-const { Sider } = Layout;
+import { ITENS_MENU, menuItemAtivo } from "./MenuLateral.itens";
 
 export function MenuLateral() {
   const { pathname } = useLocation();
@@ -29,34 +33,28 @@ export function MenuLateral() {
   const chaveAtiva = menuItemAtivo(pathname);
 
   return (
-    <Sider
-      width={tokensLayout.menuWidth}
-      className={estilos.sider}
-      theme="dark"
-    >
-      <div className={estilos.logo}>
-        <img src={logoLocus} alt="LOCUS" />
-      </div>
+    <MenuSider width={tokensLayout.menuWidth} theme="dark">
+      <MenuLogo>
+        <MenuLogoImagem src={logoLocus} alt="Locus" />
+      </MenuLogo>
 
-      <Menu
+      <MenuLateralMenu
         mode="inline"
         theme="dark"
-        className={estilos.menu}
         selectedKeys={chaveAtiva ? [chaveAtiva] : []}
         items={itensMenu}
       />
 
-      <div className={estilos.rodapeMenu}>
-        <button
+      <MenuRodape>
+        <BotaoSairMenu
           type="button"
-          className={estilos.botaoSair}
           onClick={() => encerrarSessao()}
           aria-label="Sair"
         >
           <LogoutOutlinedIcon fontSize="inherit" />
-        </button>
-      </div>
-    </Sider>
+        </BotaoSairMenu>
+      </MenuRodape>
+    </MenuSider>
   );
 }
 

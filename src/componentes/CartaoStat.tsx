@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
-import estilos from "./estilos.module.css";
+import {
+  StatCartao,
+  StatIcone,
+  StatLegenda,
+  StatLinhaRotulo,
+  StatRotulo,
+  StatValor,
+} from "@/estilos";
 
 export interface CartaoStatProps {
   valor: number | string;
@@ -14,16 +21,14 @@ export interface CartaoStatProps {
  */
 export function CartaoStat({ valor, rotulo, legenda, icone }: CartaoStatProps) {
   return (
-    <div className={estilos.cartao}>
-      <span className={estilos.valor}>{valor}</span>
-      <div className={estilos.linhaRotulo}>
-        <span className={estilos.icone} aria-hidden>
-          {icone}
-        </span>
-        <span className={estilos.rotulo}>{rotulo}</span>
-      </div>
-      <span className={estilos.legenda}>{legenda}</span>
-    </div>
+    <StatCartao>
+      <StatValor>{valor}</StatValor>
+      <StatLinhaRotulo>
+        <StatIcone aria-hidden>{icone}</StatIcone>
+        <StatRotulo>{rotulo}</StatRotulo>
+      </StatLinhaRotulo>
+      <StatLegenda>{legenda}</StatLegenda>
+    </StatCartao>
   );
 }
 

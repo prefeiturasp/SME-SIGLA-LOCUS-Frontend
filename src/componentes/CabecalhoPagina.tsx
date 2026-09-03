@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import estilos from "./estilos.module.css";
+import { PaginaAcoes, PaginaCabecalho, PaginaTitulo } from "@/estilos";
 
 export interface CabecalhoPaginaProps {
   titulo: string;
@@ -12,10 +12,10 @@ export interface CabecalhoPaginaProps {
  */
 export function CabecalhoPagina({ titulo, acoes }: CabecalhoPaginaProps) {
   return (
-    <div className={estilos.cabecalho}>
-      <h1 className={estilos.titulo}>{titulo}</h1>
-      {acoes ? <div className={estilos.acoes}>{acoes}</div> : null}
-    </div>
+    <PaginaCabecalho>
+      <PaginaTitulo>{titulo}</PaginaTitulo>
+      {acoes ? <PaginaAcoes>{acoes}</PaginaAcoes> : null}
+    </PaginaCabecalho>
   );
 }
 

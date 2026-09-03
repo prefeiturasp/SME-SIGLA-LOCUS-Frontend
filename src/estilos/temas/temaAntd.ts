@@ -24,7 +24,7 @@ export const temaAntd: ThemeConfig = {
       headerPadding: "0 24px",
       bodyBg: colors.appBackground,
       footerBg: colors.white,
-      footerPadding: "16px 32px",
+      footerPadding: "16px 40px",
       siderBg: colors.menuBackground,
     },
     Menu: {
@@ -65,6 +65,10 @@ export const temaAntd: ThemeConfig = {
       defaultHoverColor: colors.blue,
       defaultActiveBorderColor: colors.blue,
       defaultActiveColor: colors.blue,
+    },
+    Switch: {
+      colorPrimary: colors.blue,
+      colorPrimaryHover: colors.blue,
     },
   },
 };

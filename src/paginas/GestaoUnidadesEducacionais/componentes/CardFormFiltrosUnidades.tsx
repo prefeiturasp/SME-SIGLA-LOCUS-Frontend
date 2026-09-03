@@ -1,8 +1,12 @@
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Button, Card, Col, Form, Input, Row, Select, Typography } from "antd";
+import { Col, Form, Input, Row, Select, Typography } from "antd";
+import {
+  CardFormulario,
+  PrimaryButton,
+  SecondaryButton,
+} from "@/estilos";
 import { opcoesFiltros } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 import type { FiltrosUnidades } from "@/servicos/recursos/unidadesEducacionais/tipos";
-import estilos from "./CardFormFiltrosUnidades.module.css";
 
 const { Title, Paragraph } = Typography;
 
@@ -34,7 +38,7 @@ export function CardFormFiltrosUnidades({
   const [form] = Form.useForm();
 
   return (
-    <Card className={estilos.card}>
+    <CardFormulario>
       <Title level={4} style={{ marginTop: 0 }}>
         Filtrar unidades
       </Title>
@@ -139,26 +143,24 @@ export function CardFormFiltrosUnidades({
               paddingTop: 16,
             }}
           >
-            <Button
-              type="default"
+            <SecondaryButton
               onClick={() => {
                 form.resetFields();
                 aoLimpar();
               }}
             >
               Limpar filtros
-            </Button>
-            <Button
-              type="primary"
+            </SecondaryButton>
+            <PrimaryButton
               htmlType="submit"
               icon={<SearchOutlinedIcon fontSize="small" />}
             >
               Buscar unidade
-            </Button>
+            </PrimaryButton>
           </Col>
         </Row>
       </Form>
-    </Card>
+    </CardFormulario>
   );
 }
 

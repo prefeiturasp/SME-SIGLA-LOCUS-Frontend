@@ -1,20 +1,12 @@
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { DatePicker, Table, Tooltip, Typography } from "antd";
+import { DatePicker, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { ChipVagas } from "@/componentes/ui/ChipVagas";
+import { criarPaginacaoPadrao, TagVagas, Tabela } from "@/estilos";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
-import estilos from "./TabelaUnidades.module.css";
 
 const { Title, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
-
-/** "Mostrando 1-N de TOTAL registro(s)" para o `showTotal` da paginacao. */
-function textoContagem(total: number, [inicio, fim]: [number, number]): string {
-  return `Mostrando ${inicio}-${fim} de ${total.toLocaleString(
-    "pt-BR",
-  )} registro(s)`;
-}
 
 function cabecalhoComInfo(titulo: string, dica: string) {
   return (
@@ -64,7 +56,7 @@ const colunas: ColumnsType<UnidadeEducacional> = [
     ),
     dataIndex: "saldoVagas",
     key: "saldoVagas",
-    render: (saldo: number) => <ChipVagas saldo={saldo} />,
+    render: (saldo: number) => <TagVagas saldo={saldo} />,
   },
 ];
 
@@ -115,8 +107,7 @@ export function TabelaUnidades({
         </div>
       </div>
 
-      <Table<UnidadeEducacional>
-        className={estilos.tabela}
+      <Tabela
         rowKey="codigoLotacao"
         columns={colunas}
         dataSource={unidades}
@@ -124,13 +115,10 @@ export function TabelaUnidades({
         rowClassName={(_, indice) =>
           indice % 2 === 1 ? "linhaPar" : ""
         }
-        pagination={{
+        pagination={criarPaginacaoPadrao({
           total,
           pageSize: TAMANHO_PAGINA,
-          showSizeChanger: false,
-          showTotal: (totalReg, intervalo) =>
-            textoContagem(totalReg, intervalo),
-        }}
+        })}
       />
     </section>
   );
