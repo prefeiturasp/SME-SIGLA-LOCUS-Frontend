@@ -15,10 +15,6 @@ export interface CartaoStatProps {
   icone: ReactNode;
 }
 
-/**
- * Cartao de estatistica do "Painel de informações por componente curricular":
- * numero em destaque, icone + rotulo, e uma legenda auxiliar.
- */
 export function CartaoStat({ valor, rotulo, legenda, icone }: CartaoStatProps) {
   return (
     <StatCartao>

@@ -41,9 +41,6 @@ export const temaAntd: ThemeConfig = {
       borderColor: colors.border,
     },
     Pagination: {
-      // Figma: numeros como texto simples; so o item ativo ganha um
-      // quadrado com contorno azul e fundo branco (nao preenchido).
-      // O espacamento entre os itens fica no CSS module (.ant-pagination-item).
       itemActiveBg: colors.white,
       itemSize: layout.controlHeight,
       itemActiveColorDisabled: colors.secondaryText,

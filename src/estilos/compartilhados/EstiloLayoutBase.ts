@@ -147,10 +147,6 @@ export const TopoIconeSair = styled.span`
 
 /* ======= MenuLateral ======= */
 
-/**
- * Ant Sider/Menu usam a prop `theme` ("dark"|"light"), que colide com
- * o `theme` do styled-components. Por isso esta secao usa tokens direto.
- */
 export const MenuSider = styled(AntSider)`
   background: ${colors.primary};
   position: sticky;
@@ -173,7 +169,6 @@ export const MenuLogo = styled.div`
   flex-shrink: 0;
 `;
 
-/** Logo completo LOCUS (Group 7.svg): L + banco + CUS. */
 export const MenuLogoImagem = styled.img`
   width: 85.1px;
   height: 19.9px;

@@ -4,15 +4,10 @@ import type {
   UnidadeEducacional,
 } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
-/**
- * Dados estaticos do protótipo da tela "Gestão das unidades educacionais".
- * Extraidos do Figma (frame 29:2044). Serao substituidos por chamadas a API.
- */
 
 export const TOTAL_REGISTROS = 5985;
 export const TAMANHO_PAGINA = 10;
 
-/** Componentes curriculares (Figma, nó 139:15828). */
 export const opcoesComponenteCurricular: OpcaoSelecao[] = [
   "Arte",
   "Biologia",
@@ -31,7 +26,6 @@ export const opcoesComponenteCurricular: OpcaoSelecao[] = [
   "Sociologia",
 ].map((nome) => ({ value: nome, label: nome }));
 
-/** Cartoes do "Painel de informações por componente curricular". */
 export const estatisticasPainel: EstatisticaPainel[] = [
   {
     chave: "modulos",
@@ -71,7 +65,6 @@ export const estatisticasPainel: EstatisticaPainel[] = [
   },
 ];
 
-/** Opcoes dos selects do card "Filtrar unidades". */
 export const opcoesFiltros = {
   cargo: [
     { value: "pei", label: "Professor de Ensino Fundamental II e Médio" },
@@ -105,7 +98,6 @@ export const opcoesFiltros = {
   ] satisfies OpcaoSelecao[],
 };
 
-/** Linhas da tabela "Unidades educacionais" (Figma, nó 39:3267). */
 export const linhasUnidades: UnidadeEducacional[] = [
   {
     codigoLotacao: "091488",

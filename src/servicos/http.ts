@@ -1,13 +1,6 @@
 import axios from "axios";
 import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
-/**
- * Instancia HTTP compartilhada do LOCUS.
- *
- * Em runtime (Docker/Rancher) a URL base vem de `window.__ENV__` (env.js gerado
- * pelo entrypoint); em desenvolvimento vem de `import.meta.env`. Espelha o
- * padrao ja usado no frontend SME existente.
- */
 function obterUrlBase(chave: string): string | undefined {
   if (typeof window !== "undefined" && window.__ENV__?.[chave]) {
     return window.__ENV__[chave];
@@ -15,7 +8,6 @@ function obterUrlBase(chave: string): string | undefined {
   return (import.meta.env as Record<string, string | undefined>)[chave];
 }
 
-/** Rotas que NAO devem receber o token de autenticacao. */
 const ROTAS_PUBLICAS = ["/api/v1/login/", "/api/v1/health/"];
 
 function adicionarInterceptors(instancia: AxiosInstance): void {

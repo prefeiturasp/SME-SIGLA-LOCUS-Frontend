@@ -2,7 +2,6 @@ import { useCallback, useMemo } from "react";
 import { App } from "antd";
 import type { NotificationPlacement } from "antd/es/notification/interface";
 
-/** Placement padrao do toast Locus (topo da tela). */
 const PLACEMENT_PADRAO: NotificationPlacement = "top";
 
 export interface OpcoesNotificacao {
@@ -11,10 +10,6 @@ export interface OpcoesNotificacao {
   placement?: NotificationPlacement;
 }
 
-/**
- * Toast / notificacao padrao do Locus.
- * Preferir este hook (ou `useToast` reexportado em `@/estilos`) em todas as paginas.
- */
 export function useNotificacao() {
   const { notification } = App.useApp();
 

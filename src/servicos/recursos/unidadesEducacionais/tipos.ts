@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-/**
- * Contratos do recurso "unidades educacionais".
- *
- * Schemas Zod validam mocks e futuras respostas HTTP.
- */
-
-/** Saldo de vagas de uma unidade: disponivel, excedente ou completo. */
 export const situacaoVagasSchema = z.enum([
   "disponivel",
   "excedente",
@@ -22,7 +15,6 @@ export const unidadeEducacionalSchema = z.object({
   modulo: z.number().int().nonnegative(),
   lotacao: z.number().int().nonnegative(),
   afastados: z.number().int().nonnegative(),
-  /** Saldo de vagas: positivo = disponiveis, negativo = excedentes, 0 = completo. */
   saldoVagas: z.number().int(),
 });
 export type UnidadeEducacional = z.infer<typeof unidadeEducacionalSchema>;
@@ -55,7 +47,6 @@ export const respostaListagemSchema = z.object({
 });
 export type RespostaListagem = z.infer<typeof respostaListagemSchema>;
 
-/** Filtros da busca de unidades. Todos opcionais (protótipo nao aplica). */
 export interface FiltrosUnidades {
   componente?: string;
   cargo?: string;
@@ -74,16 +65,12 @@ export interface FiltrosUnidades {
   tamanhoPagina?: number;
 }
 
-/**
- * Deriva a situacao textual da coluna "Vagas" a partir do saldo numerico.
- */
 export function situacaoDoSaldo(saldo: number): SituacaoVagas {
   if (saldo > 0) return "disponivel";
   if (saldo < 0) return "excedente";
   return "completo";
 }
 
-/** Resposta da consulta de lotacao (preenche dados da UE). */
 export const dadosLotacaoConsultaSchema = z.object({
   codigoLotacao: z.string(),
   tipoUnidade: z.string(),
@@ -98,7 +85,6 @@ export const componenteRegistrarSchema = z.object({
 });
 export type ComponenteRegistrar = z.infer<typeof componenteRegistrarSchema>;
 
-/** Payload de criacao de unidade educacional. */
 export const payloadRegistrarUnidadeSchema = z.object({
   codigoLotacao: z.string().min(1),
   tipoUnidade: z.string().min(1),
@@ -125,7 +111,6 @@ export type RespostaRegistrarUnidade = z.infer<
   typeof respostaRegistrarUnidadeSchema
 >;
 
-/** Erro de dominio: lotacao inexistente (mock ou API 404). */
 export class LotacaoNaoEncontradaError extends Error {
   readonly codigo = "LOTACAO_NAO_ENCONTRADA" as const;
 
