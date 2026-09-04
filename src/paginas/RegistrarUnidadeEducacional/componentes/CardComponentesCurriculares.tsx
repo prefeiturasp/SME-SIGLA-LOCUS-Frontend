@@ -31,11 +31,13 @@ function criarColunas(
       title: "Componente curricular",
       dataIndex: "componente",
       key: "componente",
+      width: "35%",
     },
     {
       title: "Módulos",
       dataIndex: "quantidadeModulos",
       key: "quantidadeModulos",
+      width: 120,
       align: "center",
       render: (quantidade: number) => formatarModulos(quantidade),
     },

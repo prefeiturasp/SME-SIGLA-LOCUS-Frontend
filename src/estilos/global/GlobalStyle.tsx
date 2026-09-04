@@ -41,11 +41,15 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 1.4;
     min-height: auto;
     margin-top: ${({ theme }) => theme.spacing.xs}px;
-    color: ${({ theme }) => theme.colors.secondaryText};
+    color: ${({ theme }) => theme.colors.primaryText};
   }
 
   .ant-form-item-explain-error {
     color: ${({ theme }) => theme.colors.error};
+  }
+
+  .ant-list-item-meta-description {
+    color: ${({ theme }) => theme.colors.primaryText};
   }
 
   .ant-select .ant-select-selector {

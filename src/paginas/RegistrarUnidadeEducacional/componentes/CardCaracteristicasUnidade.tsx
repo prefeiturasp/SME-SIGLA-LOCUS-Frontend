@@ -50,7 +50,7 @@ export function CardCaracteristicasUnidade({
             title={<Text strong>Escola Municipalizada</Text>}
             description={
               <>
-                <Text type="secondary" style={{ fontSize: 13 }}>
+                <Text style={{ fontSize: 13 }}>
                   Se a unidade educacional for municipalizada, selecione abaixo
                   o ano da municipalização.
                 </Text>
@@ -100,7 +100,7 @@ export function CardCaracteristicasUnidade({
           <List.Item.Meta
             title={<Text strong>Ensino fundamental I</Text>}
             description={
-              <Text type="secondary" style={{ fontSize: 13 }}>
+              <Text style={{ fontSize: 13 }}>
                 A unidade educacional possui ensino fundamental I.
               </Text>
             }
@@ -120,7 +120,7 @@ export function CardCaracteristicasUnidade({
           <List.Item.Meta
             title={<Text strong>EJA Modular</Text>}
             description={
-              <Text type="secondary" style={{ fontSize: 13 }}>
+              <Text style={{ fontSize: 13 }}>
                 A unidade educacional possui Ensino de Jovens e Adultos na
                 modalidade Modular.
               </Text>
@@ -141,7 +141,7 @@ export function CardCaracteristicasUnidade({
           <List.Item.Meta
             title={<Text strong>São Paulo Integral</Text>}
             description={
-              <Text type="secondary" style={{ fontSize: 13 }}>
+              <Text style={{ fontSize: 13 }}>
                 A unidade educacional faz parte do programa São Paulo Integral.
               </Text>
             }
@@ -162,7 +162,7 @@ export function CardCaracteristicasUnidade({
             title={<Text strong>Contabilizar UE</Text>}
             description={
               <>
-                <Text type="secondary" style={{ fontSize: 13 }}>
+                <Text style={{ fontSize: 13 }}>
                   A unidade será contabilizada nos cálculos do LOCUS.
                 </Text>
                 {!caracteristicas.contabilizarUE ? (
