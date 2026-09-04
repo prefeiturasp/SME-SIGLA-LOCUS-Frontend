@@ -1,7 +1,6 @@
 import { Providers } from "./providers";
 import { RotasApp } from "@/rotas";
 
-/** Raiz da aplicacao: provedores + rotas. */
 export function App() {
   return (
     <Providers>

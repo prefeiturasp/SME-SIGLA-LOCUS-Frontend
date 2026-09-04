@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
+import { ComTema } from "@/testes/renderizarComTema";
 import { GestaoUnidadesEducacionais } from "../index";
 
 function renderNaCasca(children: ReactNode) {
@@ -11,18 +12,20 @@ function renderNaCasca(children: ReactNode) {
     defaultOptions: { queries: { retry: false } },
   });
   return render(
-    <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[CAMINHOS.cadastroGestaoUnidades]}>
-        <Routes>
-          <Route element={<LayoutBase />}>
-            <Route
-              path={CAMINHOS.cadastroGestaoUnidades}
-              element={children}
-            />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    </QueryClientProvider>,
+    <ComTema>
+      <QueryClientProvider client={client}>
+        <MemoryRouter initialEntries={[CAMINHOS.cadastroGestaoUnidades]}>
+          <Routes>
+            <Route element={<LayoutBase />}>
+              <Route
+                path={CAMINHOS.cadastroGestaoUnidades}
+                element={children}
+              />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>
+    </ComTema>,
   );
 }
 
@@ -36,10 +39,8 @@ describe("GestaoUnidadesEducacionais (integração com a casca)", () => {
       }),
     ).toBeInTheDocument();
 
-    // breadcrumb da casca
     expect(screen.getByText("Início")).toBeInTheDocument();
 
-    // painel (dados estaticos carregados via React Query)
     expect(
       await screen.findByText(
         "Painel de informações por componente curricular",
@@ -47,12 +48,10 @@ describe("GestaoUnidadesEducacionais (integração com a casca)", () => {
     ).toBeInTheDocument();
     expect(await screen.findByText("Módulos")).toBeInTheDocument();
 
-    // tabela
     expect(
       await screen.findByText("Mostrando 1-10 de 5.985 registro(s)"),
     ).toBeInTheDocument();
 
-    // rodape da casca
     expect(
       screen.getByText(/Versão v2.3 - Homologada/),
     ).toBeInTheDocument();

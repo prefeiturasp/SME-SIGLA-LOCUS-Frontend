@@ -1,30 +1,14 @@
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Button, Card, Col, Form, Input, Row, Select, Typography } from "antd";
+import { FormItem } from "@/estilos";
 import { opcoesFiltros } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 import type { FiltrosUnidades } from "@/servicos/recursos/unidadesEducacionais/tipos";
-import estilos from "./CardFormFiltrosUnidades.module.css";
 
 const { Title, Paragraph } = Typography;
 
 export interface CardFormFiltrosUnidadesProps {
   aoBuscar: (filtros: FiltrosUnidades) => void;
   aoLimpar: () => void;
-}
-
-interface CampoProps {
-  label: string;
-  children: React.ReactNode;
-  ajuda?: string;
-}
-
-function Campo({ label, children, ajuda }: CampoProps) {
-  return (
-    <Col xs={24} sm={12} lg={6}>
-      <Form.Item label={label} style={{ marginBottom: 8 }} help={ajuda}>
-        {children}
-      </Form.Item>
-    </Col>
-  );
 }
 
 export function CardFormFiltrosUnidades({
@@ -34,7 +18,7 @@ export function CardFormFiltrosUnidades({
   const [form] = Form.useForm();
 
   return (
-    <Card className={estilos.card}>
+    <Card>
       <Title level={4} style={{ marginTop: 0 }}>
         Filtrar unidades
       </Title>
@@ -49,87 +33,111 @@ export function CardFormFiltrosUnidades({
         onFinish={(valores) => aoBuscar(valores as FiltrosUnidades)}
       >
         <Row gutter={16}>
-          <Campo label="Cargo">
-            <Select
-              placeholder="Selecione"
-              allowClear
-              options={opcoesFiltros.cargo}
-            />
-          </Campo>
-          <Campo label="Estrutura hierárquica (E.H)">
-            <Input placeholder="Exemplo: 123456789012345" />
-          </Campo>
-          <Campo label="Código de lotação">
-            <Input placeholder="Exemplo: 1234567" />
-          </Campo>
-          <Campo label="Tipo da unidade">
-            <Select
-              placeholder="Selecione"
-              allowClear
-              options={opcoesFiltros.tipoUnidade}
-            />
-          </Campo>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Cargo">
+              <Select
+                placeholder="Selecione"
+                allowClear
+                options={opcoesFiltros.cargo}
+              />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Estrutura hierárquica (E.H)">
+              <Input placeholder="Exemplo: 123456789012345" />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Código de lotação">
+              <Input placeholder="Exemplo: 1234567" />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Tipo da unidade">
+              <Select
+                placeholder="Selecione"
+                allowClear
+                options={opcoesFiltros.tipoUnidade}
+              />
+            </FormItem>
+          </Col>
 
-          <Campo label="Diretoria Regional de Educação (DRE)">
-            <Select
-              placeholder="Selecione"
-              allowClear
-              options={opcoesFiltros.dre}
-            />
-          </Campo>
-          <Campo label="Nome da unidade educacional">
-            <Input placeholder="Exemplo: João da Silva" />
-          </Campo>
-          <Campo label="Escolas municipalizadas">
-            <Select
-              defaultValue="todos"
-              options={opcoesFiltros.simNaoTodos}
-            />
-          </Campo>
-          <Campo label="Ano da municipalização">
-            <Select
-              placeholder="Selecione"
-              allowClear
-              options={opcoesFiltros.anoMunicipalizacao}
-            />
-          </Campo>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Diretoria Regional de Educação (DRE)">
+              <Select
+                placeholder="Selecione"
+                allowClear
+                options={opcoesFiltros.dre}
+              />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Nome da unidade educacional">
+              <Input placeholder="Exemplo: João da Silva" />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Escolas municipalizadas">
+              <Select
+                defaultValue="todos"
+                options={opcoesFiltros.simNaoTodos}
+              />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem label="Ano da municipalização">
+              <Select
+                placeholder="Selecione"
+                allowClear
+                options={opcoesFiltros.anoMunicipalizacao}
+              />
+            </FormItem>
+          </Col>
 
-          <Campo
-            label="Ensino fundamental I"
-            ajuda="Escolas que oferecem ensino fundamental."
-          >
-            <Select
-              defaultValue="todos"
-              options={opcoesFiltros.simNaoTodos}
-            />
-          </Campo>
-          <Campo
-            label="EJA Modular"
-            ajuda="Escolas com EJA na modalidade modular."
-          >
-            <Select
-              defaultValue="todos"
-              options={opcoesFiltros.simNaoTodos}
-            />
-          </Campo>
-          <Campo
-            label="São Paulo Integral"
-            ajuda="Escolas do programa São Paulo Integral."
-          >
-            <Select
-              defaultValue="todos"
-              options={opcoesFiltros.simNaoTodos}
-            />
-          </Campo>
-          <Campo
-            label="Unidade contabilizada"
-            ajuda="Escolas contabilizadas nos cálculos do sistema."
-          >
-            <Select
-              defaultValue="todos"
-              options={opcoesFiltros.simNaoTodos}
-            />
-          </Campo>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem
+              label="Ensino fundamental I"
+              help="Escolas que oferecem ensino fundamental."
+            >
+              <Select
+                defaultValue="todos"
+                options={opcoesFiltros.simNaoTodos}
+              />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem
+              label="EJA Modular"
+              help="Escolas com EJA na modalidade modular."
+            >
+              <Select
+                defaultValue="todos"
+                options={opcoesFiltros.simNaoTodos}
+              />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem
+              label="São Paulo Integral"
+              help="Escolas do programa São Paulo Integral."
+            >
+              <Select
+                defaultValue="todos"
+                options={opcoesFiltros.simNaoTodos}
+              />
+            </FormItem>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
+            <FormItem
+              label="Unidade contabilizada"
+              help="Escolas contabilizadas nos cálculos do sistema."
+            >
+              <Select
+                defaultValue="todos"
+                options={opcoesFiltros.simNaoTodos}
+              />
+            </FormItem>
+          </Col>
           <Col
             span={24}
             style={{

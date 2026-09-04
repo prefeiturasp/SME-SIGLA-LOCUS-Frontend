@@ -1,7 +1,10 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Button } from "antd";
-import { CabecalhoPagina } from "@/componentes/ui/CabecalhoPagina";
+import { useNavigate } from "react-router-dom";
+import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
+import { ConteudoPagina } from "@/estilos";
+import { CAMINHOS } from "@/rotas/caminhos";
 import { opcoesComponenteCurricular } from "./dados/dadosEstaticos";
 import { useGestaoUnidades } from "./hooks/useGestaoUnidades";
 import { CardComponenteCurricular } from "./componentes/CardComponenteCurricular";
@@ -9,6 +12,7 @@ import { CardFormFiltrosUnidades } from "./componentes/CardFormFiltrosUnidades";
 import { TabelaUnidades } from "./componentes/TabelaUnidades";
 
 export function GestaoUnidadesEducacionais() {
+  const navigate = useNavigate();
   const {
     unidades,
     total,
@@ -29,6 +33,7 @@ export function GestaoUnidadesEducacionais() {
             <Button
               type="primary"
               icon={<AddRoundedIcon fontSize="small" />}
+              onClick={() => navigate(CAMINHOS.cadastroRegistrarUE)}
             >
               Registrar UE
             </Button>
@@ -42,14 +47,7 @@ export function GestaoUnidadesEducacionais() {
         }
       />
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 16,
-          padding: "16px 32px",
-        }}
-      >
+      <ConteudoPagina>
         <CardComponenteCurricular
           estatisticas={painel?.estatisticas ?? []}
           opcoesComponente={opcoesComponenteCurricular}
@@ -67,7 +65,7 @@ export function GestaoUnidadesEducacionais() {
           total={total}
           carregando={carregando}
         />
-      </div>
+      </ConteudoPagina>
     </>
   );
 }

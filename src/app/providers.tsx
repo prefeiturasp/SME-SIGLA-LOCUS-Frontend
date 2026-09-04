@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConfigProvider } from "antd";
+import { App as AntdApp, ConfigProvider } from "antd";
+import { ThemeProvider } from "styled-components";
 import ptBR from "antd/locale/pt_BR";
 import { temaAntd } from "@/estilos/temas/temaAntd";
+import { tema } from "@/estilos/tokens/tokens";
+import { GlobalStyle } from "@/estilos/global/GlobalStyle";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,15 +17,17 @@ const queryClient = new QueryClient({
   },
 });
 
-/**
- * Provedores globais: React Query, tema/locale do Ant Design e o roteador.
- */
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider theme={temaAntd} locale={ptBR}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </ConfigProvider>
+      <ThemeProvider theme={tema}>
+        <GlobalStyle />
+        <ConfigProvider theme={temaAntd} locale={ptBR}>
+          <AntdApp>
+            <BrowserRouter>{children}</BrowserRouter>
+          </AntdApp>
+        </ConfigProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

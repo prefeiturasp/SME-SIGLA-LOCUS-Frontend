@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Button, Result } from "antd";
 import { CAMINHOS } from "@/rotas/caminhos";
 
-/** Pagina 404 do sistema. */
 export function NaoEncontrado() {
   return (
     <Result
