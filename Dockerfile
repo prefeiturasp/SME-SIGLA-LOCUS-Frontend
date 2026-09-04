@@ -4,8 +4,10 @@ WORKDIR /app
 
 COPY . ./
 RUN export NODE_PATH=src/ \
-    && npm install \
-    && npm run build
+    && npm install --loglevel verbose \
+    && npm list --depth=0 \
+    && npm run build 
+
 
 FROM nginx:alpine
 COPY entrypoint.sh /app/entrypoint.sh
