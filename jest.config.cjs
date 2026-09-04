@@ -9,7 +9,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.cjs"],
-  coverageReporters: ["text", "html"],
+  coverageReporters: ["text", "html", "lcov"],
   coverageDirectory: "coverage",
   coveragePathIgnorePatterns: [
     "/node_modules/",
