@@ -2,6 +2,7 @@ import { Card, Table, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { IconeExcluir } from "@/componentes/IconeExcluir";
 import { BotaoExcluir } from "@/estilos";
+import { formatarNumeroPadded } from "@/utilitarios/formatadores";
 import type { ComponenteCurricularAdicionado } from "../hooks/useRegistrarUnidadeEducacional";
 import { DivSemDados } from "./DivSemDados";
 import { FormularioAdicionarComponenteCurricular } from "./FormularioAdicionarComponenteCurricular";
@@ -17,10 +18,6 @@ export interface CardComponentesCurricularesProps {
   aoAlterarQuantidade: (valor: string) => void;
   aoAdicionar: () => void;
   aoRemover: (id: string) => void;
-}
-
-function formatarModulos(quantidade: number): string {
-  return String(quantidade).padStart(2, "0");
 }
 
 function criarColunas(
@@ -39,7 +36,7 @@ function criarColunas(
       key: "quantidadeModulos",
       width: 120,
       align: "center",
-      render: (quantidade: number) => formatarModulos(quantidade),
+      render: (quantidade: number) => formatarNumeroPadded(quantidade),
     },
     {
       title: "",

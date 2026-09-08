@@ -3,6 +3,7 @@ import type {
   OpcaoSelecao,
   UnidadeEducacional,
 } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { LEGENDAS_ESTATISTICA } from "@/servicos/recursos/unidadesEducacionais/textos";
 
 
 export const TOTAL_REGISTROS = 5985;
@@ -31,25 +32,25 @@ export const estatisticasPainel: EstatisticaPainel[] = [
     chave: "modulos",
     valor: 105,
     rotulo: "Módulos",
-    legenda: "Quantidade de professores alocados",
+    legenda: LEGENDAS_ESTATISTICA.modulos,
   },
   {
     chave: "lotacao",
     valor: 108,
     rotulo: "Lotação",
-    legenda: "Quantidade de vagas disponibilizadas",
+    legenda: LEGENDAS_ESTATISTICA.lotacao,
   },
   {
     chave: "afastados",
     valor: 152,
     rotulo: "Afastados",
-    legenda: "Quantidade de afastamentos temporários",
+    legenda: LEGENDAS_ESTATISTICA.afastados,
   },
   {
     chave: "vagas",
     valor: 54,
     rotulo: "Vagas",
-    legenda: "Quantidade de vagas ainda disponíveis",
+    legenda: LEGENDAS_ESTATISTICA.vagas,
   },
   {
     chave: "unidades",

@@ -119,3 +119,115 @@ export class LotacaoNaoEncontradaError extends Error {
     this.name = "LotacaoNaoEncontradaError";
   }
 }
+
+/* ======= Detalhe da unidade educacional ======= */
+
+export const grupoComponenteSchema = z.enum([
+  "baseComum",
+  "linguagensAdicionais",
+]);
+export type GrupoComponente = z.infer<typeof grupoComponenteSchema>;
+
+export const ROTULO_GRUPO_COMPONENTE: Record<GrupoComponente, string> = {
+  baseComum: "Base comum",
+  linguagensAdicionais: "Linguagens adicionais",
+};
+
+/** Ordem de exibicao dos grupos na tabela de componentes. */
+export const ORDEM_GRUPOS: GrupoComponente[] = [
+  "baseComum",
+  "linguagensAdicionais",
+];
+
+export const componenteCurricularDetalheSchema = z.object({
+  id: z.string(),
+  componente: z.string(),
+  grupo: grupoComponenteSchema,
+  modulo: z.number().int().nonnegative(),
+  lotacao: z.number().int().nonnegative(),
+  afastados: z.number().int().nonnegative(),
+  vacancias: z.number().int().nonnegative(),
+  saldoVagas: z.number().int(),
+});
+export type ComponenteCurricularDetalhe = z.infer<
+  typeof componenteCurricularDetalheSchema
+>;
+
+export const tipoVagaSchema = z.enum(["definitivo", "precario"]);
+export type TipoVaga = z.infer<typeof tipoVagaSchema>;
+
+export const ROTULO_TIPO_VAGA: Record<TipoVaga, string> = {
+  definitivo: "Definitivo",
+  precario: "Precário",
+};
+
+export const professorLotadoSchema = z.object({
+  rf: z.string(),
+  nome: z.string(),
+  tipoVaga: tipoVagaSchema,
+});
+export type ProfessorLotado = z.infer<typeof professorLotadoSchema>;
+
+export const tipoAfastamentoSchema = z.enum([
+  "licencaMedica",
+  "afastamentoEstudo",
+]);
+export type TipoAfastamento = z.infer<typeof tipoAfastamentoSchema>;
+
+export const ROTULO_TIPO_AFASTAMENTO: Record<TipoAfastamento, string> = {
+  licencaMedica: "Licença médica",
+  afastamentoEstudo: "Afastamento para estudo",
+};
+
+export const professorAfastadoSchema = z.object({
+  rf: z.string(),
+  nome: z.string(),
+  tipoAfastamento: tipoAfastamentoSchema,
+});
+export type ProfessorAfastado = z.infer<typeof professorAfastadoSchema>;
+
+export const registroHistoricoSchema = z.object({
+  id: z.string(),
+  acao: z.string(),
+  responsavel: z.string(),
+  /** ISO 8601; formatado na view. */
+  data: z.string(),
+});
+export type RegistroHistorico = z.infer<typeof registroHistoricoSchema>;
+
+export const detalheUnidadeSchema = z.object({
+  codigoLotacao: z.string(),
+  tipo: z.string(),
+  nome: z.string(),
+  dre: z.string(),
+  estatisticas: z.array(estatisticaPainelSchema),
+  componentes: z.array(componenteCurricularDetalheSchema),
+});
+export type DetalheUnidade = z.infer<typeof detalheUnidadeSchema>;
+
+export const alteracaoModuloSchema = z.object({
+  componenteId: z.string(),
+  modulo: z.number().int().nonnegative(),
+});
+export type AlteracaoModulo = z.infer<typeof alteracaoModuloSchema>;
+
+export const payloadSalvarModulosSchema = z.object({
+  codigoLotacao: z.string().min(1),
+  alteracoes: z.array(alteracaoModuloSchema).min(1),
+});
+export type PayloadSalvarModulos = z.infer<typeof payloadSalvarModulosSchema>;
+
+export const respostaOperacaoSchema = z.object({
+  sucesso: z.boolean(),
+  mensagem: z.string().optional(),
+});
+export type RespostaOperacao = z.infer<typeof respostaOperacaoSchema>;
+
+export class UnidadeNaoEncontradaError extends Error {
+  readonly codigo = "UNIDADE_NAO_ENCONTRADA" as const;
+
+  constructor(mensagem = "Unidade educacional não encontrada") {
+    super(mensagem);
+    this.name = "UnidadeNaoEncontradaError";
+  }
+}

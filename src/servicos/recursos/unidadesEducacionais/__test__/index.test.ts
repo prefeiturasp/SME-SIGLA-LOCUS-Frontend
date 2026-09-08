@@ -1,14 +1,20 @@
 import {
   consultarLotacao,
+  excluirUnidade,
   registrar,
+  reiniciarModulosSalvos,
+  salvarModulos,
+  unidadesEducacionaisDetalheServico,
   unidadesEducacionaisServico,
   URL,
 } from "../index";
 import {
   dadosLotacaoConsultaSchema,
+  detalheUnidadeSchema,
   LotacaoNaoEncontradaError,
   respostaListagemSchema,
   respostaRegistrarUnidadeSchema,
+  UnidadeNaoEncontradaError,
 } from "../tipos";
 import {
   TOTAL_REGISTROS,
@@ -87,5 +93,92 @@ describe("registrar (padrao Alvo)", () => {
 
     const { response } = registrar(payloadValido);
     await expect(response).rejects.toThrow("Erro simulado no registro da UE");
+  });
+});
+
+describe("detalhe da unidade educacional", () => {
+  beforeEach(() => reiniciarModulosSalvos());
+
+  it("resolve um detalhe valido pelo codigo de lotacao", async () => {
+    const detalhe =
+      await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
+
+    expect(() => detalheUnidadeSchema.parse(detalhe)).not.toThrow();
+    expect(detalhe.nome).toBe("Cidade Tiradentes");
+    expect(detalhe.componentes).toHaveLength(22);
+  });
+
+  it("rejeita codigo inexistente com UnidadeNaoEncontradaError", async () => {
+    await expect(
+      unidadesEducacionaisDetalheServico.obterDetalhe("999999"),
+    ).rejects.toBeInstanceOf(UnidadeNaoEncontradaError);
+  });
+
+  it("persiste os modulos salvos e recalcula as vagas", async () => {
+    const antes =
+      await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
+    const arteAntes = antes.componentes.find((c) => c.id === "arte");
+    expect(arteAntes).toMatchObject({ modulo: 3, saldoVagas: -2 });
+
+    await salvarModulos({
+      codigoLotacao: "091488",
+      alteracoes: [{ componenteId: "arte", modulo: 6 }],
+    }).response;
+
+    const depois =
+      await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
+    const arteDepois = depois.componentes.find((c) => c.id === "arte");
+    expect(arteDepois).toMatchObject({ modulo: 6, saldoVagas: 1 });
+  });
+
+  it("nao aplica os modulos salvos na versao historica", async () => {
+    await salvarModulos({
+      codigoLotacao: "091488",
+      alteracoes: [{ componenteId: "arte", modulo: 6 }],
+    }).response;
+
+    const versao =
+      await unidadesEducacionaisDetalheServico.obterVersaoHistorica(
+        "091488",
+        "h1",
+      );
+
+    expect(versao.componentes.find((c) => c.id === "arte")?.modulo).toBe(3);
+  });
+
+  it("recusa payload de salvamento sem alteracoes", () => {
+    expect(() =>
+      salvarModulos({ codigoLotacao: "091488", alteracoes: [] }),
+    ).toThrow();
+  });
+
+  it("exclui uma unidade existente e rejeita uma inexistente", async () => {
+    const { response, abort } = excluirUnidade("091488");
+    expect(typeof abort).toBe("function");
+    await expect(response).resolves.toMatchObject({ sucesso: true });
+
+    await expect(excluirUnidade("999999").response).rejects.toBeInstanceOf(
+      UnidadeNaoEncontradaError,
+    );
+  });
+
+  it("lista professores lotados, afastados e o historico", async () => {
+    const lotados =
+      await unidadesEducacionaisDetalheServico.listarProfessoresLotados(
+        "091488",
+        "arte",
+      );
+    expect(lotados[0]).toMatchObject({ nome: "João da Silva" });
+
+    const afastados =
+      await unidadesEducacionaisDetalheServico.listarProfessoresAfastados(
+        "091488",
+        "biologia",
+      );
+    expect(afastados).toHaveLength(2);
+
+    const historico =
+      await unidadesEducacionaisDetalheServico.listarHistorico("091488");
+    expect(historico).toHaveLength(3);
   });
 });

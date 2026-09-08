@@ -2,7 +2,7 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { Button, Form, Input, Select, Table } from "antd";
+import { Button, Form, Input, InputNumber, Select, Table } from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
@@ -33,14 +33,36 @@ export const BotaoExcluir = styled(Button).attrs({
 
 /* ======= Tabela ======= */
 
-/** Tabela padrao do Locus: zebra, paginacao centralizada, total a esquerda. */
-export const Tabela = styled(Table)`
+/**
+ * Tabela padrao do Locus: zebra, paginacao centralizada, total a esquerda.
+ *
+ * `$linhasClicaveis` controla o cursor das linhas. O default `true` preserva
+ * o comportamento das telas que navegam ao clicar na linha; tabelas cujas
+ * linhas nao sao clicaveis devem passar `false`.
+ */
+export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   & .ant-table-tbody > tr {
-    cursor: pointer;
+    cursor: ${({ $linhasClicaveis = true }) =>
+      $linhasClicaveis ? "pointer" : "default"};
   }
 
   & .ant-table-tbody > tr.linhaPar > td {
     background: ${({ theme }) => theme.colors.stripedBackground};
+  }
+
+  & .ant-table-thead > tr > th {
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.primaryText};
+  }
+
+  & .ant-table-tbody > tr.linhaGrupo > td {
+    background: ${({ theme }) => theme.colors.blueBackgroundSoft};
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.blue};
+  }
+
+  & .ant-table-tbody > tr.linhaGrupo > td:first-child {
+    border-left: 4px solid ${({ theme }) => theme.colors.blue};
   }
 
   & .ant-pagination {
@@ -164,6 +186,14 @@ export function textoContagemPaginacao(
   )} registro(s)`;
 }
 
+/** Rodape das tabelas sem paginacao: "Mostrando 22 de 22 componentes". */
+export function textoContagemComponentes(
+  exibidos: number,
+  total: number,
+): string {
+  return `Mostrando ${exibidos} de ${total} componentes`;
+}
+
 export interface OpcoesPaginacaoPadrao {
   total: number;
   pageSize?: number;
@@ -263,6 +293,18 @@ export const PaginaCabecalho = styled.div`
     ${({ theme }) => theme.spacing.xl}px ${({ theme }) => theme.spacing.md}px;
 `;
 
+export const PaginaTextos = styled.div`
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+export const PaginaSubtitulo = styled.span`
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  color: ${({ theme }) => theme.colors.blue};
+`;
+
 export const PaginaTitulo = styled.h1`
   margin: 0;
   font-size: ${({ theme }) => theme.typography.fontSizeTitle}px;
@@ -310,7 +352,7 @@ export const StatIcone = styled.span`
   width: 24px;
   height: 24px;
   border-radius: ${({ theme }) => theme.layout.radius}px;
-  background: rgba(0, 104, 188, 0.1);
+  background: ${({ theme }) => theme.colors.blueBackground};
   color: ${({ theme }) => theme.colors.blue};
 
   & svg {
@@ -335,6 +377,125 @@ export const StatLegenda = styled.span`
 /** Herda cor do contexto (botao, menu, texto). */
 export const IconeExcluirLixeira = styled(DeleteOutlineIcon)`
   color: currentColor;
+`;
+
+/* ======= CabecalhoSecao ======= */
+
+/** Linha "titulo + descricao a esquerda / controle a direita" dos cards. */
+export const SecaoCabecalho = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.lg}px;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+`;
+
+export const SecaoTextos = styled.div`
+  flex: 1 1 0;
+  min-width: 0;
+`;
+
+export const SecaoAcao = styled.div<{ $largura?: number }>`
+  flex: 0 0 auto;
+  ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
+`;
+
+/* ======= CampoRotulado ======= */
+
+export const CampoRotuladoRaiz = styled.div<{ $largura?: number }>`
+  ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
+  max-width: 100%;
+`;
+
+export const CampoRotuladoLabel = styled.label`
+  display: block;
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
+/* ======= ColunaComInfo ======= */
+
+/** Cabecalho de coluna com icone de informacao. */
+export const CabecalhoColunaInfo = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+/* ======= GradeCartoesStat ======= */
+
+/** Grade responsiva de CartaoStat. */
+export const GradeCartoesStat = styled.div<{ $colunas?: number }>`
+  display: grid;
+  grid-template-columns: repeat(${({ $colunas = 3 }) => $colunas}, 1fr);
+  gap: ${({ theme }) => theme.spacing.md}px;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+/* ======= ChipNumero ======= */
+
+/** Altura dos controles numericos da tabela (chip clicavel e campo Modulo). */
+const ALTURA_CONTROLE_NUMERO = 50;
+
+/** Numero clicavel com borda azul (colunas Lotacao e Afastados). */
+export const ChipNumero = styled.button`
+  display: inline-flex;
+  box-sizing: border-box;
+  width: ${ALTURA_CONTROLE_NUMERO}px;
+  height: ${ALTURA_CONTROLE_NUMERO}px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid ${({ theme }) => theme.colors.blue};
+  border-radius: ${({ theme }) => theme.layout.radius}px;
+  background: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.blue};
+  font-family: inherit;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blueBackground};
+  }
+`;
+
+/** Contraparte nao clicavel do ChipNumero (valor zero). */
+export const NumeroSimples = styled.span`
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
+/* ======= CampoNumero ======= */
+
+export const CampoNumeroEstilizado = styled(InputNumber)`
+  box-sizing: border-box;
+  width: 80px;
+  height: ${ALTURA_CONTROLE_NUMERO}px;
+
+  .ant-input-number-input-wrap,
+  .ant-input-number-input {
+    height: 100%;
+  }
+`;
+
+/* ======= RotuloGrupo ======= */
+
+/** Rotulo das linhas de agrupamento da tabela ("Base comum"). */
+export const RotuloGrupo = styled.span`
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.blue};
 `;
 
 /* ======= Toast ======= */

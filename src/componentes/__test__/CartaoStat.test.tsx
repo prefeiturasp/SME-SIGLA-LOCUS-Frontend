@@ -10,7 +10,7 @@ describe("CartaoStat", () => {
         <CartaoStat
           valor={105}
           rotulo="Módulos"
-          legenda="Quantidade de professores alocados"
+          legenda="Quantidade de vagas disponibilizadas"
           icone={<GroupsOutlinedIcon />}
         />
       </ComTema>,
@@ -19,7 +19,7 @@ describe("CartaoStat", () => {
     expect(screen.getByText("105")).toBeInTheDocument();
     expect(screen.getByText("Módulos")).toBeInTheDocument();
     expect(
-      screen.getByText("Quantidade de professores alocados"),
+      screen.getByText("Quantidade de vagas disponibilizadas"),
     ).toBeInTheDocument();
   });
 });

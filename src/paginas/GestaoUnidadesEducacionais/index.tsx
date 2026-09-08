@@ -4,7 +4,7 @@ import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ConteudoPagina } from "@/estilos";
-import { CAMINHOS } from "@/rotas/caminhos";
+import { CAMINHOS, caminhoDetalheUE } from "@/rotas/caminhos";
 import { opcoesComponenteCurricular } from "./dados/dadosEstaticos";
 import { useGestaoUnidades } from "./hooks/useGestaoUnidades";
 import { CardComponenteCurricular } from "./componentes/CardComponenteCurricular";
@@ -64,6 +64,9 @@ export function GestaoUnidadesEducacionais() {
           unidades={unidades}
           total={total}
           carregando={carregando}
+          aoSelecionarUnidade={(unidade) =>
+            navigate(caminhoDetalheUE(unidade.codigoLotacao))
+          }
         />
       </ConteudoPagina>
     </>

@@ -1,110 +1,82 @@
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { DatePicker, Tooltip, Typography } from "antd";
+import { DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
+import { CampoRotulado } from "@/componentes/CampoRotulado";
+import { ColunaComInfo } from "@/componentes/ColunaComInfo";
 import { criarPaginacaoPadrao, TagVagas, Tabela } from "@/estilos";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
+import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/textos";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { formatarNumeroPadded } from "@/utilitarios/formatadores";
 
-const { Title, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
 
-function cabecalhoComInfo(titulo: string, dica: string) {
-  return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-      {titulo}
-      <Tooltip title={dica}>
-        <InfoOutlinedIcon fontSize="inherit" />
-      </Tooltip>
-    </span>
-  );
-}
-
 const colunas: ColumnsType<UnidadeEducacional> = [
-  { title: "Código de lotação", dataIndex: "codigoLotacao", key: "codigoLotacao" },
+  {
+    title: "Código de lotação",
+    dataIndex: "codigoLotacao",
+    key: "codigoLotacao",
+  },
   { title: "Tipo", dataIndex: "tipo", key: "tipo" },
   { title: "Unidade Educacional", dataIndex: "nome", key: "nome" },
   { title: "DRE", dataIndex: "dre", key: "dre" },
   {
-    title: cabecalhoComInfo(
-      "Módulo",
-      "Quantidade total de vagas previstas na unidade educacional, estejam elas ocupadas ou não.",
-    ),
+    title: <ColunaComInfo titulo="Módulo" dica={DICAS_COLUNAS_UNIDADE.modulo} />,
     dataIndex: "modulo",
     key: "modulo",
   },
   {
-    title: cabecalhoComInfo(
-      "Lotação",
-      "Quantidade de professores atualmente lotados na unidade educacional.",
+    title: (
+      <ColunaComInfo titulo="Lotação" dica={DICAS_COLUNAS_UNIDADE.lotacao} />
     ),
     dataIndex: "lotacao",
     key: "lotacao",
   },
   {
-    title: cabecalhoComInfo(
-      "Afastados",
-      "Quantidade de professores temporariamente afastados de suas atividades.",
+    title: (
+      <ColunaComInfo titulo="Afastados" dica={DICAS_COLUNAS_UNIDADE.afastados} />
     ),
     dataIndex: "afastados",
     key: "afastados",
-    render: (valor: number) => String(valor).padStart(2, "0"),
+    render: (valor: number) => formatarNumeroPadded(valor),
   },
   {
-    title: cabecalhoComInfo(
-      "Vagas",
-      "Valores negativos indicam professores excedentes. Valores positivos indicam vagas disponíveis.",
-    ),
+    title: <ColunaComInfo titulo="Vagas" dica={DICAS_COLUNAS_UNIDADE.vagas} />,
     dataIndex: "saldoVagas",
     key: "saldoVagas",
     render: (saldo: number) => <TagVagas saldo={saldo} />,
   },
 ];
 
-export interface TabelaUnidadesEscolares {
+export interface TabelaUnidadesProps {
   unidades: UnidadeEducacional[];
   total: number;
   carregando: boolean;
+  aoSelecionarUnidade?: (unidade: UnidadeEducacional) => void;
 }
 
 export function TabelaUnidades({
   unidades,
   total,
   carregando,
-}: TabelaUnidadesEscolares) {
+  aoSelecionarUnidade,
+}: TabelaUnidadesProps) {
   return (
     <section>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: 24,
-          padding: "0 8px",
-        }}
-      >
-        <div style={{ flex: "1 1 0", minWidth: 0 }}>
-          <Title level={4} style={{ marginTop: 0 }}>
-            Unidades educacionais
-          </Title>
-          <Paragraph>
-            Clique em uma unidade educacional para conferir os módulos de cada
-            componente curricular. Você também pode selecionar um período para
-            consultar as movimentações realizadas nesse intervalo.
-          </Paragraph>
-        </div>
-        <div>
-          <label
-            style={{ display: "block", fontWeight: 700, marginBottom: 8 }}
-            htmlFor="periodo"
-          >
-            Selecione um período
-          </label>
-          <RangePicker
-            id="periodo"
-            format="DD/MM/YYYY"
-            placeholder={["00/00/0000", "00/00/0000"]}
-          />
-        </div>
+      <div style={{ padding: "0 8px" }}>
+        <CabecalhoSecao
+          titulo="Unidades educacionais"
+          descricao="Clique em uma unidade educacional para conferir os módulos de cada componente curricular. Você também pode selecionar um período para consultar as movimentações realizadas nesse intervalo."
+          acao={
+            <CampoRotulado id="periodo" rotulo="Selecione um período">
+              <RangePicker
+                id="periodo"
+                format="DD/MM/YYYY"
+                placeholder={["00/00/0000", "00/00/0000"]}
+              />
+            </CampoRotulado>
+          }
+        />
       </div>
 
       <Tabela
@@ -112,9 +84,21 @@ export function TabelaUnidades({
         columns={colunas}
         dataSource={unidades}
         loading={carregando}
-        rowClassName={(_, indice) =>
-          indice % 2 === 1 ? "linhaPar" : ""
-        }
+        rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
+        onRow={(unidade) => ({
+          onClick: () => aoSelecionarUnidade?.(unidade),
+          role: aoSelecionarUnidade ? "button" : undefined,
+          tabIndex: aoSelecionarUnidade ? 0 : undefined,
+          onKeyDown: (evento) => {
+            if (
+              aoSelecionarUnidade &&
+              (evento.key === "Enter" || evento.key === " ")
+            ) {
+              evento.preventDefault();
+              aoSelecionarUnidade(unidade);
+            }
+          },
+        })}
         pagination={criarPaginacaoPadrao({
           total,
           pageSize: TAMANHO_PAGINA,

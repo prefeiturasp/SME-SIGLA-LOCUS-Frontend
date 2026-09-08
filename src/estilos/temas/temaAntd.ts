@@ -89,7 +89,25 @@ export const temaAntd: ThemeConfig = {
       defaultHoverColor: colors.blue,
       defaultActiveBorderColor: colors.blue,
       defaultActiveColor: colors.blue,
+      // Cor do texto dos botoes danger de fundo claro (text/default).
       dangerColor: colors.error,
+      // O primary danger tem fundo vermelho: o texto precisa ser branco.
+      primaryColor: colors.white,
+    },
+    Segmented: {
+      itemSelectedBg: colors.activeBlue,
+      itemSelectedColor: colors.white,
+      itemColor: colors.primaryText,
+      trackBg: "transparent",
+      borderRadius: layout.radius,
+      controlHeight: layout.controlHeight,
+    },
+    InputNumber: {
+      controlHeight: layout.controlHeight,
+      borderRadius: layout.radius,
+      hoverBorderColor: colors.border,
+      activeBorderColor: colors.border,
+      activeShadow: "none",
     },
     Switch: {
       colorPrimary: colors.blue,
