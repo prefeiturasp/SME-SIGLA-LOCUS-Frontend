@@ -1,7 +1,7 @@
 import { Card, Select } from "antd";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
 import { CampoRotulado } from "@/componentes/CampoRotulado";
-import { CartaoStat } from "@/componentes/CartaoStat";
+import { CardDados } from "@/componentes/CardDados";
 import { iconeDaEstatistica } from "@/componentes/iconesEstatistica";
 import { GradeCartoesStat } from "@/estilos";
 import type {
@@ -50,11 +50,11 @@ export function CardComponenteCurricular({
 
       <GradeCartoesStat $colunas={3}>
         {estatisticas.map((stat) => (
-          <CartaoStat
+          <CardDados
             key={stat.chave}
             valor={stat.valor}
-            rotulo={stat.rotulo}
-            legenda={stat.legenda}
+            titulo={stat.rotulo}
+            descricao={stat.legenda}
             icone={iconeDaEstatistica(stat.chave)}
           />
         ))}

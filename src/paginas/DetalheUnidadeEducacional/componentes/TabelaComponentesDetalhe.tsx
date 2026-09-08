@@ -1,9 +1,8 @@
-import { Table } from "antd";
+import { InputNumber, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { CampoNumeroModulo } from "@/componentes/CampoNumeroModulo";
-import { ChipNumeroClicavel } from "@/componentes/ChipNumeroClicavel";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
 import {
+  InputDesabilitadoAzul,
   RotuloGrupo,
   Tabela,
   TagVagas,
@@ -72,11 +71,16 @@ export function TabelaComponentesDetalhe({
       onCell: (linha) => celulaGrupo(linha, 1, TOTAL_COLUNAS),
       render: (_, linha) =>
         linha.tipo === "grupo" ? null : (
-          <CampoNumeroModulo
-            valor={linha.modulo}
-            desabilitado={somenteLeitura}
-            rotuloAcessivel={`Módulo de ${linha.componente}`}
-            aoAlterar={(valor) => aoAlterarModulo(linha.id, valor)}
+          <InputNumber
+            min={0}
+            max={999}
+            precision={0}
+            value={linha.modulo}
+            disabled={somenteLeitura}
+            aria-label={`Módulo de ${linha.componente}`}
+            onChange={(valor) =>
+              aoAlterarModulo(linha.id, typeof valor === "number" ? valor : 0)
+            }
           />
         ),
     },
@@ -93,12 +97,13 @@ export function TabelaComponentesDetalhe({
       onCell: (linha) => celulaGrupo(linha, 2, TOTAL_COLUNAS),
       render: (_, linha) =>
         linha.tipo === "grupo" ? null : (
-          <ChipNumeroClicavel
-            valor={linha.lotacao}
-            rotuloAcessivel={`Ver lotação de ${linha.componente}`}
-            aoClicar={
-              somenteLeitura ? undefined : () => aoAbrirLotacao(linha)
-            }
+          <InputDesabilitadoAzul
+            readOnly
+            $largura={50}
+            $clicavel={!somenteLeitura && linha.lotacao > 0}
+            value={String(linha.lotacao)}
+            aria-label={`Lotação de ${linha.componente}`}
+            onClick={() => aoAbrirLotacao(linha)}
           />
         ),
     },
@@ -115,16 +120,20 @@ export function TabelaComponentesDetalhe({
       onCell: (linha) => celulaGrupo(linha, 3, TOTAL_COLUNAS),
       render: (_, linha) =>
         linha.tipo === "grupo" ? null : (
-          <ChipNumeroClicavel
-            valor={linha.afastados}
-            rotuloAcessivel={`Ver afastados de ${linha.componente}`}
-            aoClicar={
-              somenteLeitura ? undefined : () => aoAbrirAfastados(linha)
+          <InputDesabilitadoAzul
+            readOnly
+            $largura={50}
+            $clicavel={!somenteLeitura && linha.afastados > 0}
+            value={String(linha.afastados)}
+            aria-label={`Afastados de ${linha.componente}`}
+            onClick={
+              somenteLeitura || linha.afastados === 0
+                ? undefined
+                : () => aoAbrirAfastados(linha)
             }
           />
         ),
-    },
-    {
+    },    {
       title: (
         <ColunaComInfo
           titulo="Vacâncias"
@@ -153,7 +162,6 @@ export function TabelaComponentesDetalhe({
 
   return (
     <Tabela
-      $linhasClicaveis={false}
       rowKey="id"
       columns={colunas}
       dataSource={linhas}

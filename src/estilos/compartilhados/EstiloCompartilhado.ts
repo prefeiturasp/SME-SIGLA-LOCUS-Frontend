@@ -226,6 +226,30 @@ export const InputForm = styled(Input)`
   min-width: 0;
 `;
 
+/** Input somente leitura com aparencia ativa: fundo branco e borda azul. */
+export const InputDesabilitadoAzul = styled(Input)<{
+  $largura?: number | string;
+  $clicavel?: boolean;
+}>`
+  width: ${({ $largura }) =>
+    $largura === undefined
+      ? "100%"
+      : typeof $largura === "number"
+        ? `${$largura}px`
+        : $largura};
+
+  &.ant-input-disabled,
+  &.ant-input[disabled],
+  &.ant-input-affix-wrapper-disabled,
+  &.ant-input[readonly] {
+    color: ${({ theme }) => theme.colors.primaryText} !important;
+    background-color: ${({ theme }) => theme.colors.white} !important;
+    border-color: ${({ theme }) => theme.colors.blue} !important;
+    cursor: ${({ $clicavel }) =>
+      $clicavel ? "pointer" : "default"} !important;
+  }
+`;
+
 export const InputFormFlex = styled(InputForm)`
   flex: 1 1 0;
 `;
@@ -318,9 +342,9 @@ export const PaginaAcoes = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
-/* ======= CartaoStat ======= */
+/* ======= CardDados ======= */
 
-export const StatCartao = styled.div`
+export const CardDiv = styled.div`
   display: flex;
   flex: 1 1 0;
   min-width: 0;
@@ -333,19 +357,19 @@ export const StatCartao = styled.div`
   background: ${({ theme }) => theme.colors.white};
 `;
 
-export const StatValor = styled.span`
+export const CardValor = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
-export const StatLinhaRotulo = styled.div`
+export const CardLinhaTitulo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-export const StatIcone = styled.span`
+export const CardTituloIcone = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -361,13 +385,13 @@ export const StatIcone = styled.span`
   }
 `;
 
-export const StatRotulo = styled.span`
+export const CardTitulo = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
-export const StatLegenda = styled.span`
+export const CardDescricao = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeCaption}px;
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
@@ -428,7 +452,7 @@ export const CabecalhoColunaInfo = styled.span`
 
 /* ======= GradeCartoesStat ======= */
 
-/** Grade responsiva de CartaoStat. */
+/** Grade responsiva de CardDados. */
 export const GradeCartoesStat = styled.div<{ $colunas?: number }>`
   display: grid;
   grid-template-columns: repeat(${({ $colunas = 3 }) => $colunas}, 1fr);

@@ -1,6 +1,9 @@
+import EventSeatOutlinedIcon from "@mui/icons-material/EventSeatOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
+import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
 import { Card, Typography } from "antd";
-import { CartaoStat } from "@/componentes/CartaoStat";
-import { iconeDaEstatistica } from "@/componentes/iconesEstatistica";
+import { CardDados } from "@/componentes/CardDados";
 import { GradeCartoesStat } from "@/estilos";
 import type { EstatisticaPainel } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
@@ -13,6 +16,11 @@ export interface CardInformacoesUnidadeProps {
 export function CardInformacoesUnidade({
   estatisticas,
 }: CardInformacoesUnidadeProps) {
+  const modulos = estatisticas.find((item) => item.chave === "modulos");
+  const lotacao = estatisticas.find((item) => item.chave === "lotacao");
+  const afastados = estatisticas.find((item) => item.chave === "afastados");
+  const vagas = estatisticas.find((item) => item.chave === "vagas");
+
   return (
     <Card>
       <Title level={4} style={{ marginTop: 0 }}>
@@ -24,15 +32,30 @@ export function CardInformacoesUnidade({
       </Paragraph>
 
       <GradeCartoesStat $colunas={4}>
-        {estatisticas.map((estatistica) => (
-          <CartaoStat
-            key={estatistica.chave}
-            valor={estatistica.valor}
-            rotulo={estatistica.rotulo}
-            legenda={estatistica.legenda}
-            icone={iconeDaEstatistica(estatistica.chave)}
-          />
-        ))}
+        <CardDados
+          valor="105"
+          titulo="Módulos"
+          descricao="Quantidade de vagas disponibilizadas"
+          icone={<ViewModuleOutlinedIcon />}
+        />
+        <CardDados
+          valor="108"
+          titulo="Lotação"
+          descricao="Quantidade de professores alocados"
+          icone={<GroupsOutlinedIcon />}
+        />
+        <CardDados
+          valor="8"
+          titulo="Afastados"
+          descricao="Quantidade de afastamentos temporários"
+          icone={<PersonRemoveOutlinedIcon />}
+        />
+        <CardDados
+          valor="5"
+          titulo="Vagas"
+          descricao="Quantidade de vagas ainda disponíveis"
+          icone={<EventSeatOutlinedIcon />}
+        />
       </GradeCartoesStat>
     </Card>
   );

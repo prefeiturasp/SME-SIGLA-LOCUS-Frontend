@@ -1,7 +1,6 @@
-import { Select } from "antd";
-import { CampoRotulado } from "@/componentes/CampoRotulado";
-import { GrupoFiltroSegmentado } from "@/componentes/GrupoFiltroSegmentado";
+import { FormItem, SelectForm } from "@/estilos";
 import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { SegmentadoComBorda } from "../Estilos";
 import {
   OPCOES_FILTRO_SITUACAO,
   type FiltroSituacao,
@@ -35,27 +34,33 @@ export function FiltrosComponentes({
         marginBottom: 24,
       }}
     >
-      <CampoRotulado
-        id="filtro-componente"
-        rotulo="Componente curricular"
-        largura={LARGURA_SELECT}
+      <FormItem
+        label="Componente curricular"
+        layout="vertical"
+        style={{ width: LARGURA_SELECT, marginBottom: 0 }}
       >
-        <Select
+        <SelectForm
           id="filtro-componente"
-          style={{ width: "100%" }}
           allowClear
           placeholder="Selecione"
           value={componenteSelecionado}
-          onChange={aoSelecionarComponente}
+          onChange={(valor) =>
+            aoSelecionarComponente(valor as string | undefined)
+          }
           options={opcoesComponente}
         />
-      </CampoRotulado>
+      </FormItem>
 
-      <GrupoFiltroSegmentado
-        opcoes={OPCOES_FILTRO_SITUACAO}
-        valor={filtroSituacao}
-        aoSelecionar={aoSelecionarFiltroSituacao}
-        rotuloAcessivel="Filtrar componentes por situação"
+      <SegmentadoComBorda
+        aria-label="Filtrar componentes por situação"
+        value={filtroSituacao}
+        onChange={(novoValor) =>
+          aoSelecionarFiltroSituacao(novoValor as FiltroSituacao)
+        }
+        options={OPCOES_FILTRO_SITUACAO.map(({ valor, rotulo }) => ({
+          label: rotulo,
+          value: valor,
+        }))}
       />
     </div>
   );

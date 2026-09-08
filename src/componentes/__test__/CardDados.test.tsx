@@ -1,16 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import { CartaoStat } from "../CartaoStat";
+import { CardDados } from "../CardDados";
 import { ComTema } from "@/testes/renderizarComTema";
 
-describe("CartaoStat", () => {
-  it("renderiza valor, rotulo e legenda", () => {
+describe("CardDados", () => {
+  it("renderiza valor, titulo e descricao", () => {
     render(
       <ComTema>
-        <CartaoStat
+        <CardDados
           valor={105}
-          rotulo="Módulos"
-          legenda="Quantidade de vagas disponibilizadas"
+          titulo="Módulos"
+          descricao="Quantidade de vagas disponibilizadas"
           icone={<GroupsOutlinedIcon />}
         />
       </ComTema>,

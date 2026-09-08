@@ -76,39 +76,44 @@ describe("TabelaComponentesDetalhe", () => {
     ).toBeInTheDocument();
   });
 
-  it("abre os paineis ao clicar nos numeros de lotacao e afastados", async () => {
-    const { aoAbrirLotacao, aoAbrirAfastados } = renderizarTabela();
+  it("abre o painel ao clicar no numero de afastados", async () => {
+    const { aoAbrirAfastados } = renderizarTabela();
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Ver lotação de Arte" }),
-    );
-    expect(aoAbrirLotacao).toHaveBeenCalledWith(
-      expect.objectContaining({ componente: "Arte" }),
-    );
-
-    await userEvent.click(
-      screen.getByRole("button", { name: "Ver afastados de Biologia" }),
-    );
+    await userEvent.click(screen.getByLabelText("Afastados de Biologia"));
     expect(aoAbrirAfastados).toHaveBeenCalledWith(
       expect.objectContaining({ componente: "Biologia" }),
     );
   });
 
-  it("nao torna clicavel o numero zero", () => {
+  it("exibe a lotacao como input somente leitura", () => {
     renderizarTabela();
 
-    // Arte tem 0 afastados no mock.
-    expect(
-      screen.queryByRole("button", { name: "Ver afastados de Arte" }),
-    ).not.toBeInTheDocument();
+    const campoLotacao = screen.getByLabelText("Lotação de Arte");
+    expect(campoLotacao).toHaveAttribute("readonly");
+    expect(campoLotacao).toHaveValue("5");
   });
 
-  it("desabilita a edicao no modo somente leitura", () => {
-    renderizarTabela({ somenteLeitura: true });
+  it("nao abre painel quando o valor e zero", async () => {
+    const { aoAbrirAfastados } = renderizarTabela();
+
+    // Arte tem 0 afastados no mock.
+    await userEvent.click(screen.getByLabelText("Afastados de Arte"));
+    expect(aoAbrirAfastados).not.toHaveBeenCalled();
+  });
+
+  it("desabilita a edicao no modo somente leitura", async () => {
+    const { aoAbrirLotacao, aoAbrirAfastados } = renderizarTabela({
+      somenteLeitura: true,
+    });
 
     expect(screen.getByLabelText("Módulo de Arte")).toBeDisabled();
-    expect(
-      screen.queryByRole("button", { name: "Ver lotação de Arte" }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Lotação de Arte")).toHaveAttribute(
+      "readonly",
+    );
+
+    await userEvent.click(screen.getByLabelText("Lotação de Arte"));
+    await userEvent.click(screen.getByLabelText("Afastados de Biologia"));
+    expect(aoAbrirLotacao).not.toHaveBeenCalled();
+    expect(aoAbrirAfastados).not.toHaveBeenCalled();
   });
 });
