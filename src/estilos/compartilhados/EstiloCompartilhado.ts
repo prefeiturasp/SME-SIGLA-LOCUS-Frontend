@@ -12,9 +12,6 @@ import {
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/tipos/unidadesEducacionais";
 
-/* ======= BotaoExcluir ======= */
-
-/** Botao de exclusao padrao (icone lixeira, vermelho). */
 export const BotaoExcluir = styled(Button).attrs({
   type: "text",
   danger: true,
@@ -31,15 +28,6 @@ export const BotaoExcluir = styled(Button).attrs({
   }
 `;
 
-/* ======= Tabela ======= */
-
-/**
- * Tabela padrao do Locus: zebra, paginacao centralizada, total a esquerda.
- *
- * `$linhasClicaveis` controla o cursor das linhas. O default `true` preserva
- * o comportamento das telas que navegam ao clicar na linha; tabelas cujas
- * linhas nao sao clicaveis devem passar `false`.
- */
 export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   & .ant-table-tbody > tr {
     cursor: ${({ $linhasClicaveis = true }) =>
@@ -84,7 +72,6 @@ export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   }
 ` as typeof Table;
 
-/** Area de conteudo padrao das paginas (gap e padding do mockup). */
 export const ConteudoPagina = styled.div`
   display: flex;
   flex-direction: column;
@@ -92,8 +79,6 @@ export const ConteudoPagina = styled.div`
   padding: ${({ theme }) => theme.spacing.md}px
     ${({ theme }) => theme.spacing.xl}px;
 `;
-
-/* ======= Tag ======= */
 
 export type VarianteTag = "disponivel" | "excedente" | "completo" | "neutro";
 
@@ -117,7 +102,6 @@ const estilosPorVarianteTag = (variante: VarianteTag, tema: DefaultTheme) =>
     `,
   })[variante];
 
-/** Tag padrao do Locus (chip com icone + texto). */
 export const Tag = styled.span<{ $variante: VarianteTag }>`
   display: inline-flex;
   align-items: center;
@@ -137,13 +121,10 @@ export const Tag = styled.span<{ $variante: VarianteTag }>`
   ${({ $variante, theme }) => estilosPorVarianteTag($variante, theme)}
 `;
 
-/* ======= TagVagas ======= */
-
 export interface TagVagasProps {
   saldo: number;
 }
 
-/** Tag de vagas padrao do Locus (+N disponiveis, -N excedentes, Completo). */
 export function TagVagas({ saldo }: TagVagasProps) {
   const situacao = situacaoDoSaldo(saldo);
 
@@ -173,8 +154,6 @@ export function TagVagas({ saldo }: TagVagasProps) {
   );
 }
 
-/* ======= paginacao ======= */
-
 export const TAMANHO_PAGINA_PADRAO = 10;
 
 export function textoContagemPaginacao(
@@ -186,7 +165,6 @@ export function textoContagemPaginacao(
   )} registro(s)`;
 }
 
-/** Rodape das tabelas sem paginacao: "Mostrando 22 de 22 componentes". */
 export function textoContagemComponentes(
   exibidos: number,
   total: number,
@@ -217,8 +195,6 @@ export function criarPaginacaoPadrao({
   };
 }
 
-/* ======= campos ======= */
-
 const { TextArea } = Input;
 
 export const InputForm = styled(Input)`
@@ -226,7 +202,6 @@ export const InputForm = styled(Input)`
   min-width: 0;
 `;
 
-/** Input somente leitura com aparencia ativa: fundo branco e borda azul. */
 export const InputDesabilitadoAzul = styled(Input)<{
   $largura?: number | string;
   $clicavel?: boolean;
@@ -270,8 +245,6 @@ export const FormItem = styled(Form.Item)`
   width: 100%;
 `;
 
-/* ======= layoutFormulario ======= */
-
 export const LinhaCampoAcao = styled.div`
   display: flex;
   width: 100%;
@@ -306,8 +279,6 @@ export const BotaoAcaoInline = styled(Button).attrs({ type: "default" })`
   white-space: nowrap;
 `;
 
-/* ======= CabecalhoPagina ======= */
-
 export const PaginaCabecalho = styled.div`
   display: flex;
   align-items: center;
@@ -341,8 +312,6 @@ export const PaginaAcoes = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
-
-/* ======= CardDados ======= */
 
 export const CardDiv = styled.div`
   display: flex;
@@ -396,16 +365,10 @@ export const CardDescricao = styled.span`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
-/* ======= IconeExcluir ======= */
-
-/** Herda cor do contexto (botao, menu, texto). */
 export const IconeExcluirLixeira = styled(DeleteOutlineIcon)`
   color: currentColor;
 `;
 
-/* ======= CabecalhoCard ======= */
-
-/** Linha "titulo + descricao a esquerda / controle a direita" dos cards. */
 export const SecaoCabecalho = styled.div`
   display: flex;
   align-items: flex-start;
@@ -427,8 +390,6 @@ export const SecaoAcao = styled.div<{ $largura?: number }>`
   ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
 `;
 
-/* ======= CampoRotulado ======= */
-
 export const CampoRotuladoRaiz = styled.div<{ $largura?: number }>`
   ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
   max-width: 100%;
@@ -441,18 +402,12 @@ export const CampoRotuladoLabel = styled.label`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
-/* ======= ColunaComInfo ======= */
-
-/** Cabecalho de coluna com icone de informacao. */
 export const CabecalhoColunaInfo = styled.span`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs}px;
 `;
 
-/* ======= GradeCartoesStat ======= */
-
-/** Grade responsiva de CardDados. */
 export const GradeCartoesStat = styled.div<{ $colunas?: number }>`
   display: grid;
   grid-template-columns: repeat(${({ $colunas = 3 }) => $colunas}, 1fr);
@@ -467,12 +422,8 @@ export const GradeCartoesStat = styled.div<{ $colunas?: number }>`
   }
 `;
 
-/* ======= ChipNumero ======= */
-
-/** Altura dos controles numericos da tabela (chip clicavel e campo Modulo). */
 const ALTURA_CONTROLE_NUMERO = 50;
 
-/** Numero clicavel com borda azul (colunas Lotacao e Afastados). */
 export const ChipNumero = styled.button`
   display: inline-flex;
   box-sizing: border-box;
@@ -496,12 +447,9 @@ export const ChipNumero = styled.button`
   }
 `;
 
-/** Contraparte nao clicavel do ChipNumero (valor zero). */
 export const NumeroSimples = styled.span`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
-
-/* ======= CampoNumero ======= */
 
 export const CampoNumeroEstilizado = styled(InputNumber)`
   box-sizing: border-box;
@@ -514,15 +462,10 @@ export const CampoNumeroEstilizado = styled(InputNumber)`
   }
 `;
 
-/* ======= RotuloGrupo ======= */
-
-/** Rotulo das linhas de agrupamento da tabela ("Base comum"). */
 export const RotuloGrupo = styled.span`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.blue};
 `;
-
-/* ======= Toast ======= */
 
 export const useNotificacao = useNotificacaoHook;
 export const useToast = useNotificacaoHook;

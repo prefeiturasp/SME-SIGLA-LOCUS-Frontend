@@ -120,8 +120,6 @@ export class LotacaoNaoEncontradaError extends Error {
   }
 }
 
-/* ======= Detalhe da unidade educacional ======= */
-
 export const grupoComponenteSchema = z.enum([
   "baseComum",
   "linguagensAdicionais",
@@ -133,7 +131,6 @@ export const ROTULO_GRUPO_COMPONENTE: Record<GrupoComponente, string> = {
   linguagensAdicionais: "Linguagens adicionais",
 };
 
-/** Ordem de exibicao dos grupos na tabela de componentes. */
 export const ORDEM_GRUPOS: GrupoComponente[] = [
   "baseComum",
   "linguagensAdicionais",
@@ -190,7 +187,6 @@ export const registroHistoricoSchema = z.object({
   id: z.string(),
   acao: z.string(),
   responsavel: z.string(),
-  /** ISO 8601; formatado na view. */
   data: z.string(),
 });
 export type RegistroHistorico = z.infer<typeof registroHistoricoSchema>;

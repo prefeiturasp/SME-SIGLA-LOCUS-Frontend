@@ -20,7 +20,6 @@ export function obterUsuarioLogado(): UsuarioLogado {
       return usuarioLogadoSchema.parse(JSON.parse(bruto));
     }
   } catch {
-    // storage indisponivel ou JSON invalido -> usa o mock
   }
   return USUARIO_MOCK;
 }
@@ -31,7 +30,6 @@ export function encerrarSessao(
   try {
     localStorage.removeItem("USUARIO");
   } catch {
-    // ignora storage indisponivel
   }
   aoFinalizar();
 }

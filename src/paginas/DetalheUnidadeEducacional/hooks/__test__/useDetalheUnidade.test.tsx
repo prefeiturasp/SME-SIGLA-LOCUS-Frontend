@@ -106,7 +106,6 @@ describe("useDetalheUnidade", () => {
     expect(result.current.componentesExibidos).toBe(1);
 
     act(() => result.current.selecionarFiltroSituacao("comVagas"));
-    // Arte e excedente, entao nao atende "com vagas".
     expect(result.current.componentesExibidos).toBe(0);
   });
 

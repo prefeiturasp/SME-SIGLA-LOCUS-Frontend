@@ -10,7 +10,6 @@ function ComTema({ children }: { children: ReactNode }) {
   return <ThemeProvider theme={tema}>{children}</ThemeProvider>;
 }
 
-/** Render com ThemeProvider — necessario para styled-components. */
 export function renderizarComTema(
   ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
@@ -23,16 +22,9 @@ export function renderizarComTema(
 
 export interface ComProvedoresProps {
   children: ReactNode;
-  /** Rota inicial do MemoryRouter. */
   rota?: string;
 }
 
-/**
- * Casca completa de providers para testes de integracao.
- *
- * Inclui o `App` do antd, exigido por `useNotificacao` (App.useApp) e pelo
- * contexto de portal de Drawer/Modal.
- */
 export function ComProvedores({ children, rota = "/" }: ComProvedoresProps) {
   return (
     <ComTema>

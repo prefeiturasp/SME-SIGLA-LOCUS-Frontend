@@ -7,12 +7,10 @@ const { Title, Paragraph } = Typography;
 export interface CabecalhoCardProps {
   titulo: string;
   descricao?: ReactNode;
-  /** Controle exibido a direita (select rotulado, seletor de periodo, botao). */
   acao?: ReactNode;
   larguraAcao?: number;
 }
 
-/** Cabecalho de card: titulo e descricao a esquerda, controle a direita. */
 export function CabecalhoCard({
   titulo,
   descricao,

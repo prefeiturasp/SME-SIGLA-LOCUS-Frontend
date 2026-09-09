@@ -109,10 +109,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   const [versaoVisualizada, setVersaoVisualizada] = useState<
     RegistroHistorico | undefined
   >();
-  /**
-   * Incrementado apos salvar para forcar o recarregamento do detalhe — e o que
-   * traz de volta os modulos recem-gravados na camada de dados.
-   */
   const [versaoDados, setVersaoDados] = useState(0);
 
   const detalheQuery = useDadosEstaticos(
@@ -156,7 +152,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     [unidade?.componentes],
   );
 
-  /** Modulos originais, para detectar quando uma edicao volta ao valor inicial. */
   const modulosOriginais = useMemo(() => {
     const mapa = new Map<string, number>();
     componentes.forEach((componente) =>
@@ -165,7 +160,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     return mapa;
   }, [componentes]);
 
-  /** Componentes com as edicoes pendentes aplicadas e as vagas recalculadas. */
   const componentesComEdicoes = useMemo(
     () =>
       componentes.map((componente) => {
@@ -208,10 +202,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
 
   const possuiAlteracoes = Object.keys(modulosEditados).length > 0;
 
-  /**
-   * Espelha `modulosEditados` para leitura sincrona nos callbacks, sem
-   * depender da closure do render. Atualizado junto de cada `setState`.
-   */
   const modulosEditadosRef = useRef(modulosEditados);
 
   const definirModulosEditados = useCallback(
@@ -293,8 +283,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   }, [codigoLotacao, navigate, notificacao]);
 
   const voltar = useCallback(() => {
-    // Usa o ref para nao depender da closure: `voltar` pode ser chamado no
-    // mesmo ciclo de uma edicao, quando `possuiAlteracoes` ainda esta defasado.
     if (Object.keys(modulosEditadosRef.current).length > 0) {
       setModalSaidaAberto(true);
       return;

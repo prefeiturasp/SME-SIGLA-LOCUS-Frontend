@@ -9,7 +9,6 @@ import type {
   RegistroHistorico,
 } from "@/tipos/unidadesEducacionais";
 
-/** Componente antes de ter saldo de vagas e id derivados. */
 interface ComponenteBase {
   componente: string;
   grupo: ComponenteCurricularDetalhe["grupo"];
@@ -19,12 +18,6 @@ interface ComponenteBase {
   vacancias: number;
 }
 
-/**
- * Vagas = modulo - lotacao + afastados + vacancias.
- *
- * Afastados e vacancias liberam a vaga que o professor ocupava, entao contam
- * a favor do saldo.
- */
 export function calcularSaldoVagas({
   modulo,
   lotacao,
@@ -46,7 +39,6 @@ function identificador(componente: string): string {
 }
 
 const COMPONENTES_BASE: ComponenteBase[] = [
-  // Base comum
   {
     componente: "Arte",
     grupo: "baseComum",
@@ -199,7 +191,6 @@ const COMPONENTES_BASE: ComponenteBase[] = [
     afastados: 0,
     vacancias: 0,
   },
-  // Linguagens adicionais
   {
     componente: "Espanhol",
     grupo: "linguagensAdicionais",
@@ -269,12 +260,6 @@ function montarEstatisticas(
   ];
 }
 
-/**
- * Detalhe de cada UE da listagem, indexado pelo codigo de lotacao.
- *
- * As estatisticas vem da propria linha da listagem, para os numeros das duas
- * telas nao divergirem.
- */
 export const detalhesPorCodigo: Record<string, DetalheUnidade> =
   Object.fromEntries(
     linhasUnidades.map((unidade) => [
@@ -346,7 +331,6 @@ export const professoresAfastadosPorComponente: Record<
   ],
 };
 
-/** Professores padrao para componentes sem lista propria no mock. */
 export const professoresLotadosPadrao: ProfessorLotado[] = [
   { nome: "João da Silva", rf: "123.456.7", tipoVaga: "definitivo" },
   { nome: "Maria Souza", rf: "123.456.7", tipoVaga: "precario" },

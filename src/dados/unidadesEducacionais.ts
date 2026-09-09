@@ -51,12 +51,6 @@ export const unidadesEducacionaisServico = {
   }),
 };
 
-/**
- * Estado mutavel dos modulos salvos, por codigo de lotacao e componente.
- *
- * Sem isso o recarregamento apos salvar volta ao dado estatico e desfaz a
- * edicao do usuario na tela.
- */
 const modulosSalvos = new Map<string, Map<string, number>>();
 
 function aplicarModulosSalvos(detalhe: DetalheUnidade): DetalheUnidade {
@@ -106,12 +100,6 @@ export const unidadesEducacionaisDetalheServico = {
   listarHistorico: async (_codigo: string): Promise<RegistroHistorico[]> =>
     historicoExemplo,
 
-  /**
-   * Versao anterior do registro, para o modo somente leitura.
-   *
-   * Devolve o detalhe original (sem as edicoes salvas), que e o que uma versao
-   * historica representa.
-   */
   obterVersaoHistorica: async (
     codigo: string,
     _idRegistro: string,
@@ -156,7 +144,6 @@ export async function excluirUnidade(
   };
 }
 
-/** Limpa o estado mutavel dos modulos salvos. Uso exclusivo dos testes. */
 export function reiniciarModulosSalvos(): void {
   modulosSalvos.clear();
 }

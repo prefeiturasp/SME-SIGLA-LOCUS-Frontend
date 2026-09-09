@@ -7,10 +7,6 @@ import { reiniciarModulosSalvos } from "@/dados/unidadesEducacionais";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { DetalheUnidadeEducacional } from "../index";
 
-/**
- * A casca completa + query assincrona pode passar do 1s padrao do findBy*
- * quando a suite roda em paralelo.
- */
 const ESPERA = { timeout: 5000 };
 
 function renderNaCasca(codigo = "091488") {
@@ -56,7 +52,6 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     expect(within(informacoes).getByText("Afastados")).toBeInTheDocument();
     expect(within(informacoes).getByText("Vagas")).toBeInTheDocument();
 
-    // breadcrumb da casca resolvido pela rota com parametro
     const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
     expect(within(breadcrumb).getByText("Início")).toBeInTheDocument();
     expect(within(breadcrumb).getByText("Cadastro")).toBeInTheDocument();

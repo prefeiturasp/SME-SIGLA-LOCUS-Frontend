@@ -4,7 +4,6 @@ import type { ColumnsType } from "antd/es/table";
 import { PainelLateral } from "@/componentes/PainelLateral";
 import type { RegistroHistorico } from "@/tipos/unidadesEducacionais";
 
-/** Formata a data ISO do registro no padrao dd/mm/aaaa hh:mm. */
 export function formatarDataHistorico(iso: string): string {
   const data = new Date(iso);
   if (Number.isNaN(data.getTime())) return iso;
