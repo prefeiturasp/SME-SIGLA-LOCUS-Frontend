@@ -1,8 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { PainelLateral } from "@/componentes/PainelLateral";
-import { unidadesEducacionaisDetalheServico } from "@/servicos/recursos/unidadesEducacionais";
+import {
+  professoresLotadosPadrao,
+  professoresLotadosPorComponente,
+} from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
 import {
   ROTULO_TIPO_VAGA,
   type ProfessorLotado,
@@ -31,20 +34,19 @@ export interface PainelLotacaoProps {
 
 export function PainelLotacao({
   aberto,
-  codigoLotacao,
+  codigoLotacao: _codigoLotacao,
   componenteId,
   nomeComponente,
   aoFechar,
 }: PainelLotacaoProps) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["professores-lotados", codigoLotacao, componenteId],
-    queryFn: () =>
-      unidadesEducacionaisDetalheServico.listarProfessoresLotados(
-        codigoLotacao,
-        componenteId ?? "",
-      ),
-    enabled: aberto && Boolean(componenteId),
-  });
+  const dados = useMemo(
+    () =>
+      componenteId
+        ? (professoresLotadosPorComponente[componenteId] ??
+          professoresLotadosPadrao)
+        : [],
+    [componenteId],
+  );
 
   return (
     <PainelLateral
@@ -57,8 +59,7 @@ export function PainelLotacao({
       <Table
         rowKey="nome"
         columns={colunas}
-        dataSource={data ?? []}
-        loading={isLoading}
+        dataSource={dados ?? []}
         pagination={false}
       />
     </PainelLateral>

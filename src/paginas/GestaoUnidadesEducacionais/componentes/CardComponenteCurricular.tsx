@@ -1,25 +1,25 @@
+import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import EventSeatOutlinedIcon from "@mui/icons-material/EventSeatOutlined";
+import Groups3OutlinedIcon from "@mui/icons-material/Groups3Outlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
+import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
 import { Card, Select } from "antd";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
-import { CampoRotulado } from "@/componentes/CampoRotulado";
 import { CardDados } from "@/componentes/CardDados";
-import { iconeDaEstatistica } from "@/componentes/iconesEstatistica";
-import { GradeCartoesStat } from "@/estilos";
-import type {
-  EstatisticaPainel,
-  OpcaoSelecao,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { FormItem, GridCardsDados } from "@/estilos";
+import { LEGENDAS_ESTATISTICA } from "@/servicos/recursos/unidadesEducacionais/textos";
+import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
 const LARGURA_FILTRO = 306;
 
 export interface CardComponenteCurricularProps {
-  estatisticas: EstatisticaPainel[];
   opcoesComponente: OpcaoSelecao[];
   componenteSelecionado: string;
   aoSelecionarComponente: (componente: string) => void;
 }
 
 export function CardComponenteCurricular({
-  estatisticas,
   opcoesComponente,
   componenteSelecionado,
   aoSelecionarComponente,
@@ -32,9 +32,11 @@ export function CardComponenteCurricular({
           descricao="Estes são dados de todas as unidades educacionais considerando o componente curricular selecionado no filtro."
           larguraAcao={LARGURA_FILTRO}
           acao={
-            <CampoRotulado
-              id="componente-curricular"
-              rotulo="Componente curricular"
+            <FormItem
+              label="Componente curricular"
+              htmlFor="componente-curricular"
+              layout="vertical"
+              style={{ marginBottom: 0 }}
             >
               <Select
                 id="componente-curricular"
@@ -43,22 +45,49 @@ export function CardComponenteCurricular({
                 onChange={aoSelecionarComponente}
                 options={opcoesComponente}
               />
-            </CampoRotulado>
+            </FormItem>
           }
         />
       </div>
 
-      <GradeCartoesStat $colunas={3}>
-        {estatisticas.map((stat) => (
-          <CardDados
-            key={stat.chave}
-            valor={stat.valor}
-            titulo={stat.rotulo}
-            descricao={stat.legenda}
-            icone={iconeDaEstatistica(stat.chave)}
-          />
-        ))}
-      </GradeCartoesStat>
+      <GridCardsDados $colunas={3}>
+        <CardDados
+          valor={105}
+          titulo="Módulos"
+          descricao={LEGENDAS_ESTATISTICA.modulos}
+          icone={<ViewModuleOutlinedIcon />}
+        />
+        <CardDados
+          valor={108}
+          titulo="Lotação"
+          descricao={LEGENDAS_ESTATISTICA.lotacao}
+          icone={<GroupsOutlinedIcon />}
+        />
+        <CardDados
+          valor={152}
+          titulo="Afastados"
+          descricao={LEGENDAS_ESTATISTICA.afastados}
+          icone={<PersonRemoveOutlinedIcon />}
+        />
+        <CardDados
+          valor={54}
+          titulo="Vagas"
+          descricao={LEGENDAS_ESTATISTICA.vagas}
+          icone={<EventSeatOutlinedIcon />}
+        />
+        <CardDados
+          valor={596}
+          titulo="Unidades Educacionais"
+          descricao="Quantidade total de unidades educacionais"
+          icone={<ApartmentOutlinedIcon />}
+        />
+        <CardDados
+          valor={16}
+          titulo="Turmas ativas"
+          descricao="Quantidade de turmas ativas no EOL."
+          icone={<Groups3OutlinedIcon />}
+        />
+      </GridCardsDados>
     </Card>
   );
 }

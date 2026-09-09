@@ -4,7 +4,7 @@ import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
 import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
 import { Card, Typography } from "antd";
 import { CardDados } from "@/componentes/CardDados";
-import { GradeCartoesStat } from "@/estilos";
+import { GridCardsDados } from "@/estilos";
 import type { EstatisticaPainel } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
 const { Title, Paragraph } = Typography;
@@ -13,13 +13,7 @@ export interface CardInformacoesUnidadeProps {
   estatisticas: EstatisticaPainel[];
 }
 
-export function CardInformacoesUnidade({
-  estatisticas,
-}: CardInformacoesUnidadeProps) {
-  const modulos = estatisticas.find((item) => item.chave === "modulos");
-  const lotacao = estatisticas.find((item) => item.chave === "lotacao");
-  const afastados = estatisticas.find((item) => item.chave === "afastados");
-  const vagas = estatisticas.find((item) => item.chave === "vagas");
+export function CardInformacoesUnidade() { 
 
   return (
     <Card>
@@ -31,7 +25,7 @@ export function CardInformacoesUnidade({
         a quantidade de afastados dentro da unidade educacional.
       </Paragraph>
 
-      <GradeCartoesStat $colunas={4}>
+      <GridCardsDados  $colunas={4}>
         <CardDados
           valor="105"
           titulo="Módulos"
@@ -56,7 +50,7 @@ export function CardInformacoesUnidade({
           descricao="Quantidade de vagas ainda disponíveis"
           icone={<EventSeatOutlinedIcon />}
         />
-      </GradeCartoesStat>
+      </GridCardsDados>
     </Card>
   );
 }

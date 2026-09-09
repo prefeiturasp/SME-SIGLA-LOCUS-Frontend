@@ -1,19 +1,18 @@
+import { Col, Row } from "antd";
 import { FormItem, SelectForm } from "@/estilos";
 import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
-import { SegmentadoComBorda } from "../Estilos";
+import { FiltroSituacao } from "../Estilos";
 import {
   OPCOES_FILTRO_SITUACAO,
-  type FiltroSituacao,
+  type FiltroSituacaoValores,
 } from "../hooks/useDetalheUnidade";
-
-const LARGURA_SELECT = 420;
 
 export interface FiltrosComponentesProps {
   opcoesComponente: OpcaoSelecao[];
   componenteSelecionado?: string;
-  filtroSituacao: FiltroSituacao;
+  filtroSituacao: FiltroSituacaoValores;
   aoSelecionarComponente: (valor?: string) => void;
-  aoSelecionarFiltroSituacao: (valor: FiltroSituacao) => void;
+  aoSelecionarFiltroSituacao: (valor: FiltroSituacaoValores) => void;
 }
 
 export function FiltrosComponentes({
@@ -24,45 +23,45 @@ export function FiltrosComponentes({
   aoSelecionarFiltroSituacao,
 }: FiltrosComponentesProps) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
-        gap: 24,
-        flexWrap: "wrap",
-        marginBottom: 24,
-      }}
+    <Row
+      gutter={[128, 16]}
+      align="bottom"
+      justify="space-between"
+      style={{ marginBottom: 24 }}
     >
-      <FormItem
-        label="Componente curricular"
-        layout="vertical"
-        style={{ width: LARGURA_SELECT, marginBottom: 0 }}
-      >
-        <SelectForm
-          id="filtro-componente"
-          allowClear
-          placeholder="Selecione"
-          value={componenteSelecionado}
-          onChange={(valor) =>
-            aoSelecionarComponente(valor as string | undefined)
-          }
-          options={opcoesComponente}
-        />
-      </FormItem>
+      <Col xs={24} md={12}>
+        <FormItem
+          label="Componente curricular"
+          layout="vertical"
+          style={{ width: "100%", marginBottom: 0 }}
+        >
+          <SelectForm
+            id="filtro-componente"
+            allowClear
+            placeholder="Selecione"
+            value={componenteSelecionado}
+            onChange={(valor) =>
+              aoSelecionarComponente(valor as string | undefined)
+            }
+            options={opcoesComponente}
+          />
+        </FormItem>
+      </Col>
 
-      <SegmentadoComBorda
-        aria-label="Filtrar componentes por situação"
-        value={filtroSituacao}
-        onChange={(novoValor) =>
-          aoSelecionarFiltroSituacao(novoValor as FiltroSituacao)
-        }
-        options={OPCOES_FILTRO_SITUACAO.map(({ valor, rotulo }) => ({
-          label: rotulo,
-          value: valor,
-        }))}
-      />
-    </div>
+      <Col xs={24} md={12}>
+        <FiltroSituacao
+          aria-label="Filtrar componentes por situação"
+          value={filtroSituacao}
+          onChange={(novoValor) =>
+            aoSelecionarFiltroSituacao(novoValor as FiltroSituacaoValores)
+          }
+          options={OPCOES_FILTRO_SITUACAO.map(({ valor, rotulo }) => ({
+            label: rotulo,
+            value: valor,
+          }))}
+        />
+      </Col>
+    </Row>
   );
 }
 

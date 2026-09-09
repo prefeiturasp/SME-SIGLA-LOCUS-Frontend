@@ -1,9 +1,8 @@
 import { DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
-import { CampoRotulado } from "@/componentes/CampoRotulado";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
-import { criarPaginacaoPadrao, TagVagas, Tabela } from "@/estilos";
+import { criarPaginacaoPadrao, FormItem, TagVagas, Tabela } from "@/estilos";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/textos";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
@@ -68,13 +67,18 @@ export function TabelaUnidades({
           titulo="Unidades educacionais"
           descricao="Clique em uma unidade educacional para conferir os módulos de cada componente curricular. Você também pode selecionar um período para consultar as movimentações realizadas nesse intervalo."
           acao={
-            <CampoRotulado id="periodo" rotulo="Selecione um período">
+            <FormItem
+              label="Selecione um período"
+              htmlFor="periodo"
+              layout="vertical"
+              style={{ marginBottom: 0 }}
+            >
               <RangePicker
                 id="periodo"
                 format="DD/MM/YYYY"
                 placeholder={["00/00/0000", "00/00/0000"]}
               />
-            </CampoRotulado>
+            </FormItem>
           }
         />
       </div>

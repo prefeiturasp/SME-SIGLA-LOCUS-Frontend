@@ -6,7 +6,6 @@ export interface BannerVersaoHistoricaProps {
   aoVoltar: () => void;
 }
 
-/** Aviso do modo somente leitura de uma versao anterior do registro. */
 export function BannerVersaoHistorica({
   data,
   aoVoltar,

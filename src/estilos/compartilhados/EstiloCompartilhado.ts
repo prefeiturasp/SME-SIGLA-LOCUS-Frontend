@@ -12,9 +12,7 @@ import {
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
-/* ======= BotaoExcluir ======= */
 
-/** Botao de exclusao padrao (icone lixeira, vermelho). */
 export const BotaoExcluir = styled(Button).attrs({
   type: "text",
   danger: true,
@@ -31,15 +29,6 @@ export const BotaoExcluir = styled(Button).attrs({
   }
 `;
 
-/* ======= Tabela ======= */
-
-/**
- * Tabela padrao do Locus: zebra, paginacao centralizada, total a esquerda.
- *
- * `$linhasClicaveis` controla o cursor das linhas. O default `true` preserva
- * o comportamento das telas que navegam ao clicar na linha; tabelas cujas
- * linhas nao sao clicaveis devem passar `false`.
- */
 export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   & .ant-table-tbody > tr {
     cursor: ${({ $linhasClicaveis = true }) =>
@@ -84,7 +73,6 @@ export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   }
 ` as typeof Table;
 
-/** Area de conteudo padrao das paginas (gap e padding do mockup). */
 export const ConteudoPagina = styled.div`
   display: flex;
   flex-direction: column;
@@ -427,33 +415,13 @@ export const SecaoAcao = styled.div<{ $largura?: number }>`
   ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
 `;
 
-/* ======= CampoRotulado ======= */
-
-export const CampoRotuladoRaiz = styled.div<{ $largura?: number }>`
-  ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
-  max-width: 100%;
-`;
-
-export const CampoRotuladoLabel = styled.label`
-  display: block;
-  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primaryText};
-`;
-
-/* ======= ColunaComInfo ======= */
-
-/** Cabecalho de coluna com icone de informacao. */
 export const CabecalhoColunaInfo = styled.span`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs}px;
 `;
 
-/* ======= GradeCartoesStat ======= */
-
-/** Grade responsiva de CardDados. */
-export const GradeCartoesStat = styled.div<{ $colunas?: number }>`
+export const GridCardsDados = styled.div<{ $colunas?: number }>`
   display: grid;
   grid-template-columns: repeat(${({ $colunas = 3 }) => $colunas}, 1fr);
   gap: ${({ theme }) => theme.spacing.md}px;
@@ -467,12 +435,8 @@ export const GradeCartoesStat = styled.div<{ $colunas?: number }>`
   }
 `;
 
-/* ======= ChipNumero ======= */
-
-/** Altura dos controles numericos da tabela (chip clicavel e campo Modulo). */
 const ALTURA_CONTROLE_NUMERO = 50;
 
-/** Numero clicavel com borda azul (colunas Lotacao e Afastados). */
 export const ChipNumero = styled.button`
   display: inline-flex;
   box-sizing: border-box;
@@ -496,12 +460,9 @@ export const ChipNumero = styled.button`
   }
 `;
 
-/** Contraparte nao clicavel do ChipNumero (valor zero). */
 export const NumeroSimples = styled.span`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
-
-/* ======= CampoNumero ======= */
 
 export const CampoNumeroEstilizado = styled(InputNumber)`
   box-sizing: border-box;
@@ -514,15 +475,6 @@ export const CampoNumeroEstilizado = styled(InputNumber)`
   }
 `;
 
-/* ======= RotuloGrupo ======= */
-
-/** Rotulo das linhas de agrupamento da tabela ("Base comum"). */
-export const RotuloGrupo = styled.span`
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.blue};
-`;
-
-/* ======= Toast ======= */
 
 export const useNotificacao = useNotificacaoHook;
 export const useToast = useNotificacaoHook;

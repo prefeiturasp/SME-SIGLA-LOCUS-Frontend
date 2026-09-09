@@ -1,44 +1,20 @@
 import type { AxiosRequestConfig } from "axios";
-import {
-  linhasUnidades,
-  estatisticasPainel,
-  TAMANHO_PAGINA,
-  TOTAL_REGISTROS,
-} from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
-import {
-  detalhesPorCodigo,
-  historicoExemplo,
-  professoresAfastadosPadrao,
-  professoresAfastadosPorComponente,
-  professoresLotadosPadrao,
-  professoresLotadosPorComponente,
-} from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
+import { detalhesPorCodigo } from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
 import { lotacoesConsultaExemplo } from "@/paginas/RegistrarUnidadeEducacional/dados/dadosEstaticos";
 import {
   dadosLotacaoConsultaSchema,
   LotacaoNaoEncontradaError,
-  painelComponenteSchema,
   payloadRegistrarUnidadeSchema,
-  respostaListagemSchema,
   respostaRegistrarUnidadeSchema,
   detalheUnidadeSchema,
-  professorAfastadoSchema,
-  professorLotadoSchema,
-  registroHistoricoSchema,
   payloadSalvarModulosSchema,
   respostaOperacaoSchema,
   UnidadeNaoEncontradaError,
   type DadosLotacaoConsulta,
   type DetalheUnidade,
   type PayloadSalvarModulos,
-  type ProfessorAfastado,
-  type ProfessorLotado,
-  type RegistroHistorico,
   type RespostaOperacao,
-  type FiltrosUnidades,
-  type PainelComponente,
   type PayloadRegistrarUnidade,
-  type RespostaListagem,
   type RespostaRegistrarUnidade,
 } from "./tipos";
 
@@ -70,31 +46,11 @@ function deveSimularErroRegistro(): boolean {
   return new URLSearchParams(window.location.search).get("erro") === "1";
 }
 
-export const unidadesEducacionaisServico = {
-  listar: (filtros?: FiltrosUnidades): Promise<RespostaListagem> => {
-    const resposta = respostaListagemSchema.parse({
-      itens: linhasUnidades,
-      total: TOTAL_REGISTROS,
-      pagina: filtros?.pagina ?? 1,
-      tamanhoPagina: filtros?.tamanhoPagina ?? TAMANHO_PAGINA,
-    });
-    return Promise.resolve(resposta);
-  },
-
-  painel: (componente: string): Promise<PainelComponente> => {
-    const painel = painelComponenteSchema.parse({
-      componente,
-      estatisticas: estatisticasPainel,
-    });
-    return Promise.resolve(painel);
-  },
-};
-
 /**
  * Estado mutavel dos modulos salvos, por codigo de lotacao e componente.
  *
- * Sem isso o refetch apos salvar recarrega o dado estatico e desfaz a edicao
- * do usuario na tela.
+ * Sem isso a releitura apos salvar recarrega o dado estatico e desfaz a
+ * edicao do usuario na tela.
  *
  * TODO: substituir por chamada HTTP real.
  */
@@ -120,67 +76,33 @@ function aplicarModulosSalvos(detalhe: DetalheUnidade): DetalheUnidade {
   };
 }
 
-export const unidadesEducacionaisDetalheServico = {
-  obterDetalhe: (codigo: string): Promise<DetalheUnidade> => {
-    const encontrado = detalhesPorCodigo[codigo];
-
-    if (!encontrado) {
-      return Promise.reject(new UnidadeNaoEncontradaError());
-    }
-
-    return Promise.resolve(
-      detalheUnidadeSchema.parse(aplicarModulosSalvos(encontrado)),
-    );
-  },
-
-  listarProfessoresLotados: (
-    _codigo: string,
-    componenteId: string,
-  ): Promise<ProfessorLotado[]> =>
-    Promise.resolve(
-      (
-        professoresLotadosPorComponente[componenteId] ??
-        professoresLotadosPadrao
-      ).map((professor) => professorLotadoSchema.parse(professor)),
-    ),
-
-  listarProfessoresAfastados: (
-    _codigo: string,
-    componenteId: string,
-  ): Promise<ProfessorAfastado[]> =>
-    Promise.resolve(
-      (
-        professoresAfastadosPorComponente[componenteId] ??
-        professoresAfastadosPadrao
-      ).map((professor) => professorAfastadoSchema.parse(professor)),
-    ),
-
-  listarHistorico: (_codigo: string): Promise<RegistroHistorico[]> =>
-    Promise.resolve(
-      historicoExemplo.map((registro) =>
-        registroHistoricoSchema.parse(registro),
-      ),
-    ),
-
+export interface OpcoesLeituraDetalhe {
   /**
-   * Versao anterior do registro, para o modo somente leitura.
-   *
-   * O mock devolve o detalhe original (sem as edicoes salvas), que e o que
-   * uma versao historica representa.
+   * Quando falso devolve o registro original, sem as edicoes ja salvas — que
+   * e justamente o que uma versao historica representa.
    */
-  obterVersaoHistorica: (
-    codigo: string,
-    _idRegistro: string,
-  ): Promise<DetalheUnidade> => {
-    const encontrado = detalhesPorCodigo[codigo];
+  comEdicoesSalvas?: boolean;
+}
 
-    if (!encontrado) {
-      return Promise.reject(new UnidadeNaoEncontradaError());
-    }
+/**
+ * Detalhe da unidade lido direto dos dados estaticos, de forma sincrona.
+ *
+ * Devolve `undefined` quando o codigo nao existe, no lugar do erro que uma
+ * chamada HTTP lancaria.
+ *
+ * TODO: substituir por chamada HTTP real.
+ */
+export function lerDetalheEstatico(
+  codigo: string,
+  { comEdicoesSalvas = true }: OpcoesLeituraDetalhe = {},
+): DetalheUnidade | undefined {
+  const encontrado = detalhesPorCodigo[codigo];
+  if (!encontrado) return undefined;
 
-    return Promise.resolve(detalheUnidadeSchema.parse(encontrado));
-  },
-};
+  return detalheUnidadeSchema.parse(
+    comEdicoesSalvas ? aplicarModulosSalvos(encontrado) : encontrado,
+  );
+}
 
 export const salvarModulos = (
   payload: PayloadSalvarModulos,
@@ -273,5 +195,3 @@ export const registrar = (
 
   return { response, abort };
 };
-
-export default unidadesEducacionaisServico;

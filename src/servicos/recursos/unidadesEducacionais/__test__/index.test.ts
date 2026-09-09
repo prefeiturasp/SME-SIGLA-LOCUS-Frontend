@@ -1,25 +1,28 @@
 import {
   consultarLotacao,
   excluirUnidade,
+  lerDetalheEstatico,
   registrar,
   reiniciarModulosSalvos,
   salvarModulos,
-  unidadesEducacionaisDetalheServico,
-  unidadesEducacionaisServico,
   URL,
 } from "../index";
 import {
   dadosLotacaoConsultaSchema,
   detalheUnidadeSchema,
   LotacaoNaoEncontradaError,
-  respostaListagemSchema,
   respostaRegistrarUnidadeSchema,
   UnidadeNaoEncontradaError,
 } from "../tipos";
 import {
+  linhasUnidades,
   TOTAL_REGISTROS,
-  TAMANHO_PAGINA,
 } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
+import {
+  historicoExemplo,
+  professoresAfastadosPorComponente,
+  professoresLotadosPorComponente,
+} from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
 
 describe("URL Registrar UE", () => {
   it("monta as rotas de consulta e registro", () => {
@@ -30,13 +33,10 @@ describe("URL Registrar UE", () => {
   });
 });
 
-describe("unidadesEducacionaisServico (mock Gestao)", () => {
-  it("listar continua retornando dados estaticos", async () => {
-    const resposta = await unidadesEducacionaisServico.listar();
-    expect(() => respostaListagemSchema.parse(resposta)).not.toThrow();
-    expect(resposta.itens).toHaveLength(10);
-    expect(resposta.total).toBe(TOTAL_REGISTROS);
-    expect(resposta.tamanhoPagina).toBe(TAMANHO_PAGINA);
+describe("dados estaticos da Gestao de UEs", () => {
+  it("expoe a listagem e o total usados pela tela", () => {
+    expect(linhasUnidades).toHaveLength(10);
+    expect(TOTAL_REGISTROS).toBe(5985);
   });
 });
 
@@ -99,25 +99,22 @@ describe("registrar (padrao Alvo)", () => {
 describe("detalhe da unidade educacional", () => {
   beforeEach(() => reiniciarModulosSalvos());
 
-  it("resolve um detalhe valido pelo codigo de lotacao", async () => {
-    const detalhe =
-      await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
+  it("le um detalhe valido pelo codigo de lotacao", () => {
+    const detalhe = lerDetalheEstatico("091488");
 
     expect(() => detalheUnidadeSchema.parse(detalhe)).not.toThrow();
-    expect(detalhe.nome).toBe("Cidade Tiradentes");
-    expect(detalhe.componentes).toHaveLength(22);
+    expect(detalhe?.nome).toBe("Cidade Tiradentes");
+    expect(detalhe?.componentes).toHaveLength(22);
   });
 
-  it("rejeita codigo inexistente com UnidadeNaoEncontradaError", async () => {
-    await expect(
-      unidadesEducacionaisDetalheServico.obterDetalhe("999999"),
-    ).rejects.toBeInstanceOf(UnidadeNaoEncontradaError);
+  it("devolve undefined para codigo inexistente", () => {
+    expect(lerDetalheEstatico("999999")).toBeUndefined();
   });
 
   it("persiste os modulos salvos e recalcula as vagas", async () => {
-    const antes =
-      await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
-    const arteAntes = antes.componentes.find((c) => c.id === "arte");
+    const arteAntes = lerDetalheEstatico("091488")?.componentes.find(
+      (c) => c.id === "arte",
+    );
     expect(arteAntes).toMatchObject({ modulo: 3, saldoVagas: -2 });
 
     await salvarModulos({
@@ -125,25 +122,21 @@ describe("detalhe da unidade educacional", () => {
       alteracoes: [{ componenteId: "arte", modulo: 6 }],
     }).response;
 
-    const depois =
-      await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
-    const arteDepois = depois.componentes.find((c) => c.id === "arte");
+    const arteDepois = lerDetalheEstatico("091488")?.componentes.find(
+      (c) => c.id === "arte",
+    );
     expect(arteDepois).toMatchObject({ modulo: 6, saldoVagas: 1 });
   });
 
-  it("nao aplica os modulos salvos na versao historica", async () => {
+  it("nao aplica os modulos salvos quando lido sem edicoes (versao historica)", async () => {
     await salvarModulos({
       codigoLotacao: "091488",
       alteracoes: [{ componenteId: "arte", modulo: 6 }],
     }).response;
 
-    const versao =
-      await unidadesEducacionaisDetalheServico.obterVersaoHistorica(
-        "091488",
-        "h1",
-      );
+    const versao = lerDetalheEstatico("091488", { comEdicoesSalvas: false });
 
-    expect(versao.componentes.find((c) => c.id === "arte")?.modulo).toBe(3);
+    expect(versao?.componentes.find((c) => c.id === "arte")?.modulo).toBe(3);
   });
 
   it("recusa payload de salvamento sem alteracoes", () => {
@@ -162,23 +155,11 @@ describe("detalhe da unidade educacional", () => {
     );
   });
 
-  it("lista professores lotados, afastados e o historico", async () => {
-    const lotados =
-      await unidadesEducacionaisDetalheServico.listarProfessoresLotados(
-        "091488",
-        "arte",
-      );
-    expect(lotados[0]).toMatchObject({ nome: "João da Silva" });
-
-    const afastados =
-      await unidadesEducacionaisDetalheServico.listarProfessoresAfastados(
-        "091488",
-        "biologia",
-      );
-    expect(afastados).toHaveLength(2);
-
-    const historico =
-      await unidadesEducacionaisDetalheServico.listarHistorico("091488");
-    expect(historico).toHaveLength(3);
+  it("expoe professores lotados, afastados e o historico estaticos", () => {
+    expect(professoresLotadosPorComponente.arte?.[0]).toMatchObject({
+      nome: "João da Silva",
+    });
+    expect(professoresAfastadosPorComponente.biologia).toHaveLength(2);
+    expect(historicoExemplo).toHaveLength(3);
   });
 });

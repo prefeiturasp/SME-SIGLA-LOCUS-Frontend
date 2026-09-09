@@ -1,7 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { App as AntdApp, ConfigProvider } from "antd";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { temaAntd } from "@/estilos/temas/temaAntd";
@@ -35,17 +34,11 @@ export interface ComProvedoresProps {
  * contexto de portal de Drawer/Modal.
  */
 export function ComProvedores({ children, rota = "/" }: ComProvedoresProps) {
-  const client = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-
   return (
     <ComTema>
       <ConfigProvider theme={temaAntd}>
         <AntdApp>
-          <QueryClientProvider client={client}>
-            <MemoryRouter initialEntries={[rota]}>{children}</MemoryRouter>
-          </QueryClientProvider>
+          <MemoryRouter initialEntries={[rota]}>{children}</MemoryRouter>
         </AntdApp>
       </ConfigProvider>
     </ComTema>

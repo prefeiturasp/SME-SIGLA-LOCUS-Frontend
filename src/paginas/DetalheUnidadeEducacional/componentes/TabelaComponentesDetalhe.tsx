@@ -3,7 +3,6 @@ import type { ColumnsType } from "antd/es/table";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
 import {
   InputDesabilitadoAzul,
-  RotuloGrupo,
   Tabela,
   TagVagas,
   textoContagemComponentes,
@@ -11,8 +10,8 @@ import {
 import { DICAS_COLUNAS_COMPONENTE } from "@/servicos/recursos/unidadesEducacionais/textos";
 import type { ComponenteCurricularDetalhe } from "@/servicos/recursos/unidadesEducacionais/tipos";
 import type { LinhaTabelaComponentes } from "../utilitarios";
+import { GrupoComponente } from "../Estilos";
 
-/** Quantidade de colunas da tabela; usada no colSpan das linhas de grupo. */
 const TOTAL_COLUNAS = 6;
 
 export interface TabelaComponentesDetalheProps {
@@ -26,10 +25,6 @@ export interface TabelaComponentesDetalheProps {
   aoAbrirAfastados: (componente: ComponenteCurricularDetalhe) => void;
 }
 
-/**
- * Celula de uma linha de cabecalho de grupo: a primeira coluna ocupa a
- * largura toda e as demais somem.
- */
 function celulaGrupo(
   linha: LinhaTabelaComponentes,
   indiceColuna: number,
@@ -56,7 +51,7 @@ export function TabelaComponentesDetalhe({
       onCell: (linha) => celulaGrupo(linha, 0, TOTAL_COLUNAS),
       render: (_, linha) =>
         linha.tipo === "grupo" ? (
-          <RotuloGrupo>{linha.rotulo}</RotuloGrupo>
+          <GrupoComponente>{linha.rotulo}</GrupoComponente>
         ) : (
           linha.componente
         ),

@@ -7,10 +7,7 @@ import { reiniciarModulosSalvos } from "@/servicos/recursos/unidadesEducacionais
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { DetalheUnidadeEducacional } from "../index";
 
-/**
- * A casca completa + query assincrona pode passar do 1s padrao do findBy*
- * quando a suite roda em paralelo.
- */
+/** A casca completa pode passar do 1s padrao do findBy* com a suite em paralelo. */
 const ESPERA = { timeout: 5000 };
 
 function renderNaCasca(codigo = "091488") {
@@ -56,7 +53,6 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     expect(within(informacoes).getByText("Afastados")).toBeInTheDocument();
     expect(within(informacoes).getByText("Vagas")).toBeInTheDocument();
 
-    // breadcrumb da casca resolvido pela rota com parametro
     const breadcrumb = document.querySelector(
       ".ant-breadcrumb",
     ) as HTMLElement;
@@ -84,9 +80,8 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     await waitFor(() => expect(salvar).toBeEnabled());
   });
 
-  // Os casos que verificavam a abertura do painel de lotacao e do modal de
-  // exclusao foram removidos junto com a renderizacao desses overlays. Quando
-  // eles voltarem a ser renderizados, os testes devem voltar tambem.
+  // Os casos do painel de lotacao e do modal de exclusao sairam junto com a
+  // renderizacao desses overlays; devem voltar quando eles voltarem.
 
 
   it("exibe o estado de nao encontrada para codigo inexistente", async () => {

@@ -16,7 +16,6 @@ export function GestaoUnidadesEducacionais() {
   const {
     unidades,
     total,
-    painel,
     componenteSelecionado,
     carregando,
     selecionarComponente,
@@ -49,7 +48,6 @@ export function GestaoUnidadesEducacionais() {
 
       <ConteudoPagina>
         <CardComponenteCurricular
-          estatisticas={painel?.estatisticas ?? []}
           opcoesComponente={opcoesComponenteCurricular}
           componenteSelecionado={componenteSelecionado}
           aoSelecionarComponente={selecionarComponente}

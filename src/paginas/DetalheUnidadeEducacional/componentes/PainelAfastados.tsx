@@ -1,8 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { PainelLateral } from "@/componentes/PainelLateral";
-import { unidadesEducacionaisDetalheServico } from "@/servicos/recursos/unidadesEducacionais";
+import {
+  professoresAfastadosPadrao,
+  professoresAfastadosPorComponente,
+} from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
 import {
   ROTULO_TIPO_AFASTAMENTO,
   type ProfessorAfastado,
@@ -31,20 +34,19 @@ export interface PainelAfastadosProps {
 
 export function PainelAfastados({
   aberto,
-  codigoLotacao,
+  codigoLotacao: _codigoLotacao,
   componenteId,
   nomeComponente,
   aoFechar,
 }: PainelAfastadosProps) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["professores-afastados", codigoLotacao, componenteId],
-    queryFn: () =>
-      unidadesEducacionaisDetalheServico.listarProfessoresAfastados(
-        codigoLotacao,
-        componenteId ?? "",
-      ),
-    enabled: aberto && Boolean(componenteId),
-  });
+  const dados = useMemo(
+    () =>
+      componenteId
+        ? (professoresAfastadosPorComponente[componenteId] ??
+          professoresAfastadosPadrao)
+        : [],
+    [componenteId],
+  );
 
   return (
     <PainelLateral
@@ -57,8 +59,7 @@ export function PainelAfastados({
       <Table
         rowKey="nome"
         columns={colunas}
-        dataSource={data ?? []}
-        loading={isLoading}
+        dataSource={dados ?? []}
         pagination={false}
       />
     </PainelLateral>

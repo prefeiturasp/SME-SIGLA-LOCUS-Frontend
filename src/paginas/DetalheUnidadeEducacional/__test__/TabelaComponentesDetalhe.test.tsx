@@ -63,7 +63,6 @@ describe("TabelaComponentesDetalhe", () => {
     );
 
     const corpo = container.querySelectorAll(".ant-table-tbody > tr");
-    // 1a linha e o cabecalho do grupo; a zebra so comeca na 2a de componente.
     expect(corpo[0]).toHaveClass("linhaGrupo");
     expect(corpo[1]).not.toHaveClass("linhaPar");
     expect(corpo[2]).toHaveClass("linhaPar");
@@ -96,7 +95,6 @@ describe("TabelaComponentesDetalhe", () => {
   it("nao abre painel quando o valor e zero", async () => {
     const { aoAbrirAfastados } = renderizarTabela();
 
-    // Arte tem 0 afastados no mock.
     await userEvent.click(screen.getByLabelText("Afastados de Arte"));
     expect(aoAbrirAfastados).not.toHaveBeenCalled();
   });
