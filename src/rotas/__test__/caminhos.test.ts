@@ -22,7 +22,10 @@ describe("caminhoDetalheUE", () => {
 describe("casarPadrao", () => {
   it("extrai os parametros quando o padrao casa", () => {
     expect(
-      casarPadrao(CAMINHOS.cadastroDetalheUE, "/cadastro/unidade-educacional/091488"),
+      casarPadrao(
+        CAMINHOS.cadastroDetalheUE,
+        "/cadastro/unidade-educacional/091488",
+      ),
     ).toEqual({ codigoLotacao: "091488" });
   });
 
@@ -46,9 +49,9 @@ describe("breadcrumbDaRota", () => {
       { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
     ]);
 
-    expect(
-      breadcrumbDaRota(CAMINHOS.cadastroRegistrarUE).at(-1),
-    ).toEqual({ titulo: "Registrar Unidade Educacional" });
+    expect(breadcrumbDaRota(CAMINHOS.cadastroRegistrarUE).at(-1)).toEqual({
+      titulo: "Registrar Unidade Educacional",
+    });
   });
 
   it("resolve a rota de detalhe com parametro", () => {

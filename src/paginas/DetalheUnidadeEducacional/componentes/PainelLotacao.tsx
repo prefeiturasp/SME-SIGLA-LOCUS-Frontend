@@ -1,13 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useDadosEstaticos } from "@/hooks/useDadosEstaticos";
 import { PainelLateral } from "@/componentes/PainelLateral";
-import { unidadesEducacionaisDetalheServico } from "@/servicos/recursos/unidadesEducacionais";
+import { unidadesEducacionaisDetalheServico } from "@/dados/unidadesEducacionais";
 import {
   ROTULO_TIPO_VAGA,
   type ProfessorLotado,
   type TipoVaga,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+} from "@/tipos/unidadesEducacionais";
 
 const colunas: ColumnsType<ProfessorLotado> = [
   { title: "Nome", dataIndex: "nome", key: "nome" },
@@ -36,15 +37,18 @@ export function PainelLotacao({
   nomeComponente,
   aoFechar,
 }: PainelLotacaoProps) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["professores-lotados", codigoLotacao, componenteId],
-    queryFn: () =>
-      unidadesEducacionaisDetalheServico.listarProfessoresLotados(
-        codigoLotacao,
-        componenteId ?? "",
-      ),
-    enabled: aberto && Boolean(componenteId),
-  });
+  const { dados, carregando } = useDadosEstaticos(
+    useCallback(
+      () =>
+        unidadesEducacionaisDetalheServico.listarProfessoresLotados(
+          codigoLotacao,
+          componenteId ?? "",
+        ),
+      [codigoLotacao, componenteId],
+    ),
+    [codigoLotacao, componenteId],
+    aberto && Boolean(componenteId),
+  );
 
   return (
     <PainelLateral
@@ -57,8 +61,8 @@ export function PainelLotacao({
       <Table
         rowKey="nome"
         columns={colunas}
-        dataSource={data ?? []}
-        loading={isLoading}
+        dataSource={dados ?? []}
+        loading={carregando}
         pagination={false}
       />
     </PainelLateral>

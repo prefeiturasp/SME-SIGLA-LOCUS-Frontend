@@ -41,9 +41,7 @@ describe("PainelHistorico", () => {
     expect(
       screen.getByText("Alteração de módulo de biologia"),
     ).toBeInTheDocument();
-    expect(
-      screen.getAllByText("Maria Cecília Guimarães"),
-    ).toHaveLength(3);
+    expect(screen.getAllByText("Maria Cecília Guimarães")).toHaveLength(3);
     expect(screen.getByText("07/08/2026 12:02")).toBeInTheDocument();
   });
 

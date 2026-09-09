@@ -1,9 +1,9 @@
 import { Card } from "antd";
-import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
+import { CabecalhoCard } from "@/componentes/CabecalhoCard";
 import type {
   ComponenteCurricularDetalhe,
   OpcaoSelecao,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+} from "@/tipos/unidadesEducacionais";
 import type { FiltroSituacao } from "../hooks/useDetalheUnidade";
 import type { LinhaTabelaComponentes } from "../utilitarios";
 import { FiltrosComponentes } from "./FiltrosComponentes";
@@ -43,7 +43,7 @@ export function CardComponentesDetalhe({
   return (
     <Card>
       <div style={{ marginBottom: 24 }}>
-        <CabecalhoSecao
+        <CabecalhoCard
           titulo="Dados por componente curricular"
           descricao="Compare as informações por componente curricular da unidade educacional. Use os filtros para localizar um componente curricular ou filtrar vagas, excedentes e afastamentos."
         />

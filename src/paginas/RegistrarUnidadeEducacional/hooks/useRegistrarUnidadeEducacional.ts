@@ -2,11 +2,12 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { useNotificacao } from "@/hooks/useNotificacao";
-import { API } from "@/servicos";
 import {
+  consultarLotacao as consultarLotacaoServico,
+  registrar as registrarServico,
   LotacaoNaoEncontradaError,
   type PayloadRegistrarUnidade,
-} from "@/servicos/recursos/unidadesEducacionais";
+} from "@/dados/unidadesEducacionais";
 import {
   caracteristicasPadrao,
   type CaracteristicasPadrao,
@@ -43,7 +44,10 @@ export interface EstadoRegistrarUnidadeEducacional {
   erroCodigoLotacao?: string;
   erroComponenteCurricular?: string;
   salvando: boolean;
-  atualizarDados: (campo: keyof DadosUnidade, valor: string | undefined) => void;
+  atualizarDados: (
+    campo: keyof DadosUnidade,
+    valor: string | undefined,
+  ) => void;
   alternarCaracteristica: (chave: keyof CaracteristicasPadrao) => void;
   definirComponenteSelecionado: (valor?: string) => void;
   definirQuantidadeModulos: (valor: string) => void;
@@ -59,9 +63,9 @@ let proximoId = 1;
 function lotacaoFoiConsultada(dados: DadosUnidade): boolean {
   return Boolean(
     dados.codigoLotacao.trim() &&
-      dados.tipoUnidade &&
-      dados.dre &&
-      dados.nome.trim(),
+    dados.tipoUnidade &&
+    dados.dre &&
+    dados.nome.trim(),
   );
 }
 
@@ -96,8 +100,9 @@ export function useRegistrarUnidadeEducacional(): EstadoRegistrarUnidadeEducacio
     codigoLotacao: "",
     nome: "",
   });
-  const [caracteristicas, setCaracteristicas] =
-    useState<CaracteristicasPadrao>(caracteristicasPadrao);
+  const [caracteristicas, setCaracteristicas] = useState<CaracteristicasPadrao>(
+    caracteristicasPadrao,
+  );
   const [componentes, setComponentes] = useState<
     ComponenteCurricularAdicionado[]
   >([]);
@@ -224,9 +229,9 @@ export function useRegistrarUnidadeEducacional(): EstadoRegistrarUnidadeEducacio
     }
 
     try {
-      const resultado =
-        await API.UnidadesEducacionais.consultarLotacao(validacao.codigo!)
-          .response;
+      const resultado = await consultarLotacaoServico(
+        validacao.codigo!,
+      );
       setErroCodigoLotacao(undefined);
       setDados((atual) => ({
         ...atual,
@@ -264,14 +269,13 @@ export function useRegistrarUnidadeEducacional(): EstadoRegistrarUnidadeEducacio
 
     setSalvando(true);
     try {
-      const resposta = await API.UnidadesEducacionais.registrar(
+      const resposta = await registrarServico(
         montarPayloadRegistro(dados, caracteristicas, componentes),
-      ).response;
+      );
 
       notificacao.sucesso({
         titulo: "Sucesso!",
-        texto:
-          resposta.mensagem ?? "A unidade educacional foi registrada.",
+        texto: resposta.mensagem ?? "A unidade educacional foi registrada.",
       });
       navigate(CAMINHOS.cadastroGestaoUnidades);
     } catch {

@@ -1,11 +1,11 @@
 import { screen } from "@testing-library/react";
-import { CabecalhoSecao } from "../CabecalhoSecao";
+import { CabecalhoCard } from "../CabecalhoCard";
 import { renderizarComTema } from "@/testes/renderizarComTema";
 
-describe("CabecalhoSecao", () => {
+describe("CabecalhoCard", () => {
   it("renderiza titulo, descricao e o slot de acao", () => {
     renderizarComTema(
-      <CabecalhoSecao
+      <CabecalhoCard
         titulo="Unidades educacionais"
         descricao="Clique em uma unidade educacional."
         acao={<button type="button">Filtrar</button>}
@@ -22,7 +22,7 @@ describe("CabecalhoSecao", () => {
   });
 
   it("omite descricao e acao quando nao informadas", () => {
-    renderizarComTema(<CabecalhoSecao titulo="Somente titulo" />);
+    renderizarComTema(<CabecalhoCard titulo="Somente titulo" />);
 
     expect(
       screen.getByRole("heading", { name: "Somente titulo" }),

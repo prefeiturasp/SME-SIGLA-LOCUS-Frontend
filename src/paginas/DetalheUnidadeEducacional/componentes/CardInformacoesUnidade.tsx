@@ -5,7 +5,7 @@ import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
 import { Card, Typography } from "antd";
 import { CardDados } from "@/componentes/CardDados";
 import { GradeCartoesStat } from "@/estilos";
-import type { EstatisticaPainel } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import type { EstatisticaPainel } from "@/tipos/unidadesEducacionais";
 
 const { Title, Paragraph } = Typography;
 

@@ -1,5 +1,5 @@
 import { FormItem, SelectForm } from "@/estilos";
-import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import type { OpcaoSelecao } from "@/tipos/unidadesEducacionais";
 import { SegmentadoComBorda } from "../Estilos";
 import {
   OPCOES_FILTRO_SITUACAO,

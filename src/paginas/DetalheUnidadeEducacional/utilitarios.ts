@@ -2,7 +2,7 @@ import {
   ORDEM_GRUPOS,
   ROTULO_GRUPO_COMPONENTE,
   type ComponenteCurricularDetalhe,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+} from "@/tipos/unidadesEducacionais";
 
 export interface LinhaGrupo {
   tipo: "grupo";

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
-import { reiniciarModulosSalvos } from "@/servicos/recursos/unidadesEducacionais";
+import { reiniciarModulosSalvos } from "@/dados/unidadesEducacionais";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { DetalheUnidadeEducacional } from "../index";
 
@@ -57,9 +57,7 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     expect(within(informacoes).getByText("Vagas")).toBeInTheDocument();
 
     // breadcrumb da casca resolvido pela rota com parametro
-    const breadcrumb = document.querySelector(
-      ".ant-breadcrumb",
-    ) as HTMLElement;
+    const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
     expect(within(breadcrumb).getByText("Início")).toBeInTheDocument();
     expect(within(breadcrumb).getByText("Cadastro")).toBeInTheDocument();
     expect(
@@ -77,27 +75,22 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     );
     expect(salvar).toBeDisabled();
 
-    const campoArte = await screen.findByLabelText("Módulo de Arte", {}, ESPERA);
+    const campoArte = await screen.findByLabelText(
+      "Módulo de Arte",
+      {},
+      ESPERA,
+    );
     await userEvent.clear(campoArte);
     await userEvent.type(campoArte, "9");
 
     await waitFor(() => expect(salvar).toBeEnabled());
   });
 
-  // Os casos que verificavam a abertura do painel de lotacao e do modal de
-  // exclusao foram removidos junto com a renderizacao desses overlays. Quando
-  // eles voltarem a ser renderizados, os testes devem voltar tambem.
-
-
   it("exibe o estado de nao encontrada para codigo inexistente", async () => {
     renderNaCasca("999999");
 
     expect(
-      await screen.findByText(
-        "Unidade educacional não encontrada",
-        {},
-        ESPERA,
-      ),
+      await screen.findByText("Unidade educacional não encontrada", {}, ESPERA),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Voltar para a listagem" }),

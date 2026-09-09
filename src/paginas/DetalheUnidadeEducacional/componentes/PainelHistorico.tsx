@@ -2,7 +2,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { Button, Table, Tooltip } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { PainelLateral } from "@/componentes/PainelLateral";
-import type { RegistroHistorico } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import type { RegistroHistorico } from "@/tipos/unidadesEducacionais";
 
 /** Formata a data ISO do registro no padrao dd/mm/aaaa hh:mm. */
 export function formatarDataHistorico(iso: string): string {

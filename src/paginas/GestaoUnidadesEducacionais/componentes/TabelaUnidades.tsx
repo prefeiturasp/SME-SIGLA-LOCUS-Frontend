@@ -1,12 +1,12 @@
 import { DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
+import { CabecalhoCard } from "@/componentes/CabecalhoCard";
 import { CampoRotulado } from "@/componentes/CampoRotulado";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
 import { criarPaginacaoPadrao, TagVagas, Tabela } from "@/estilos";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
-import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/textos";
-import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { DICAS_COLUNAS_UNIDADE } from "@/textos/unidadesEducacionais";
+import type { UnidadeEducacional } from "@/tipos/unidadesEducacionais";
 import { formatarNumeroPadded } from "@/utilitarios/formatadores";
 
 const { RangePicker } = DatePicker;
@@ -21,7 +21,9 @@ const colunas: ColumnsType<UnidadeEducacional> = [
   { title: "Unidade Educacional", dataIndex: "nome", key: "nome" },
   { title: "DRE", dataIndex: "dre", key: "dre" },
   {
-    title: <ColunaComInfo titulo="Módulo" dica={DICAS_COLUNAS_UNIDADE.modulo} />,
+    title: (
+      <ColunaComInfo titulo="Módulo" dica={DICAS_COLUNAS_UNIDADE.modulo} />
+    ),
     dataIndex: "modulo",
     key: "modulo",
   },
@@ -34,7 +36,10 @@ const colunas: ColumnsType<UnidadeEducacional> = [
   },
   {
     title: (
-      <ColunaComInfo titulo="Afastados" dica={DICAS_COLUNAS_UNIDADE.afastados} />
+      <ColunaComInfo
+        titulo="Afastados"
+        dica={DICAS_COLUNAS_UNIDADE.afastados}
+      />
     ),
     dataIndex: "afastados",
     key: "afastados",
@@ -64,7 +69,7 @@ export function TabelaUnidades({
   return (
     <section>
       <div style={{ padding: "0 8px" }}>
-        <CabecalhoSecao
+        <CabecalhoCard
           titulo="Unidades educacionais"
           descricao="Clique em uma unidade educacional para conferir os módulos de cada componente curricular. Você também pode selecionar um período para consultar as movimentações realizadas nesse intervalo."
           acao={

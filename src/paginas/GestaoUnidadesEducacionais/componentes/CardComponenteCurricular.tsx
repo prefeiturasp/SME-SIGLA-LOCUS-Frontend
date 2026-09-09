@@ -1,5 +1,5 @@
 import { Card, Select } from "antd";
-import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
+import { CabecalhoCard } from "@/componentes/CabecalhoCard";
 import { CampoRotulado } from "@/componentes/CampoRotulado";
 import { CardDados } from "@/componentes/CardDados";
 import { iconeDaEstatistica } from "@/componentes/iconesEstatistica";
@@ -7,7 +7,7 @@ import { GradeCartoesStat } from "@/estilos";
 import type {
   EstatisticaPainel,
   OpcaoSelecao,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+} from "@/tipos/unidadesEducacionais";
 
 const LARGURA_FILTRO = 306;
 
@@ -27,7 +27,7 @@ export function CardComponenteCurricular({
   return (
     <Card>
       <div style={{ marginBottom: 24 }}>
-        <CabecalhoSecao
+        <CabecalhoCard
           titulo="Painel de informações por componente curricular"
           descricao="Estes são dados de todas as unidades educacionais considerando o componente curricular selecionado no filtro."
           larguraAcao={LARGURA_FILTRO}

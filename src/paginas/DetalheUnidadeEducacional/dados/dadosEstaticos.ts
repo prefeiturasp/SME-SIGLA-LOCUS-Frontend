@@ -1,5 +1,5 @@
 import { linhasUnidades } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
-import { LEGENDAS_ESTATISTICA } from "@/servicos/recursos/unidadesEducacionais/textos";
+import { LEGENDAS_ESTATISTICA } from "@/textos/unidadesEducacionais";
 import type {
   ComponenteCurricularDetalhe,
   DetalheUnidade,
@@ -7,7 +7,7 @@ import type {
   ProfessorAfastado,
   ProfessorLotado,
   RegistroHistorico,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+} from "@/tipos/unidadesEducacionais";
 
 /** Componente antes de ter saldo de vagas e id derivados. */
 interface ComponenteBase {
@@ -47,29 +47,183 @@ function identificador(componente: string): string {
 
 const COMPONENTES_BASE: ComponenteBase[] = [
   // Base comum
-  { componente: "Arte", grupo: "baseComum", modulo: 3, lotacao: 5, afastados: 0, vacancias: 0 },
-  { componente: "Biologia", grupo: "baseComum", modulo: 6, lotacao: 6, afastados: 2, vacancias: 0 },
-  { componente: "Ciências", grupo: "baseComum", modulo: 5, lotacao: 3, afastados: 0, vacancias: 1 },
-  { componente: "Educação Física", grupo: "baseComum", modulo: 4, lotacao: 6, afastados: 1, vacancias: 0 },
-  { componente: "Filosofia", grupo: "baseComum", modulo: 5, lotacao: 5, afastados: 1, vacancias: 0 },
-  { componente: "Física", grupo: "baseComum", modulo: 4, lotacao: 4, afastados: 0, vacancias: 0 },
-  { componente: "Geografia", grupo: "baseComum", modulo: 5, lotacao: 4, afastados: 1, vacancias: 0 },
-  { componente: "História", grupo: "baseComum", modulo: 5, lotacao: 6, afastados: 1, vacancias: 0 },
-  { componente: "Matemática", grupo: "baseComum", modulo: 6, lotacao: 5, afastados: 1, vacancias: 0 },
-  { componente: "Português", grupo: "baseComum", modulo: 5, lotacao: 6, afastados: 2, vacancias: 0 },
-  { componente: "Química", grupo: "baseComum", modulo: 5, lotacao: 7, afastados: 2, vacancias: 0 },
-  { componente: "Sociologia", grupo: "baseComum", modulo: 5, lotacao: 6, afastados: 0, vacancias: 0 },
-  { componente: "Ensino Religioso", grupo: "baseComum", modulo: 2, lotacao: 2, afastados: 0, vacancias: 0 },
-  { componente: "Informática", grupo: "baseComum", modulo: 3, lotacao: 2, afastados: 0, vacancias: 0 },
-  { componente: "Projeto de Vida", grupo: "baseComum", modulo: 3, lotacao: 3, afastados: 1, vacancias: 0 },
-  { componente: "Leitura", grupo: "baseComum", modulo: 2, lotacao: 3, afastados: 0, vacancias: 0 },
-  { componente: "Robótica", grupo: "baseComum", modulo: 2, lotacao: 1, afastados: 0, vacancias: 0 },
-  { componente: "Tecnologias", grupo: "baseComum", modulo: 3, lotacao: 3, afastados: 0, vacancias: 1 },
-  { componente: "Empreendedorismo", grupo: "baseComum", modulo: 2, lotacao: 2, afastados: 0, vacancias: 0 },
+  {
+    componente: "Arte",
+    grupo: "baseComum",
+    modulo: 3,
+    lotacao: 5,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Biologia",
+    grupo: "baseComum",
+    modulo: 6,
+    lotacao: 6,
+    afastados: 2,
+    vacancias: 0,
+  },
+  {
+    componente: "Ciências",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 3,
+    afastados: 0,
+    vacancias: 1,
+  },
+  {
+    componente: "Educação Física",
+    grupo: "baseComum",
+    modulo: 4,
+    lotacao: 6,
+    afastados: 1,
+    vacancias: 0,
+  },
+  {
+    componente: "Filosofia",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 5,
+    afastados: 1,
+    vacancias: 0,
+  },
+  {
+    componente: "Física",
+    grupo: "baseComum",
+    modulo: 4,
+    lotacao: 4,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Geografia",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 4,
+    afastados: 1,
+    vacancias: 0,
+  },
+  {
+    componente: "História",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 6,
+    afastados: 1,
+    vacancias: 0,
+  },
+  {
+    componente: "Matemática",
+    grupo: "baseComum",
+    modulo: 6,
+    lotacao: 5,
+    afastados: 1,
+    vacancias: 0,
+  },
+  {
+    componente: "Português",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 6,
+    afastados: 2,
+    vacancias: 0,
+  },
+  {
+    componente: "Química",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 7,
+    afastados: 2,
+    vacancias: 0,
+  },
+  {
+    componente: "Sociologia",
+    grupo: "baseComum",
+    modulo: 5,
+    lotacao: 6,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Ensino Religioso",
+    grupo: "baseComum",
+    modulo: 2,
+    lotacao: 2,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Informática",
+    grupo: "baseComum",
+    modulo: 3,
+    lotacao: 2,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Projeto de Vida",
+    grupo: "baseComum",
+    modulo: 3,
+    lotacao: 3,
+    afastados: 1,
+    vacancias: 0,
+  },
+  {
+    componente: "Leitura",
+    grupo: "baseComum",
+    modulo: 2,
+    lotacao: 3,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Robótica",
+    grupo: "baseComum",
+    modulo: 2,
+    lotacao: 1,
+    afastados: 0,
+    vacancias: 0,
+  },
+  {
+    componente: "Tecnologias",
+    grupo: "baseComum",
+    modulo: 3,
+    lotacao: 3,
+    afastados: 0,
+    vacancias: 1,
+  },
+  {
+    componente: "Empreendedorismo",
+    grupo: "baseComum",
+    modulo: 2,
+    lotacao: 2,
+    afastados: 0,
+    vacancias: 0,
+  },
   // Linguagens adicionais
-  { componente: "Espanhol", grupo: "linguagensAdicionais", modulo: 2, lotacao: 6, afastados: 2, vacancias: 0 },
-  { componente: "Inglês", grupo: "linguagensAdicionais", modulo: 4, lotacao: 8, afastados: 2, vacancias: 1 },
-  { componente: "Libras", grupo: "linguagensAdicionais", modulo: 2, lotacao: 6, afastados: 2, vacancias: 0 },
+  {
+    componente: "Espanhol",
+    grupo: "linguagensAdicionais",
+    modulo: 2,
+    lotacao: 6,
+    afastados: 2,
+    vacancias: 0,
+  },
+  {
+    componente: "Inglês",
+    grupo: "linguagensAdicionais",
+    modulo: 4,
+    lotacao: 8,
+    afastados: 2,
+    vacancias: 1,
+  },
+  {
+    componente: "Libras",
+    grupo: "linguagensAdicionais",
+    modulo: 2,
+    lotacao: 6,
+    afastados: 2,
+    vacancias: 0,
+  },
 ];
 
 export const componentesDetalhe: ComponenteCurricularDetalhe[] =
@@ -141,24 +295,26 @@ export const detalhesPorCodigo: Record<string, DetalheUnidade> =
     ]),
   );
 
-export const professoresLotadosPorComponente: Record<string, ProfessorLotado[]> =
-  {
-    arte: [
-      { nome: "João da Silva", rf: "123.456.7", tipoVaga: "definitivo" },
-      { nome: "Maria Souza", rf: "123.456.7", tipoVaga: "precario" },
-      { nome: "Ana Beatriz Lima", rf: "123.456.7", tipoVaga: "definitivo" },
-      { nome: "Carlos Eduardo Rocha", rf: "123.456.7", tipoVaga: "precario" },
-      { nome: "Fernanda Alves", rf: "123.456.7", tipoVaga: "definitivo" },
-    ],
-    biologia: [
-      { nome: "Paulo Henrique Dias", rf: "123.456.7", tipoVaga: "definitivo" },
-      { nome: "Marta Ribeiro", rf: "123.456.7", tipoVaga: "definitivo" },
-      { nome: "Juliana Prado", rf: "123.456.7", tipoVaga: "precario" },
-      { nome: "Rafael Nogueira", rf: "123.456.7", tipoVaga: "definitivo" },
-      { nome: "Camila Ferraz", rf: "123.456.7", tipoVaga: "precario" },
-      { nome: "Bruno Tavares", rf: "123.456.7", tipoVaga: "definitivo" },
-    ],
-  };
+export const professoresLotadosPorComponente: Record<
+  string,
+  ProfessorLotado[]
+> = {
+  arte: [
+    { nome: "João da Silva", rf: "123.456.7", tipoVaga: "definitivo" },
+    { nome: "Maria Souza", rf: "123.456.7", tipoVaga: "precario" },
+    { nome: "Ana Beatriz Lima", rf: "123.456.7", tipoVaga: "definitivo" },
+    { nome: "Carlos Eduardo Rocha", rf: "123.456.7", tipoVaga: "precario" },
+    { nome: "Fernanda Alves", rf: "123.456.7", tipoVaga: "definitivo" },
+  ],
+  biologia: [
+    { nome: "Paulo Henrique Dias", rf: "123.456.7", tipoVaga: "definitivo" },
+    { nome: "Marta Ribeiro", rf: "123.456.7", tipoVaga: "definitivo" },
+    { nome: "Juliana Prado", rf: "123.456.7", tipoVaga: "precario" },
+    { nome: "Rafael Nogueira", rf: "123.456.7", tipoVaga: "definitivo" },
+    { nome: "Camila Ferraz", rf: "123.456.7", tipoVaga: "precario" },
+    { nome: "Bruno Tavares", rf: "123.456.7", tipoVaga: "definitivo" },
+  ],
+};
 
 export const professoresAfastadosPorComponente: Record<
   string,

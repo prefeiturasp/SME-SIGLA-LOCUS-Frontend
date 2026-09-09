@@ -10,7 +10,7 @@ import {
   useNotificacao as useNotificacaoHook,
   type OpcoesNotificacao,
 } from "@/hooks/useNotificacao";
-import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { situacaoDoSaldo } from "@/tipos/unidadesEducacionais";
 
 /* ======= BotaoExcluir ======= */
 
@@ -403,7 +403,7 @@ export const IconeExcluirLixeira = styled(DeleteOutlineIcon)`
   color: currentColor;
 `;
 
-/* ======= CabecalhoSecao ======= */
+/* ======= CabecalhoCard ======= */
 
 /** Linha "titulo + descricao a esquerda / controle a direita" dos cards. */
 export const SecaoCabecalho = styled.div`

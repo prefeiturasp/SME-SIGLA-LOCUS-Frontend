@@ -6,29 +6,20 @@ import {
   salvarModulos,
   unidadesEducacionaisDetalheServico,
   unidadesEducacionaisServico,
-  URL,
-} from "../index";
+} from "@/dados/unidadesEducacionais";
 import {
   dadosLotacaoConsultaSchema,
   detalheUnidadeSchema,
   LotacaoNaoEncontradaError,
+  payloadSalvarModulosSchema,
   respostaListagemSchema,
   respostaRegistrarUnidadeSchema,
   UnidadeNaoEncontradaError,
-} from "../tipos";
+} from "@/tipos/unidadesEducacionais";
 import {
   TOTAL_REGISTROS,
   TAMANHO_PAGINA,
 } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
-
-describe("URL Registrar UE", () => {
-  it("monta as rotas de consulta e registro", () => {
-    expect(URL.consultarLotacao("123")).toBe(
-      "/api/v1/unidades-educacionais/lotacao/123/",
-    );
-    expect(URL.registrar()).toBe("/api/v1/unidades-educacionais/");
-  });
-});
 
 describe("unidadesEducacionaisServico (mock Gestao)", () => {
   it("listar continua retornando dados estaticos", async () => {
@@ -41,11 +32,9 @@ describe("unidadesEducacionaisServico (mock Gestao)", () => {
 });
 
 describe("consultarLotacao (padrao Alvo)", () => {
-  it("retorna { response, abort } com dados mockados", async () => {
-    const { response, abort } = consultarLotacao("123");
-    const dados = await response;
+  it("retorna os dados estaticos da lotacao", async () => {
+    const dados = await consultarLotacao("123");
 
-    expect(typeof abort).toBe("function");
     expect(() => dadosLotacaoConsultaSchema.parse(dados)).not.toThrow();
     expect(dados).toEqual({
       codigoLotacao: "123",
@@ -56,8 +45,9 @@ describe("consultarLotacao (padrao Alvo)", () => {
   });
 
   it("rejeita codigo inexistente com LotacaoNaoEncontradaError", async () => {
-    const { response } = consultarLotacao("999");
-    await expect(response).rejects.toBeInstanceOf(LotacaoNaoEncontradaError);
+    await expect(consultarLotacao("999")).rejects.toBeInstanceOf(
+      LotacaoNaoEncontradaError,
+    );
   });
 });
 
@@ -79,11 +69,9 @@ describe("registrar (padrao Alvo)", () => {
     window.history.replaceState({}, "", "/");
   });
 
-  it("retorna { response, abort } apos validar payload", async () => {
-    const { response, abort } = registrar(payloadValido);
-    const dados = await response;
+  it("registra e devolve a resposta de sucesso", async () => {
+    const dados = await registrar(payloadValido);
 
-    expect(typeof abort).toBe("function");
     expect(() => respostaRegistrarUnidadeSchema.parse(dados)).not.toThrow();
     expect(dados.sucesso).toBe(true);
   });
@@ -91,8 +79,9 @@ describe("registrar (padrao Alvo)", () => {
   it("rejeita quando a URL tem ?erro=1 (demo do toast de erro)", async () => {
     window.history.replaceState({}, "", "/?erro=1");
 
-    const { response } = registrar(payloadValido);
-    await expect(response).rejects.toThrow("Erro simulado no registro da UE");
+    await expect(registrar(payloadValido)).rejects.toThrow(
+      "Erro simulado no registro da UE",
+    );
   });
 });
 
@@ -123,7 +112,7 @@ describe("detalhe da unidade educacional", () => {
     await salvarModulos({
       codigoLotacao: "091488",
       alteracoes: [{ componenteId: "arte", modulo: 6 }],
-    }).response;
+    });
 
     const depois =
       await unidadesEducacionaisDetalheServico.obterDetalhe("091488");
@@ -135,7 +124,7 @@ describe("detalhe da unidade educacional", () => {
     await salvarModulos({
       codigoLotacao: "091488",
       alteracoes: [{ componenteId: "arte", modulo: 6 }],
-    }).response;
+    });
 
     const versao =
       await unidadesEducacionaisDetalheServico.obterVersaoHistorica(
@@ -148,16 +137,19 @@ describe("detalhe da unidade educacional", () => {
 
   it("recusa payload de salvamento sem alteracoes", () => {
     expect(() =>
-      salvarModulos({ codigoLotacao: "091488", alteracoes: [] }),
+      payloadSalvarModulosSchema.parse({
+        codigoLotacao: "091488",
+        alteracoes: [],
+      }),
     ).toThrow();
   });
 
   it("exclui uma unidade existente e rejeita uma inexistente", async () => {
-    const { response, abort } = excluirUnidade("091488");
-    expect(typeof abort).toBe("function");
-    await expect(response).resolves.toMatchObject({ sucesso: true });
+    await expect(excluirUnidade("091488")).resolves.toMatchObject({
+      sucesso: true,
+    });
 
-    await expect(excluirUnidade("999999").response).rejects.toBeInstanceOf(
+    await expect(excluirUnidade("999999")).rejects.toBeInstanceOf(
       UnidadeNaoEncontradaError,
     );
   });

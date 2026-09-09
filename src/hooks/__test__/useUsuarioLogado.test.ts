@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useUsuarioLogado } from "../useUsuarioLogado";
-import { USUARIO_MOCK } from "@/servicos/recursos/autenticacao";
+import { USUARIO_MOCK } from "@/auth";
 
 describe("useUsuarioLogado", () => {
   afterEach(() => {

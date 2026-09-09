@@ -1,34 +1,36 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDadosEstaticos } from "@/hooks/useDadosEstaticos";
 import { useNotificacao } from "@/hooks/useNotificacao";
 import { CAMINHOS } from "@/rotas/caminhos";
 import {
   excluirUnidade,
   salvarModulos,
   unidadesEducacionaisDetalheServico,
-} from "@/servicos/recursos/unidadesEducacionais";
+} from "@/dados/unidadesEducacionais";
 import type {
   ComponenteCurricularDetalhe,
   DetalheUnidade,
   OpcaoSelecao,
   RegistroHistorico,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
-import { montarLinhasAgrupadas, type LinhaTabelaComponentes } from "../utilitarios";
+} from "@/tipos/unidadesEducacionais";
+import {
+  montarLinhasAgrupadas,
+  type LinhaTabelaComponentes,
+} from "../utilitarios";
 
 export type FiltroSituacao =
-  | "todos"
-  | "comVagas"
-  | "comExcedente"
-  | "comAfastados";
+  "todos" | "comVagas" | "comExcedente" | "comAfastados";
 
-export const OPCOES_FILTRO_SITUACAO: { valor: FiltroSituacao; rotulo: string }[] =
-  [
-    { valor: "todos", rotulo: "Todos" },
-    { valor: "comVagas", rotulo: "Com vagas" },
-    { valor: "comExcedente", rotulo: "Com excedente" },
-    { valor: "comAfastados", rotulo: "Com afastados" },
-  ];
+export const OPCOES_FILTRO_SITUACAO: {
+  valor: FiltroSituacao;
+  rotulo: string;
+}[] = [
+  { valor: "todos", rotulo: "Todos" },
+  { valor: "comVagas", rotulo: "Com vagas" },
+  { valor: "comExcedente", rotulo: "Com excedente" },
+  { valor: "comAfastados", rotulo: "Com afastados" },
+];
 
 export interface PainelProfessores {
   tipo: "lotacao" | "afastados";
@@ -88,7 +90,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   const { codigoLotacao = "" } = useParams<{ codigoLotacao: string }>();
   const navigate = useNavigate();
   const notificacao = useNotificacao();
-  const queryClient = useQueryClient();
 
   const [componenteSelecionado, setComponenteSelecionado] = useState<
     string | undefined
@@ -108,36 +109,47 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   const [versaoVisualizada, setVersaoVisualizada] = useState<
     RegistroHistorico | undefined
   >();
+  /**
+   * Incrementado apos salvar para forcar o recarregamento do detalhe — e o que
+   * traz de volta os modulos recem-gravados na camada de dados.
+   */
+  const [versaoDados, setVersaoDados] = useState(0);
 
-  const detalheQuery = useQuery({
-    queryKey: ["detalhe-unidade", codigoLotacao],
-    queryFn: () =>
-      unidadesEducacionaisDetalheServico.obterDetalhe(codigoLotacao),
-    retry: false,
-    enabled: Boolean(codigoLotacao),
-  });
+  const detalheQuery = useDadosEstaticos(
+    useCallback(
+      () => unidadesEducacionaisDetalheServico.obterDetalhe(codigoLotacao),
+      [codigoLotacao],
+    ),
+    [codigoLotacao, versaoDados],
+    Boolean(codigoLotacao),
+  );
 
-  const versaoQuery = useQuery({
-    queryKey: ["versao-unidade", codigoLotacao, versaoVisualizada?.id],
-    queryFn: () =>
-      unidadesEducacionaisDetalheServico.obterVersaoHistorica(
-        codigoLotacao,
-        versaoVisualizada?.id ?? "",
-      ),
-    retry: false,
-    enabled: Boolean(codigoLotacao) && Boolean(versaoVisualizada),
-  });
+  const idVersaoVisualizada = versaoVisualizada?.id;
 
-  const historicoQuery = useQuery({
-    queryKey: ["historico-unidade", codigoLotacao],
-    queryFn: () =>
-      unidadesEducacionaisDetalheServico.listarHistorico(codigoLotacao),
-    retry: false,
-    enabled: Boolean(codigoLotacao) && painelHistoricoAberto,
-  });
+  const versaoQuery = useDadosEstaticos(
+    useCallback(
+      () =>
+        unidadesEducacionaisDetalheServico.obterVersaoHistorica(
+          codigoLotacao,
+          idVersaoVisualizada ?? "",
+        ),
+      [codigoLotacao, idVersaoVisualizada],
+    ),
+    [codigoLotacao, idVersaoVisualizada],
+    Boolean(codigoLotacao) && Boolean(idVersaoVisualizada),
+  );
+
+  const historicoQuery = useDadosEstaticos(
+    useCallback(
+      () => unidadesEducacionaisDetalheServico.listarHistorico(codigoLotacao),
+      [codigoLotacao],
+    ),
+    [codigoLotacao],
+    Boolean(codigoLotacao) && painelHistoricoAberto,
+  );
 
   const somenteLeitura = Boolean(versaoVisualizada);
-  const unidade = somenteLeitura ? versaoQuery.data : detalheQuery.data;
+  const unidade = somenteLeitura ? versaoQuery.dados : detalheQuery.dados;
 
   const componentes = useMemo(
     () => unidade?.componentes ?? [],
@@ -147,7 +159,9 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   /** Modulos originais, para detectar quando uma edicao volta ao valor inicial. */
   const modulosOriginais = useMemo(() => {
     const mapa = new Map<string, number>();
-    componentes.forEach((componente) => mapa.set(componente.id, componente.modulo));
+    componentes.forEach((componente) =>
+      mapa.set(componente.id, componente.modulo),
+    );
     return mapa;
   }, [componentes]);
 
@@ -231,12 +245,10 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
         alteracoes: Object.entries(modulosEditados).map(
           ([componenteId, modulo]) => ({ componenteId, modulo }),
         ),
-      }).response;
+      });
 
       definirModulosEditados({});
-      await queryClient.invalidateQueries({
-        queryKey: ["detalhe-unidade", codigoLotacao],
-      });
+      setVersaoDados((atual) => atual + 1);
       notificacao.sucesso({
         titulo: "Sucesso!",
         texto: "As alterações foram salvas.",
@@ -254,21 +266,16 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     unidade,
     possuiAlteracoes,
     modulosEditados,
-    codigoLotacao,
     definirModulosEditados,
     notificacao,
-    queryClient,
   ]);
 
   const confirmarExclusao = useCallback(async () => {
     setExcluindo(true);
     try {
-      await excluirUnidade(codigoLotacao).response;
+      await excluirUnidade(codigoLotacao);
 
       setModalExclusaoAberto(false);
-      await queryClient.invalidateQueries({
-        queryKey: ["unidades-educacionais"],
-      });
       notificacao.sucesso({
         titulo: "Sucesso!",
         texto: "A unidade educacional foi excluída.",
@@ -283,7 +290,7 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     } finally {
       setExcluindo(false);
     }
-  }, [codigoLotacao, navigate, notificacao, queryClient]);
+  }, [codigoLotacao, navigate, notificacao]);
 
   const voltar = useCallback(() => {
     // Usa o ref para nao depender da closure: `voltar` pode ser chamado no
@@ -301,13 +308,19 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     navigate(CAMINHOS.cadastroGestaoUnidades);
   }, [definirModulosEditados, navigate]);
 
-  const visualizarVersao = useCallback((registro: RegistroHistorico) => {
-    setPainelHistoricoAberto(false);
-    definirModulosEditados({});
-    setVersaoVisualizada(registro);
-  }, [definirModulosEditados]);
+  const visualizarVersao = useCallback(
+    (registro: RegistroHistorico) => {
+      setPainelHistoricoAberto(false);
+      definirModulosEditados({});
+      setVersaoVisualizada(registro);
+    },
+    [definirModulosEditados],
+  );
 
-  const voltarVersaoAtual = useCallback(() => setVersaoVisualizada(undefined), []);
+  const voltarVersaoAtual = useCallback(
+    () => setVersaoVisualizada(undefined),
+    [],
+  );
 
   return useMemo(
     () => ({
@@ -320,14 +333,14 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       filtroSituacao,
       possuiAlteracoes,
       carregando: somenteLeitura
-        ? versaoQuery.isLoading
-        : detalheQuery.isLoading,
-      naoEncontrada: detalheQuery.isError,
+        ? versaoQuery.carregando
+        : detalheQuery.carregando,
+      naoEncontrada: detalheQuery.erro,
       salvando,
       excluindo,
       somenteLeitura,
       versaoVisualizada,
-      historico: historicoQuery.data ?? [],
+      historico: historicoQuery.dados ?? [],
       painelProfessores,
       painelHistoricoAberto,
       modalExclusaoAberto,
@@ -362,13 +375,13 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       filtroSituacao,
       possuiAlteracoes,
       somenteLeitura,
-      versaoQuery.isLoading,
-      detalheQuery.isLoading,
-      detalheQuery.isError,
+      versaoQuery.carregando,
+      detalheQuery.carregando,
+      detalheQuery.erro,
       salvando,
       excluindo,
       versaoVisualizada,
-      historicoQuery.data,
+      historicoQuery.dados,
       painelProfessores,
       painelHistoricoAberto,
       modalExclusaoAberto,

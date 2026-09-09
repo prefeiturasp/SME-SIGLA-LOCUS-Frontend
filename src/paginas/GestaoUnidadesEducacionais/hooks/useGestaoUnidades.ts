@@ -1,15 +1,14 @@
-import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { unidadesEducacionaisServico } from "@/servicos/recursos/unidadesEducacionais";
+import { useCallback, useMemo, useState } from "react";
+import { useDadosEstaticos } from "@/hooks/useDadosEstaticos";
+import { unidadesEducacionaisServico } from "@/dados/unidadesEducacionais";
 import type {
   FiltrosUnidades,
   PainelComponente,
   UnidadeEducacional,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+} from "@/tipos/unidadesEducacionais";
 import { opcoesComponenteCurricular } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 
-const COMPONENTE_PADRAO =
-  opcoesComponenteCurricular[0]?.value ?? "Arte";
+const COMPONENTE_PADRAO = opcoesComponenteCurricular[0]?.value ?? "Arte";
 
 export interface EstadoGestaoUnidades {
   unidades: UnidadeEducacional[];
@@ -28,36 +27,39 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
     useState(COMPONENTE_PADRAO);
   const [filtros, setFiltros] = useState<FiltrosUnidades>({});
 
-  const listagem = useQuery({
-    queryKey: ["unidades-educacionais", filtros],
-    queryFn: () => unidadesEducacionaisServico.listar(filtros),
-  });
+  const listagem = useDadosEstaticos(
+    useCallback(() => unidadesEducacionaisServico.listar(filtros), [filtros]),
+    [filtros],
+  );
 
-  const painelQuery = useQuery({
-    queryKey: ["painel-componente", componenteSelecionado],
-    queryFn: () => unidadesEducacionaisServico.painel(componenteSelecionado),
-  });
+  const painelQuery = useDadosEstaticos(
+    useCallback(
+      () => unidadesEducacionaisServico.painel(componenteSelecionado),
+      [componenteSelecionado],
+    ),
+    [componenteSelecionado],
+  );
 
   return useMemo(
     () => ({
-      unidades: listagem.data?.itens ?? [],
-      total: listagem.data?.total ?? 0,
-      painel: painelQuery.data,
+      unidades: listagem.dados?.itens ?? [],
+      total: listagem.dados?.total ?? 0,
+      painel: painelQuery.dados,
       componenteSelecionado,
-      carregando: listagem.isLoading || painelQuery.isLoading,
-      erro: listagem.isError || painelQuery.isError,
+      carregando: listagem.carregando || painelQuery.carregando,
+      erro: listagem.erro || painelQuery.erro,
       selecionarComponente: setComponenteSelecionado,
       aplicarFiltros: (novos: FiltrosUnidades) =>
         setFiltros((atuais) => ({ ...atuais, ...novos })),
       limparFiltros: () => setFiltros({}),
     }),
     [
-      listagem.data,
-      listagem.isLoading,
-      listagem.isError,
-      painelQuery.data,
-      painelQuery.isLoading,
-      painelQuery.isError,
+      listagem.dados,
+      listagem.carregando,
+      listagem.erro,
+      painelQuery.dados,
+      painelQuery.carregando,
+      painelQuery.erro,
       componenteSelecionado,
     ],
   );

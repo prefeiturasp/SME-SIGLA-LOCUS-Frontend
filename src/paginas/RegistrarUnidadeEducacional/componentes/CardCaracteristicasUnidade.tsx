@@ -182,9 +182,7 @@ export function CardCaracteristicasUnidade({
                     }}
                   >
                     <TextAreaForm
-                      status={
-                        erroMotivoNaoContabilizacao ? "error" : undefined
-                      }
+                      status={erroMotivoNaoContabilizacao ? "error" : undefined}
                       aria-label="Por que a unidade não deve ser contabilizada?"
                       aria-required
                       aria-invalid={Boolean(erroMotivoNaoContabilizacao)}

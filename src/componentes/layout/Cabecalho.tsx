@@ -4,7 +4,7 @@ import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOu
 import brasaoPrefeitura from "@/assets/logo-prefeitura-cabecalho.png";
 import { Cabecalho as EstiloCabecalho } from "@/estilos";
 import { useUsuarioLogado } from "@/hooks/useUsuarioLogado";
-import { encerrarSessao } from "@/servicos/recursos/autenticacao";
+import { encerrarSessao } from "@/auth";
 import { breadcrumbDaRota } from "@/rotas/caminhos";
 
 export interface CabecalhoProps {

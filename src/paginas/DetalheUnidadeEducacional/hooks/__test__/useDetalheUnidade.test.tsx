@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { Route, Routes } from "react-router-dom";
 import { CAMINHOS } from "@/rotas/caminhos";
-import * as servico from "@/servicos/recursos/unidadesEducacionais";
+import * as servico from "@/dados/unidadesEducacionais";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { useDetalheUnidade } from "../useDetalheUnidade";
 
@@ -83,10 +83,7 @@ describe("useDetalheUnidade", () => {
   });
 
   it("preserva as edicoes quando o salvamento falha", async () => {
-    jest.spyOn(servico, "salvarModulos").mockReturnValue({
-      response: Promise.reject(new Error("falha")),
-      abort: () => {},
-    });
+    jest.spyOn(servico, "salvarModulos").mockRejectedValue(new Error("falha"));
     const result = await montarHook();
 
     act(() => result.current.alterarModulo("arte", 9));
@@ -129,10 +126,7 @@ describe("useDetalheUnidade", () => {
   });
 
   it("mantem o modal aberto quando a exclusao falha", async () => {
-    jest.spyOn(servico, "excluirUnidade").mockReturnValue({
-      response: Promise.reject(new Error("falha")),
-      abort: () => {},
-    });
+    jest.spyOn(servico, "excluirUnidade").mockRejectedValue(new Error("falha"));
     const result = await montarHook();
 
     act(() => result.current.abrirModalExclusao());

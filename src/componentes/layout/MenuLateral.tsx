@@ -11,7 +11,7 @@ import {
   MenuSider,
 } from "@/estilos";
 import { layout as tokensLayout } from "@/estilos/tokens/tokens";
-import { encerrarSessao } from "@/servicos/recursos/autenticacao";
+import { encerrarSessao } from "@/auth";
 import { ITENS_MENU, menuItemAtivo } from "./MenuLateral.itens";
 
 export function MenuLateral() {

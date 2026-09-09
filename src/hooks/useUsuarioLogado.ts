@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   obterUsuarioLogado,
   type UsuarioLogado,
-} from "@/servicos/recursos/autenticacao";
+} from "@/auth";
 
 export function useUsuarioLogado(): UsuarioLogado {
   return useMemo(() => obterUsuarioLogado(), []);

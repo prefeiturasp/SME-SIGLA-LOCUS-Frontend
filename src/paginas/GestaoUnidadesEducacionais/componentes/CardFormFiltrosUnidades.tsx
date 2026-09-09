@@ -2,7 +2,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Button, Card, Col, Form, Input, Row, Select, Typography } from "antd";
 import { FormItem } from "@/estilos";
 import { opcoesFiltros } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
-import type { FiltrosUnidades } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import type { FiltrosUnidades } from "@/tipos/unidadesEducacionais";
 
 const { Title, Paragraph } = Typography;
 

@@ -1,4 +1,4 @@
-import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import type { OpcaoSelecao } from "@/tipos/unidadesEducacionais";
 import {
   opcoesComponenteCurricular,
   opcoesFiltros,
@@ -33,25 +33,23 @@ export interface DadosLotacaoConsultaMock {
   nome: string;
 }
 
-export const lotacoesConsultaExemplo: Record<
-  string,
-  DadosLotacaoConsultaMock
-> = {
-  "123": {
-    tipoUnidade: "EMEF",
-    dre: "itaquera",
-    nome: "EMEF Prof. Maria da Silva",
-  },
-  "456": {
-    tipoUnidade: "EMEI",
-    dre: "butanta",
-    nome: "EMEI Jardim das Flores",
-  },
-  "789": {
-    tipoUnidade: "CEI",
-    dre: "sao-miguel",
-    nome: "CEI Vila Nova",
-  },
-};
+export const lotacoesConsultaExemplo: Record<string, DadosLotacaoConsultaMock> =
+  {
+    "123": {
+      tipoUnidade: "EMEF",
+      dre: "itaquera",
+      nome: "EMEF Prof. Maria da Silva",
+    },
+    "456": {
+      tipoUnidade: "EMEI",
+      dre: "butanta",
+      nome: "EMEI Jardim das Flores",
+    },
+    "789": {
+      tipoUnidade: "CEI",
+      dre: "sao-miguel",
+      nome: "CEI Vila Nova",
+    },
+  };
 
 export type { OpcaoSelecao };

@@ -4,7 +4,7 @@ import { SecaoAcao, SecaoCabecalho, SecaoTextos } from "@/estilos";
 
 const { Title, Paragraph } = Typography;
 
-export interface CabecalhoSecaoProps {
+export interface CabecalhoCardProps {
   titulo: string;
   descricao?: ReactNode;
   /** Controle exibido a direita (select rotulado, seletor de periodo, botao). */
@@ -13,12 +13,12 @@ export interface CabecalhoSecaoProps {
 }
 
 /** Cabecalho de card: titulo e descricao a esquerda, controle a direita. */
-export function CabecalhoSecao({
+export function CabecalhoCard({
   titulo,
   descricao,
   acao,
   larguraAcao,
-}: CabecalhoSecaoProps) {
+}: CabecalhoCardProps) {
   return (
     <SecaoCabecalho>
       <SecaoTextos>
@@ -34,4 +34,4 @@ export function CabecalhoSecao({
   );
 }
 
-export default CabecalhoSecao;
+export default CabecalhoCard;

@@ -2,9 +2,8 @@ import type {
   EstatisticaPainel,
   OpcaoSelecao,
   UnidadeEducacional,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
-import { LEGENDAS_ESTATISTICA } from "@/servicos/recursos/unidadesEducacionais/textos";
-
+} from "@/tipos/unidadesEducacionais";
+import { LEGENDAS_ESTATISTICA } from "@/textos/unidadesEducacionais";
 
 export const TOTAL_REGISTROS = 5985;
 export const TAMANHO_PAGINA = 10;

@@ -25,12 +25,10 @@ export function obterUsuarioLogado(): UsuarioLogado {
   return USUARIO_MOCK;
 }
 
-
 export function encerrarSessao(
   aoFinalizar: () => void = () => window.location.reload(),
 ): void {
   try {
-    localStorage.removeItem("TOKEN");
     localStorage.removeItem("USUARIO");
   } catch {
     // ignora storage indisponivel

@@ -65,8 +65,8 @@ describe("ModalConfirmacao", () => {
   it("exibe o botao de confirmacao carregando", () => {
     renderizarModal({ confirmando: true });
 
-    expect(
-      screen.getByRole("button", { name: /Excluir UE/ }),
-    ).toHaveClass("ant-btn-loading");
+    expect(screen.getByRole("button", { name: /Excluir UE/ })).toHaveClass(
+      "ant-btn-loading",
+    );
   });
 });

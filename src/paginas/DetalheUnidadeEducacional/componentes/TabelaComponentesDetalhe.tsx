@@ -8,8 +8,8 @@ import {
   TagVagas,
   textoContagemComponentes,
 } from "@/estilos";
-import { DICAS_COLUNAS_COMPONENTE } from "@/servicos/recursos/unidadesEducacionais/textos";
-import type { ComponenteCurricularDetalhe } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { DICAS_COLUNAS_COMPONENTE } from "@/textos/unidadesEducacionais";
+import type { ComponenteCurricularDetalhe } from "@/tipos/unidadesEducacionais";
 import type { LinhaTabelaComponentes } from "../utilitarios";
 
 /** Quantidade de colunas da tabela; usada no colSpan das linhas de grupo. */
@@ -144,8 +144,7 @@ export function TabelaComponentesDetalhe({
       align: "center",
       width: 120,
       onCell: (linha) => celulaGrupo(linha, 4, TOTAL_COLUNAS),
-      render: (_, linha) =>
-        linha.tipo === "grupo" ? null : linha.vacancias,
+      render: (_, linha) => (linha.tipo === "grupo" ? null : linha.vacancias),
     },
     {
       title: (
@@ -173,7 +172,10 @@ export function TabelaComponentesDetalhe({
           <Table.Summary.Row>
             <Table.Summary.Cell index={0} colSpan={TOTAL_COLUNAS}>
               <strong>
-                {textoContagemComponentes(componentesExibidos, totalComponentes)}
+                {textoContagemComponentes(
+                  componentesExibidos,
+                  totalComponentes,
+                )}
               </strong>
             </Table.Summary.Cell>
           </Table.Summary.Row>

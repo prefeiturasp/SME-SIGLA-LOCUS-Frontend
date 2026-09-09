@@ -18,9 +18,7 @@ export const componenteCurricularSchema = z
   .trim()
   .min(1, { message: MENSAGENS_VALIDACAO.campoObrigatorio });
 
-export type ResultadoValidacao =
-  | { ok: true }
-  | { ok: false; mensagem: string };
+export type ResultadoValidacao = { ok: true } | { ok: false; mensagem: string };
 
 export function validarCodigoLotacaoObrigatorio(
   codigo: string,

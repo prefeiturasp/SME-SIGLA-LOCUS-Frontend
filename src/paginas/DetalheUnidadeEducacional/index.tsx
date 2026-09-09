@@ -115,14 +115,6 @@ export function DetalheUnidadeEducacional() {
         <LinhaHistoricoAlteracoes aoAbrir={estado.abrirPainelHistorico} />
       </ConteudoPagina>
 
-      {/*
-        Modal de exclusao e paineis de lotacao, afastados e historico removidos
-        temporariamente: serao reimplementados por outro desenvolvedor. As acoes
-        que os abrem seguem ligadas aos handlers do useDetalheUnidade
-        (abrirModalExclusao, abrirPainelLotacao, abrirPainelAfastados,
-        abrirPainelHistorico); basta voltar a renderizar os componentes aqui.
-      */}
-
       <ModalConfirmacao
         aberto={estado.modalSaidaAberto}
         titulo="Descartar alterações"

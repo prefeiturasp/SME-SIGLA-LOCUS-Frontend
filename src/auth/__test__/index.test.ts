@@ -1,8 +1,4 @@
-import {
-  encerrarSessao,
-  obterUsuarioLogado,
-  USUARIO_MOCK,
-} from "../index";
+import { encerrarSessao, obterUsuarioLogado, USUARIO_MOCK } from "../index";
 
 describe("obterUsuarioLogado", () => {
   afterEach(() => localStorage.clear());
@@ -16,14 +12,12 @@ describe("obterUsuarioLogado", () => {
 describe("encerrarSessao", () => {
   afterEach(() => localStorage.clear());
 
-  it("limpa TOKEN e USUARIO do storage e dispara o efeito de saida", () => {
-    localStorage.setItem("TOKEN", "abc");
+  it("limpa USUARIO do storage e dispara o efeito de saida", () => {
     localStorage.setItem("USUARIO", JSON.stringify(USUARIO_MOCK));
     const aoFinalizar = jest.fn();
 
     encerrarSessao(aoFinalizar);
 
-    expect(localStorage.getItem("TOKEN")).toBeNull();
     expect(localStorage.getItem("USUARIO")).toBeNull();
     expect(aoFinalizar).toHaveBeenCalledTimes(1);
   });

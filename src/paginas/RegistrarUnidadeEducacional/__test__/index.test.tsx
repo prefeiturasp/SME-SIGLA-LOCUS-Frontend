@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App as AntdApp } from "antd";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
@@ -10,29 +9,21 @@ import { ComTema } from "@/testes/renderizarComTema";
 import { RegistrarUnidadeEducacional } from "../index";
 
 function renderNaCasca(children: ReactNode) {
-  const client = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
   return render(
     <ComTema>
-      <QueryClientProvider client={client}>
-        <AntdApp>
-          <MemoryRouter initialEntries={[CAMINHOS.cadastroRegistrarUE]}>
-            <Routes>
-              <Route element={<LayoutBase />}>
-                <Route
-                  path={CAMINHOS.cadastroRegistrarUE}
-                  element={children}
-                />
-                <Route
-                  path={CAMINHOS.cadastroGestaoUnidades}
-                  element={<div>Gestão</div>}
-                />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </AntdApp>
-      </QueryClientProvider>
+      <AntdApp>
+        <MemoryRouter initialEntries={[CAMINHOS.cadastroRegistrarUE]}>
+          <Routes>
+            <Route element={<LayoutBase />}>
+              <Route path={CAMINHOS.cadastroRegistrarUE} element={children} />
+              <Route
+                path={CAMINHOS.cadastroGestaoUnidades}
+                element={<div>Gestão</div>}
+              />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </AntdApp>
     </ComTema>,
   );
 }
@@ -48,17 +39,21 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
     ).toBeInTheDocument();
 
     expect(screen.getByText("Início")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Cadastro" })).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "Cadastro" }),
+      screen.getByText("Registrar Unidade Educacional"),
     ).toBeInTheDocument();
-    expect(screen.getByText("Registrar Unidade Educacional")).toBeInTheDocument();
 
-    expect(screen.getByText("Dados da unidade educacional")).toBeInTheDocument();
+    expect(
+      screen.getByText("Dados da unidade educacional"),
+    ).toBeInTheDocument();
     expect(
       screen.getByText("Características da unidade educacional"),
     ).toBeInTheDocument();
     expect(screen.getByText("Componentes curriculares")).toBeInTheDocument();
-    expect(screen.getByText("Nenhum componente adicionado")).toBeInTheDocument();
+    expect(
+      screen.getByText("Nenhum componente adicionado"),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Contabilizar UE")).toBeChecked();
   });
 
@@ -67,7 +62,9 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
     renderNaCasca(<RegistrarUnidadeEducacional />);
 
     expect(screen.getByPlaceholderText("Exemplo: 123")).toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: "Tipo da unidade" })).toBeDisabled();
+    expect(
+      screen.getByRole("combobox", { name: "Tipo da unidade" }),
+    ).toBeDisabled();
     expect(
       screen.getByRole("combobox", {
         name: "Diretoria Regional de Educação (DRE)",

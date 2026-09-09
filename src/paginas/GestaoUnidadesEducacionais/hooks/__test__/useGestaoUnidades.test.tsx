@@ -1,20 +1,9 @@
-import type { ReactNode } from "react";
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useGestaoUnidades } from "../useGestaoUnidades";
-
-function wrapper({ children }: { children: ReactNode }) {
-  const client = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return (
-    <QueryClientProvider client={client}>{children}</QueryClientProvider>
-  );
-}
 
 describe("useGestaoUnidades", () => {
   it("carrega listagem e painel do componente selecionado", async () => {
-    const { result } = renderHook(() => useGestaoUnidades(), { wrapper });
+    const { result } = renderHook(() => useGestaoUnidades());
 
     await waitFor(() => expect(result.current.carregando).toBe(false));
 
@@ -25,7 +14,7 @@ describe("useGestaoUnidades", () => {
   });
 
   it("troca o componente selecionado e recarrega o painel", async () => {
-    const { result } = renderHook(() => useGestaoUnidades(), { wrapper });
+    const { result } = renderHook(() => useGestaoUnidades());
 
     await waitFor(() => expect(result.current.carregando).toBe(false));
 
@@ -38,7 +27,7 @@ describe("useGestaoUnidades", () => {
   });
 
   it("aplica e limpa filtros sem quebrar a listagem", async () => {
-    const { result } = renderHook(() => useGestaoUnidades(), { wrapper });
+    const { result } = renderHook(() => useGestaoUnidades());
 
     await waitFor(() => expect(result.current.carregando).toBe(false));
 

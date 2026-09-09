@@ -1,11 +1,6 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { Col, Grid, Row } from "antd";
-import {
-  BotaoAcaoInline,
-  FormItem,
-  InputForm,
-  SelectForm,
-} from "@/estilos";
+import { BotaoAcaoInline, FormItem, InputForm, SelectForm } from "@/estilos";
 import { opcoesRegistrarUnidadeEducacional } from "../dados/dadosEstaticos";
 
 const { useBreakpoint } = Grid;

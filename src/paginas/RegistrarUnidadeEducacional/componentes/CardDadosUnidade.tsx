@@ -54,9 +54,7 @@ export function CardDadosUnidade({
                   placeholder="Exemplo: 123"
                   value={dados.codigoLotacao}
                   aria-invalid={Boolean(erroCodigoLotacao)}
-                  onChange={(e) =>
-                    aoAtualizar("codigoLotacao", e.target.value)
-                  }
+                  onChange={(e) => aoAtualizar("codigoLotacao", e.target.value)}
                 />
                 <BotaoAcaoInline
                   icon={<SearchOutlinedIcon fontSize="small" />}
