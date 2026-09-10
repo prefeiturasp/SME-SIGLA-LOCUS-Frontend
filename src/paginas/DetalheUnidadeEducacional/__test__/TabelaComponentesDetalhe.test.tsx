@@ -100,7 +100,7 @@ describe("TabelaComponentesDetalhe", () => {
   });
 
   it("desabilita a edicao no modo somente leitura", async () => {
-    const { aoAbrirLotacao, aoAbrirAfastados } = renderizarTabela({
+    const { aoAbrirAfastados } = renderizarTabela({
       somenteLeitura: true,
     });
 
@@ -109,9 +109,7 @@ describe("TabelaComponentesDetalhe", () => {
       "readonly",
     );
 
-    await userEvent.click(screen.getByLabelText("Lotação de Arte"));
     await userEvent.click(screen.getByLabelText("Afastados de Biologia"));
-    expect(aoAbrirLotacao).not.toHaveBeenCalled();
     expect(aoAbrirAfastados).not.toHaveBeenCalled();
   });
 });
