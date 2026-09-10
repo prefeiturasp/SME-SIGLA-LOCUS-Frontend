@@ -7,12 +7,6 @@ export interface ColunaComInfoProps {
   dica: string;
 }
 
-/**
- * Cabecalho de coluna de tabela com icone de informacao e tooltip.
- *
- * O rotulo acessivel fica no `span` que envolve o icone: os SVGs do MUI vem
- * com `aria-hidden`, o que os tira da arvore de acessibilidade.
- */
 export function ColunaComInfo({ titulo, dica }: ColunaComInfoProps) {
   return (
     <CabecalhoColunaInfo>

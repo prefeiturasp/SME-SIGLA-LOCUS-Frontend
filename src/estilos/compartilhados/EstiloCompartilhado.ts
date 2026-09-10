@@ -2,7 +2,7 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { Button, Form, Input, InputNumber, Select, Table } from "antd";
+import { Button, Form, Input, InputNumber, Modal, Select, Table } from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
@@ -12,6 +12,34 @@ import {
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
+/* ======= modal ======= */
+
+const LARGURA_MODAL_PADRAO = 530;
+const ALTURA_MODAL_PADRAO = 198;
+
+export const ModalPadrao = styled(Modal).attrs({
+  width: LARGURA_MODAL_PADRAO,
+})`
+  .ant-modal-content {
+    height: ${ALTURA_MODAL_PADRAO}px;
+  }
+
+  .ant-modal-header {
+    padding-top: 4px;
+    padding-bottom: ${({ theme }) => theme.spacing.md}px;
+    padding-inline: 0;
+  }
+
+  .ant-modal-body {
+    padding-bottom: 5px;
+  }
+
+  .ant-modal-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    padding-inline: 8px;
+  }
+` as typeof Modal;
 
 export const BotaoExcluir = styled(Button).attrs({
   type: "text",
@@ -45,9 +73,15 @@ export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   }
 
   & .ant-table-tbody > tr.linhaGrupo > td {
+    height: 35px;
+    padding-block: 0;
     background: ${({ theme }) => theme.colors.blueBackgroundSoft};
-    font-weight: 700;
-    color: ${({ theme }) => theme.colors.blue};
+    font-family: ${({ theme }) => theme.typography.fontFamily};
+    font-weight: 600;
+    font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: ${({ theme }) => theme.colors.primaryText};
   }
 
   & .ant-table-tbody > tr.linhaGrupo > td:first-child {

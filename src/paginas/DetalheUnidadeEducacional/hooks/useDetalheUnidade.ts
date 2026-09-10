@@ -70,6 +70,7 @@ export interface EstadoDetalheUnidade {
   confirmarExclusao: () => Promise<void>;
   fecharModalSaida: () => void;
   confirmarSaida: () => void;
+  salvarESair: () => Promise<void>;
   voltar: () => void;
   salvar: () => Promise<void>;
 }
@@ -108,12 +109,10 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     RegistroHistorico | undefined
   >();
 
-  /** Gatilho de releitura apos salvar: o mock persiste fora do React. */
   const [versaoDados, setVersaoDados] = useState(0);
 
   const somenteLeitura = Boolean(versaoVisualizada);
 
-  // A versao historica e o mesmo registro sem as edicoes salvas.
   const unidade = useMemo(
     () =>
       lerDetalheEstatico(codigoLotacao, {
@@ -182,7 +181,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
 
   const possuiAlteracoes = Object.keys(modulosEditados).length > 0;
 
-  /** Espelha o estado para os callbacks lerem sem a closure defasada do render. */
   const modulosEditadosRef = useRef(modulosEditados);
 
   const definirModulosEditados = useCallback(
@@ -264,7 +262,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   }, [codigoLotacao, navigate, notificacao]);
 
   const voltar = useCallback(() => {
-    // Pelo ref: `voltar` pode rodar no mesmo ciclo de uma edicao ainda defasada.
     if (Object.keys(modulosEditadosRef.current).length > 0) {
       setModalSaidaAberto(true);
       return;
@@ -277,6 +274,47 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
     definirModulosEditados({});
     navigate(CAMINHOS.cadastroGestaoUnidades);
   }, [definirModulosEditados, navigate]);
+
+  const salvarESair = useCallback(async () => {
+    if (!unidade || !possuiAlteracoes) {
+      setModalSaidaAberto(false);
+      navigate(CAMINHOS.cadastroGestaoUnidades);
+      return;
+    }
+
+    setSalvando(true);
+    try {
+      await salvarModulos({
+        codigoLotacao: unidade.codigoLotacao,
+        alteracoes: Object.entries(modulosEditados).map(
+          ([componenteId, modulo]) => ({ componenteId, modulo }),
+        ),
+      }).response;
+
+      definirModulosEditados({});
+      setModalSaidaAberto(false);
+      notificacao.sucesso({
+        titulo: "Sucesso!",
+        texto: "As alterações foram salvas.",
+      });
+      navigate(CAMINHOS.cadastroGestaoUnidades);
+    } catch {
+      notificacao.erro({
+        titulo: "Erro",
+        texto:
+          "Não conseguimos salvar as alterações. Por favor, tente novamente!",
+      });
+    } finally {
+      setSalvando(false);
+    }
+  }, [
+    unidade,
+    possuiAlteracoes,
+    modulosEditados,
+    definirModulosEditados,
+    navigate,
+    notificacao,
+  ]);
 
   const visualizarVersao = useCallback((registro: RegistroHistorico) => {
     setPainelHistoricoAberto(false);
@@ -324,6 +362,7 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       confirmarExclusao,
       fecharModalSaida: () => setModalSaidaAberto(false),
       confirmarSaida,
+      salvarESair,
       voltar,
       salvar,
     }),
@@ -351,6 +390,7 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       voltarVersaoAtual,
       confirmarExclusao,
       confirmarSaida,
+      salvarESair,
       voltar,
       salvar,
     ],
