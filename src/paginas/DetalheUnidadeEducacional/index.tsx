@@ -4,7 +4,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Button, Result } from "antd";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
-import { ModalConfirmacao } from "@/componentes/ModalConfirmacao";
+import { ModalBase } from "@/componentes/ModalBase";
 import { ConteudoPagina } from "@/estilos";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { BannerVersaoHistorica } from "./componentes/BannerVersaoHistorica";
@@ -115,7 +115,7 @@ export function DetalheUnidadeEducacional() {
         <LinhaHistoricoAlteracoes aoAbrir={estado.abrirPainelHistorico} />
       </ConteudoPagina>
 
-      <ModalConfirmacao
+      <ModalBase
         aberto={estado.modalExclusaoAberto}
         titulo="Excluir Unidade Educacional"
         mensagem="A ação não poderá ser desfeita e as informações serão deletadas. Tem certeza que deseja continuar?"
@@ -127,7 +127,7 @@ export function DetalheUnidadeEducacional() {
         aoCancelar={estado.fecharModalExclusao}
       />
 
-      <ModalConfirmacao
+      <ModalBase
         aberto={estado.modalSaidaAberto}
         titulo="As alterações não foram salvas!"
         mensagem="Você fez alterações que ainda não foram salvas. Se sair agora, elas serão perdidas. Tem certeza que deseja continuar?"

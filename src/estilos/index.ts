@@ -1,4 +1,5 @@
 export {
+  ModalPadrao,
   BotaoExcluir,
   Tabela,
   ConteudoPagina,

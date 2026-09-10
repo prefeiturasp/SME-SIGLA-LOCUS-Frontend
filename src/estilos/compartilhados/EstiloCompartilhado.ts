@@ -6,12 +6,40 @@ import { Button, Form, Input, InputNumber, Select, Table } from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
+import { spacing } from "@/estilos/tokens/tokens";
 import {
   useNotificacao as useNotificacaoHook,
   type OpcoesNotificacao,
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
+/* ======= modal ======= */
+
+const LARGURA_MODAL_PADRAO = 530;
+const ALTURA_MODAL_PADRAO = 198;
+
+export const ModalPadrao = {
+  width: LARGURA_MODAL_PADRAO,
+  height: ALTURA_MODAL_PADRAO,
+  styles: {
+    content: {
+      height: ALTURA_MODAL_PADRAO,
+    },
+    header: {
+      paddingTop: 4,
+      paddingBottom: spacing.md,
+      paddingInline: 0,
+    },
+    body: {
+      paddingBottom: 5,
+    },
+    footer: {
+      marginTop: "auto",
+      paddingTop: 20,
+      paddingInline: 8,
+    },
+  },
+} as const;
 
 export const BotaoExcluir = styled(Button).attrs({
   type: "text",
