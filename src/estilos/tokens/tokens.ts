@@ -1,6 +1,8 @@
 export const colors = {
   primary: "#183356",
   blue: "#0068bc",
+  blueBackground: "rgba(0, 104, 188, 0.1)",
+  blueBackgroundSoft: "rgba(0, 104, 188, 0.06)",
   activeBlue: "#0f59c8",
   menuItemActiveBackground: "#0f59c8",
   menuBackground: "#183356",

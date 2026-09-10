@@ -1,95 +1,93 @@
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
-import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
-import EventSeatOutlinedIcon from "@mui/icons-material/EventSeatOutlined";
 import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import EventSeatOutlinedIcon from "@mui/icons-material/EventSeatOutlined";
 import Groups3OutlinedIcon from "@mui/icons-material/Groups3Outlined";
-import type { ReactNode } from "react";
-import { Card, Select, Typography } from "antd";
-import { CartaoStat } from "@/componentes/CartaoStat";
-import type {
-  EstatisticaPainel,
-  OpcaoSelecao,
-} from "@/servicos/recursos/unidadesEducacionais/tipos";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
+import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
+import { Card, Select } from "antd";
+import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
+import { CardDados } from "@/componentes/CardDados";
+import { FormItem, GridCardsDados } from "@/estilos";
+import { LEGENDAS_ESTATISTICA } from "@/servicos/recursos/unidadesEducacionais/textos";
+import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
-const { Title, Paragraph } = Typography;
-
-const ICONE_POR_CHAVE: Record<string, ReactNode> = {
-  modulos: <GroupsOutlinedIcon />,
-  lotacao: <ViewModuleOutlinedIcon />,
-  afastados: <PersonRemoveOutlinedIcon />,
-  vagas: <EventSeatOutlinedIcon />,
-  unidades: <ApartmentOutlinedIcon />,
-  turmas: <Groups3OutlinedIcon />,
-};
+const LARGURA_FILTRO = 306;
 
 export interface CardComponenteCurricularProps {
-  estatisticas: EstatisticaPainel[];
   opcoesComponente: OpcaoSelecao[];
   componenteSelecionado: string;
   aoSelecionarComponente: (componente: string) => void;
 }
 
 export function CardComponenteCurricular({
-  estatisticas,
   opcoesComponente,
   componenteSelecionado,
   aoSelecionarComponente,
 }: CardComponenteCurricularProps) {
   return (
     <Card>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: 24,
-          marginBottom: 24,
-        }}
-      >
-        <div style={{ flex: "1 1 0", minWidth: 0 }}>
-          <Title level={4} style={{ marginTop: 0 }}>
-            Painel de informações por componente curricular
-          </Title>
-          <Paragraph style={{ marginBottom: 0 }}>
-            Estes são dados de todas as unidades educacionais considerando o
-            componente curricular selecionado no filtro.
-          </Paragraph>
-        </div>
-        <div style={{ width: 306 }}>
-          <label
-            style={{ display: "block", fontWeight: 700, marginBottom: 8 }}
-            htmlFor="componente-curricular"
-          >
-            Componente curricular
-          </label>
-          <Select
-            id="componente-curricular"
-            style={{ width: "100%" }}
-            value={componenteSelecionado}
-            onChange={aoSelecionarComponente}
-            options={opcoesComponente}
-          />
-        </div>
+      <div style={{ marginBottom: 24 }}>
+        <CabecalhoSecao
+          titulo="Painel de informações por componente curricular"
+          descricao="Estes são dados de todas as unidades educacionais considerando o componente curricular selecionado no filtro."
+          larguraAcao={LARGURA_FILTRO}
+          acao={
+            <FormItem
+              label="Componente curricular"
+              htmlFor="componente-curricular"
+              layout="vertical"
+              style={{ marginBottom: 0 }}
+            >
+              <Select
+                id="componente-curricular"
+                style={{ width: "100%" }}
+                value={componenteSelecionado}
+                onChange={aoSelecionarComponente}
+                options={opcoesComponente}
+              />
+            </FormItem>
+          }
+        />
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 16,
-        }}
-      >
-        {estatisticas.map((stat) => (
-          <CartaoStat
-            key={stat.chave}
-            valor={stat.valor}
-            rotulo={stat.rotulo}
-            legenda={stat.legenda}
-            icone={ICONE_POR_CHAVE[stat.chave] ?? <GroupsOutlinedIcon />}
-          />
-        ))}
-      </div>
+      <GridCardsDados $colunas={3}>
+        <CardDados
+          valor={105}
+          titulo="Módulos"
+          descricao={LEGENDAS_ESTATISTICA.modulos}
+          icone={<ViewModuleOutlinedIcon />}
+        />
+        <CardDados
+          valor={108}
+          titulo="Lotação"
+          descricao={LEGENDAS_ESTATISTICA.lotacao}
+          icone={<GroupsOutlinedIcon />}
+        />
+        <CardDados
+          valor={152}
+          titulo="Afastados"
+          descricao={LEGENDAS_ESTATISTICA.afastados}
+          icone={<PersonRemoveOutlinedIcon />}
+        />
+        <CardDados
+          valor={54}
+          titulo="Vagas"
+          descricao={LEGENDAS_ESTATISTICA.vagas}
+          icone={<EventSeatOutlinedIcon />}
+        />
+        <CardDados
+          valor={596}
+          titulo="Unidades Educacionais"
+          descricao="Quantidade total de unidades educacionais"
+          icone={<ApartmentOutlinedIcon />}
+        />
+        <CardDados
+          valor={16}
+          titulo="Turmas ativas"
+          descricao="Quantidade de turmas ativas no EOL."
+          icone={<Groups3OutlinedIcon />}
+        />
+      </GridCardsDados>
     </Card>
   );
 }

@@ -1,30 +1,21 @@
 import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { ComTema } from "@/testes/renderizarComTema";
 import { GestaoUnidadesEducacionais } from "../index";
 
 function renderNaCasca(children: ReactNode) {
-  const client = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
   return render(
     <ComTema>
-      <QueryClientProvider client={client}>
-        <MemoryRouter initialEntries={[CAMINHOS.cadastroGestaoUnidades]}>
-          <Routes>
-            <Route element={<LayoutBase />}>
-              <Route
-                path={CAMINHOS.cadastroGestaoUnidades}
-                element={children}
-              />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </QueryClientProvider>
+      <MemoryRouter initialEntries={[CAMINHOS.cadastroGestaoUnidades]}>
+        <Routes>
+          <Route element={<LayoutBase />}>
+            <Route path={CAMINHOS.cadastroGestaoUnidades} element={children} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
     </ComTema>,
   );
 }

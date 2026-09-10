@@ -1,19 +1,28 @@
 import {
   consultarLotacao,
+  excluirUnidade,
+  lerDetalheEstatico,
   registrar,
-  unidadesEducacionaisServico,
+  reiniciarModulosSalvos,
+  salvarModulos,
   URL,
 } from "../index";
 import {
   dadosLotacaoConsultaSchema,
+  detalheUnidadeSchema,
   LotacaoNaoEncontradaError,
-  respostaListagemSchema,
   respostaRegistrarUnidadeSchema,
+  UnidadeNaoEncontradaError,
 } from "../tipos";
 import {
+  linhasUnidades,
   TOTAL_REGISTROS,
-  TAMANHO_PAGINA,
 } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
+import {
+  historicoExemplo,
+  professoresAfastadosPorComponente,
+  professoresLotadosPorComponente,
+} from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
 
 describe("URL Registrar UE", () => {
   it("monta as rotas de consulta e registro", () => {
@@ -24,13 +33,10 @@ describe("URL Registrar UE", () => {
   });
 });
 
-describe("unidadesEducacionaisServico (mock Gestao)", () => {
-  it("listar continua retornando dados estaticos", async () => {
-    const resposta = await unidadesEducacionaisServico.listar();
-    expect(() => respostaListagemSchema.parse(resposta)).not.toThrow();
-    expect(resposta.itens).toHaveLength(10);
-    expect(resposta.total).toBe(TOTAL_REGISTROS);
-    expect(resposta.tamanhoPagina).toBe(TAMANHO_PAGINA);
+describe("dados estaticos da Gestao de UEs", () => {
+  it("expoe a listagem e o total usados pela tela", () => {
+    expect(linhasUnidades).toHaveLength(10);
+    expect(TOTAL_REGISTROS).toBe(5985);
   });
 });
 
@@ -87,5 +93,73 @@ describe("registrar (padrao Alvo)", () => {
 
     const { response } = registrar(payloadValido);
     await expect(response).rejects.toThrow("Erro simulado no registro da UE");
+  });
+});
+
+describe("detalhe da unidade educacional", () => {
+  beforeEach(() => reiniciarModulosSalvos());
+
+  it("le um detalhe valido pelo codigo de lotacao", () => {
+    const detalhe = lerDetalheEstatico("091488");
+
+    expect(() => detalheUnidadeSchema.parse(detalhe)).not.toThrow();
+    expect(detalhe?.nome).toBe("Cidade Tiradentes");
+    expect(detalhe?.componentes).toHaveLength(22);
+  });
+
+  it("devolve undefined para codigo inexistente", () => {
+    expect(lerDetalheEstatico("999999")).toBeUndefined();
+  });
+
+  it("persiste os modulos salvos e recalcula as vagas", async () => {
+    const arteAntes = lerDetalheEstatico("091488")?.componentes.find(
+      (c) => c.id === "arte",
+    );
+    expect(arteAntes).toMatchObject({ modulo: 3, saldoVagas: -2 });
+
+    await salvarModulos({
+      codigoLotacao: "091488",
+      alteracoes: [{ componenteId: "arte", modulo: 6 }],
+    }).response;
+
+    const arteDepois = lerDetalheEstatico("091488")?.componentes.find(
+      (c) => c.id === "arte",
+    );
+    expect(arteDepois).toMatchObject({ modulo: 6, saldoVagas: 1 });
+  });
+
+  it("nao aplica os modulos salvos quando lido sem edicoes (versao historica)", async () => {
+    await salvarModulos({
+      codigoLotacao: "091488",
+      alteracoes: [{ componenteId: "arte", modulo: 6 }],
+    }).response;
+
+    const versao = lerDetalheEstatico("091488", { comEdicoesSalvas: false });
+
+    expect(versao?.componentes.find((c) => c.id === "arte")?.modulo).toBe(3);
+  });
+
+  it("recusa payload de salvamento sem alteracoes", () => {
+    expect(() =>
+      salvarModulos({ codigoLotacao: "091488", alteracoes: [] }),
+    ).toThrow();
+  });
+
+  it("exclui uma unidade existente e rejeita uma inexistente", async () => {
+    const { response, abort } = excluirUnidade("091488");
+    expect(typeof abort).toBe("function");
+    await expect(response).resolves.toMatchObject({ sucesso: true });
+
+    await expect(excluirUnidade("999999").response).rejects.toBeInstanceOf(
+      UnidadeNaoEncontradaError,
+    );
+  });
+
+  it("expoe professores lotados, afastados e o historico estaticos", () => {
+    expect(professoresLotadosPorComponente.arte?.[0]).toMatchObject({
+      nome: "João da Silva",
+    });
+    expect(professoresAfastadosPorComponente.biologia).toHaveLength(2);
+    expect(historicoExemplo).toHaveLength(3);
   });
 });

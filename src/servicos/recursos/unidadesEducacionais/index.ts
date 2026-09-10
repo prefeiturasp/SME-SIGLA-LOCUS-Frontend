@@ -1,23 +1,20 @@
 import type { AxiosRequestConfig } from "axios";
-import {
-  linhasUnidades,
-  estatisticasPainel,
-  TAMANHO_PAGINA,
-  TOTAL_REGISTROS,
-} from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
+import { detalhesPorCodigo } from "@/paginas/DetalheUnidadeEducacional/dados/dadosEstaticos";
 import { lotacoesConsultaExemplo } from "@/paginas/RegistrarUnidadeEducacional/dados/dadosEstaticos";
 import {
   dadosLotacaoConsultaSchema,
   LotacaoNaoEncontradaError,
-  painelComponenteSchema,
   payloadRegistrarUnidadeSchema,
-  respostaListagemSchema,
   respostaRegistrarUnidadeSchema,
+  detalheUnidadeSchema,
+  payloadSalvarModulosSchema,
+  respostaOperacaoSchema,
+  UnidadeNaoEncontradaError,
   type DadosLotacaoConsulta,
-  type FiltrosUnidades,
-  type PainelComponente,
+  type DetalheUnidade,
+  type PayloadSalvarModulos,
+  type RespostaOperacao,
   type PayloadRegistrarUnidade,
-  type RespostaListagem,
   type RespostaRegistrarUnidade,
 } from "./tipos";
 
@@ -30,6 +27,18 @@ export const URL = {
   consultarLotacao: (codigo: string) =>
     `/api/v1/unidades-educacionais/lotacao/${encodeURIComponent(codigo)}/`,
   registrar: () => `/api/v1/unidades-educacionais/`,
+  detalhe: (codigo: string) =>
+    `/api/v1/unidades-educacionais/${encodeURIComponent(codigo)}/`,
+  excluir: (codigo: string) =>
+    `/api/v1/unidades-educacionais/${encodeURIComponent(codigo)}/`,
+  salvarModulos: (codigo: string) =>
+    `/api/v1/unidades-educacionais/${encodeURIComponent(codigo)}/modulos/`,
+  professoresLotados: (codigo: string, componenteId: string) =>
+    `/api/v1/unidades-educacionais/${encodeURIComponent(codigo)}/componentes/${encodeURIComponent(componenteId)}/lotados/`,
+  professoresAfastados: (codigo: string, componenteId: string) =>
+    `/api/v1/unidades-educacionais/${encodeURIComponent(codigo)}/componentes/${encodeURIComponent(componenteId)}/afastados/`,
+  historico: (codigo: string) =>
+    `/api/v1/unidades-educacionais/${encodeURIComponent(codigo)}/historico/`,
 };
 
 function deveSimularErroRegistro(): boolean {
@@ -37,25 +46,113 @@ function deveSimularErroRegistro(): boolean {
   return new URLSearchParams(window.location.search).get("erro") === "1";
 }
 
-export const unidadesEducacionaisServico = {
-  listar: (filtros?: FiltrosUnidades): Promise<RespostaListagem> => {
-    const resposta = respostaListagemSchema.parse({
-      itens: linhasUnidades,
-      total: TOTAL_REGISTROS,
-      pagina: filtros?.pagina ?? 1,
-      tamanhoPagina: filtros?.tamanhoPagina ?? TAMANHO_PAGINA,
-    });
-    return Promise.resolve(resposta);
-  },
+/**
+ * Estado mutavel dos modulos salvos, por codigo de lotacao e componente.
+ *
+ * Sem isso a releitura apos salvar recarrega o dado estatico e desfaz a
+ * edicao do usuario na tela.
+ *
+ * TODO: substituir por chamada HTTP real.
+ */
+const modulosSalvos = new Map<string, Map<string, number>>();
 
-  painel: (componente: string): Promise<PainelComponente> => {
-    const painel = painelComponenteSchema.parse({
-      componente,
-      estatisticas: estatisticasPainel,
+function aplicarModulosSalvos(detalhe: DetalheUnidade): DetalheUnidade {
+  const salvos = modulosSalvos.get(detalhe.codigoLotacao);
+  if (!salvos || salvos.size === 0) return detalhe;
+
+  return {
+    ...detalhe,
+    componentes: detalhe.componentes.map((componente) => {
+      const modulo = salvos.get(componente.id);
+      if (modulo === undefined) return componente;
+
+      const diferenca = modulo - componente.modulo;
+      return {
+        ...componente,
+        modulo,
+        saldoVagas: componente.saldoVagas + diferenca,
+      };
+    }),
+  };
+}
+
+export interface OpcoesLeituraDetalhe {
+  /**
+   * Quando falso devolve o registro original, sem as edicoes ja salvas — que
+   * e justamente o que uma versao historica representa.
+   */
+  comEdicoesSalvas?: boolean;
+}
+
+/**
+ * Detalhe da unidade lido direto dos dados estaticos, de forma sincrona.
+ *
+ * Devolve `undefined` quando o codigo nao existe, no lugar do erro que uma
+ * chamada HTTP lancaria.
+ *
+ * TODO: substituir por chamada HTTP real.
+ */
+export function lerDetalheEstatico(
+  codigo: string,
+  { comEdicoesSalvas = true }: OpcoesLeituraDetalhe = {},
+): DetalheUnidade | undefined {
+  const encontrado = detalhesPorCodigo[codigo];
+  if (!encontrado) return undefined;
+
+  return detalheUnidadeSchema.parse(
+    comEdicoesSalvas ? aplicarModulosSalvos(encontrado) : encontrado,
+  );
+}
+
+export const salvarModulos = (
+  payload: PayloadSalvarModulos,
+  _axiosRequestConfig?: AxiosRequestConfig,
+) => {
+  const { abort } = new AbortController();
+  payloadSalvarModulosSchema.parse(payload);
+
+  const response: Promise<RespostaOperacao> = Promise.resolve().then(() => {
+    const salvos =
+      modulosSalvos.get(payload.codigoLotacao) ?? new Map<string, number>();
+
+    payload.alteracoes.forEach(({ componenteId, modulo }) => {
+      salvos.set(componenteId, modulo);
     });
-    return Promise.resolve(painel);
-  },
+    modulosSalvos.set(payload.codigoLotacao, salvos);
+
+    return respostaOperacaoSchema.parse({
+      sucesso: true,
+      mensagem: "As alterações foram salvas.",
+    });
+  });
+
+  return { response, abort };
 };
+
+export const excluirUnidade = (
+  codigo: string,
+  _axiosRequestConfig?: AxiosRequestConfig,
+) => {
+  const { abort } = new AbortController();
+
+  const response: Promise<RespostaOperacao> = Promise.resolve().then(() => {
+    if (!detalhesPorCodigo[codigo]) {
+      throw new UnidadeNaoEncontradaError();
+    }
+
+    return respostaOperacaoSchema.parse({
+      sucesso: true,
+      mensagem: "A unidade educacional foi excluída.",
+    });
+  });
+
+  return { response, abort };
+};
+
+/** Limpa o estado mutavel do mock. Uso exclusivo dos testes. */
+export function reiniciarModulosSalvos(): void {
+  modulosSalvos.clear();
+}
 
 export const consultarLotacao = (
   codigo: string,
@@ -98,5 +195,3 @@ export const registrar = (
 
   return { response, abort };
 };
-
-export default unidadesEducacionaisServico;

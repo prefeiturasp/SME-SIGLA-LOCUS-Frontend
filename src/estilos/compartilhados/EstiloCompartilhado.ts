@@ -2,7 +2,7 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { Button, Form, Input, Select, Table } from "antd";
+import { Button, Form, Input, InputNumber, Select, Table } from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
@@ -12,9 +12,7 @@ import {
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
-/* ======= BotaoExcluir ======= */
 
-/** Botao de exclusao padrao (icone lixeira, vermelho). */
 export const BotaoExcluir = styled(Button).attrs({
   type: "text",
   danger: true,
@@ -31,16 +29,29 @@ export const BotaoExcluir = styled(Button).attrs({
   }
 `;
 
-/* ======= Tabela ======= */
-
-/** Tabela padrao do Locus: zebra, paginacao centralizada, total a esquerda. */
-export const Tabela = styled(Table)`
+export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   & .ant-table-tbody > tr {
-    cursor: pointer;
+    cursor: ${({ $linhasClicaveis = true }) =>
+      $linhasClicaveis ? "pointer" : "default"};
   }
 
   & .ant-table-tbody > tr.linhaPar > td {
     background: ${({ theme }) => theme.colors.stripedBackground};
+  }
+
+  & .ant-table-thead > tr > th {
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.primaryText};
+  }
+
+  & .ant-table-tbody > tr.linhaGrupo > td {
+    background: ${({ theme }) => theme.colors.blueBackgroundSoft};
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.blue};
+  }
+
+  & .ant-table-tbody > tr.linhaGrupo > td:first-child {
+    border-left: 4px solid ${({ theme }) => theme.colors.blue};
   }
 
   & .ant-pagination {
@@ -62,7 +73,6 @@ export const Tabela = styled(Table)`
   }
 ` as typeof Table;
 
-/** Area de conteudo padrao das paginas (gap e padding do mockup). */
 export const ConteudoPagina = styled.div`
   display: flex;
   flex-direction: column;
@@ -164,6 +174,14 @@ export function textoContagemPaginacao(
   )} registro(s)`;
 }
 
+/** Rodape das tabelas sem paginacao: "Mostrando 22 de 22 componentes". */
+export function textoContagemComponentes(
+  exibidos: number,
+  total: number,
+): string {
+  return `Mostrando ${exibidos} de ${total} componentes`;
+}
+
 export interface OpcoesPaginacaoPadrao {
   total: number;
   pageSize?: number;
@@ -194,6 +212,30 @@ const { TextArea } = Input;
 export const InputForm = styled(Input)`
   width: 100%;
   min-width: 0;
+`;
+
+/** Input somente leitura com aparencia ativa: fundo branco e borda azul. */
+export const InputDesabilitadoAzul = styled(Input)<{
+  $largura?: number | string;
+  $clicavel?: boolean;
+}>`
+  width: ${({ $largura }) =>
+    $largura === undefined
+      ? "100%"
+      : typeof $largura === "number"
+        ? `${$largura}px`
+        : $largura};
+
+  &.ant-input-disabled,
+  &.ant-input[disabled],
+  &.ant-input-affix-wrapper-disabled,
+  &.ant-input[readonly] {
+    color: ${({ theme }) => theme.colors.primaryText} !important;
+    background-color: ${({ theme }) => theme.colors.white} !important;
+    border-color: ${({ theme }) => theme.colors.blue} !important;
+    cursor: ${({ $clicavel }) =>
+      $clicavel ? "pointer" : "default"} !important;
+  }
 `;
 
 export const InputFormFlex = styled(InputForm)`
@@ -263,6 +305,18 @@ export const PaginaCabecalho = styled.div`
     ${({ theme }) => theme.spacing.xl}px ${({ theme }) => theme.spacing.md}px;
 `;
 
+export const PaginaTextos = styled.div`
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+export const PaginaSubtitulo = styled.span`
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  color: ${({ theme }) => theme.colors.blue};
+`;
+
 export const PaginaTitulo = styled.h1`
   margin: 0;
   font-size: ${({ theme }) => theme.typography.fontSizeTitle}px;
@@ -276,9 +330,9 @@ export const PaginaAcoes = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
-/* ======= CartaoStat ======= */
+/* ======= CardDados ======= */
 
-export const StatCartao = styled.div`
+export const CardDiv = styled.div`
   display: flex;
   flex: 1 1 0;
   min-width: 0;
@@ -291,26 +345,26 @@ export const StatCartao = styled.div`
   background: ${({ theme }) => theme.colors.white};
 `;
 
-export const StatValor = styled.span`
+export const CardValor = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
-export const StatLinhaRotulo = styled.div`
+export const CardLinhaTitulo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-export const StatIcone = styled.span`
+export const CardTituloIcone = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
   border-radius: ${({ theme }) => theme.layout.radius}px;
-  background: rgba(0, 104, 188, 0.1);
+  background: ${({ theme }) => theme.colors.blueBackground};
   color: ${({ theme }) => theme.colors.blue};
 
   & svg {
@@ -319,13 +373,13 @@ export const StatIcone = styled.span`
   }
 `;
 
-export const StatRotulo = styled.span`
+export const CardTitulo = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
-export const StatLegenda = styled.span`
+export const CardDescricao = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeCaption}px;
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
@@ -337,7 +391,90 @@ export const IconeExcluirLixeira = styled(DeleteOutlineIcon)`
   color: currentColor;
 `;
 
-/* ======= Toast ======= */
+/* ======= CabecalhoSecao ======= */
+
+/** Linha "titulo + descricao a esquerda / controle a direita" dos cards. */
+export const SecaoCabecalho = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.lg}px;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+`;
+
+export const SecaoTextos = styled.div`
+  flex: 1 1 0;
+  min-width: 0;
+`;
+
+export const SecaoAcao = styled.div<{ $largura?: number }>`
+  flex: 0 0 auto;
+  ${({ $largura }) => ($largura ? `width: ${$largura}px;` : "")}
+`;
+
+export const CabecalhoColunaInfo = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+export const GridCardsDados = styled.div<{ $colunas?: number }>`
+  display: grid;
+  grid-template-columns: repeat(${({ $colunas = 3 }) => $colunas}, 1fr);
+  gap: ${({ theme }) => theme.spacing.md}px;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ALTURA_CONTROLE_NUMERO = 50;
+
+export const ChipNumero = styled.button`
+  display: inline-flex;
+  box-sizing: border-box;
+  width: ${ALTURA_CONTROLE_NUMERO}px;
+  height: ${ALTURA_CONTROLE_NUMERO}px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid ${({ theme }) => theme.colors.blue};
+  border-radius: ${({ theme }) => theme.layout.radius}px;
+  background: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.blue};
+  font-family: inherit;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blueBackground};
+  }
+`;
+
+export const NumeroSimples = styled.span`
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
+export const CampoNumeroEstilizado = styled(InputNumber)`
+  box-sizing: border-box;
+  width: 80px;
+  height: ${ALTURA_CONTROLE_NUMERO}px;
+
+  .ant-input-number-input-wrap,
+  .ant-input-number-input {
+    height: 100%;
+  }
+`;
+
 
 export const useNotificacao = useNotificacaoHook;
 export const useToast = useNotificacaoHook;

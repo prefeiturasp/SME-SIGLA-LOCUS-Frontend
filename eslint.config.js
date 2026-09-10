@@ -23,6 +23,18 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
+      // Prefixo "_" marca parametro/variavel intencionalmente nao usado
+      // (ex.: assinatura de servico que ainda nao consome o config do axios).
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   {
