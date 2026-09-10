@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import { Button } from "antd";
 import type { ReactNode } from "react";
 import { ModalPadrao } from "@/estilos";
 
@@ -64,17 +64,15 @@ export function ModalBase({
   }
 
   return (
-    <Modal
+    <ModalPadrao
       open={aberto}
       title={titulo}
       onCancel={aoCancelar}
       destroyOnHidden
-      width={ModalPadrao.width}
-      styles={ModalPadrao.styles}
       footer={botoes}
     >
       {mensagem}
-    </Modal>
+    </ModalPadrao>
   );
 }
 
