@@ -52,6 +52,11 @@ export const FiltroSituacao = styled(Segmented)`
 `;
 
 export const GrupoComponente = styled.span`
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.blue};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-weight: 600;
+  font-style: normal;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: ${({ theme }) => theme.colors.primaryText};
 `;

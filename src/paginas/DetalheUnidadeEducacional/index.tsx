@@ -116,13 +116,28 @@ export function DetalheUnidadeEducacional() {
       </ConteudoPagina>
 
       <ModalConfirmacao
-        aberto={estado.modalSaidaAberto}
-        titulo="Descartar alterações"
-        mensagem="Há alterações não salvas nesta unidade educacional. Se sair agora, elas serão perdidas. Tem certeza que deseja continuar?"
-        textoConfirmar="Sair sem salvar"
+        aberto={estado.modalExclusaoAberto}
+        titulo="Excluir Unidade Educacional"
+        mensagem="A ação não poderá ser desfeita e as informações serão deletadas. Tem certeza que deseja continuar?"
+        textoConfirmar="Excluir UE"
         perigo
+        iconeConfirmar={<DeleteOutlineIcon fontSize="small" />}
+        confirmando={estado.excluindo}
+        aoConfirmar={estado.confirmarExclusao}
+        aoCancelar={estado.fecharModalExclusao}
+      />
+
+      <ModalConfirmacao
+        aberto={estado.modalSaidaAberto}
+        titulo="As alterações não foram salvas!"
+        mensagem="Você fez alterações que ainda não foram salvas. Se sair agora, elas serão perdidas. Tem certeza que deseja continuar?"
+        textoCancelar="Continuar editando"
+        textoConfirmar="Sair sem salvar"
         aoConfirmar={estado.confirmarSaida}
         aoCancelar={estado.fecharModalSaida}
+        textoAcaoExtra="Salvar"
+        aoAcaoExtra={estado.salvarESair}
+        confirmandoAcaoExtra={estado.salvando}
       />
     </>
   );

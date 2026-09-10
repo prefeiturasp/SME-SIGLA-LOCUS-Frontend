@@ -10,19 +10,12 @@ export interface PainelLateralProps {
   aberto: boolean;
   titulo: string;
   descricao?: ReactNode;
-  /** Linha de contexto em negrito, ex.: "Componente curricular: Arte". */
   contexto?: ReactNode;
   largura?: number | string;
   aoFechar: () => void;
   children: ReactNode;
 }
 
-/**
- * Painel lateral padrao do Locus.
- *
- * O botao de fechar vai no slot `extra` (a direita do titulo) em vez do
- * `closeIcon` do antd, que fica a esquerda.
- */
 export function PainelLateral({
   aberto,
   titulo,

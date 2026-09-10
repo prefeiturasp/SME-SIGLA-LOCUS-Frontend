@@ -18,11 +18,6 @@ export type LinhaComponente = {
 
 export type LinhaTabelaComponentes = LinhaGrupo | LinhaComponente;
 
-/**
- * Achata os componentes em linhas de tabela, com os cabecalhos de grupo
- * intercalados. A zebra conta so as linhas de componente — pelo indice da
- * tabela, cada cabecalho injetado dessincronizaria as faixas.
- */
 export function montarLinhasAgrupadas(
   componentes: ComponenteCurricularDetalhe[],
 ): LinhaTabelaComponentes[] {

@@ -45,9 +45,15 @@ export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   }
 
   & .ant-table-tbody > tr.linhaGrupo > td {
+    height: 35px;
+    padding-block: 0;
     background: ${({ theme }) => theme.colors.blueBackgroundSoft};
-    font-weight: 700;
-    color: ${({ theme }) => theme.colors.blue};
+    font-family: ${({ theme }) => theme.typography.fontFamily};
+    font-weight: 600;
+    font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: ${({ theme }) => theme.colors.primaryText};
   }
 
   & .ant-table-tbody > tr.linhaGrupo > td:first-child {

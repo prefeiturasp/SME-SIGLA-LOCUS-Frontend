@@ -40,7 +40,6 @@ function identificador(componente: string): string {
 }
 
 const COMPONENTES_BASE: ComponenteBase[] = [
-  // Base comum
   { componente: "Arte", grupo: "baseComum", modulo: 3, lotacao: 5, afastados: 0, vacancias: 0 },
   { componente: "Biologia", grupo: "baseComum", modulo: 6, lotacao: 6, afastados: 2, vacancias: 0 },
   { componente: "Ciências", grupo: "baseComum", modulo: 5, lotacao: 3, afastados: 0, vacancias: 1 },
@@ -60,7 +59,6 @@ const COMPONENTES_BASE: ComponenteBase[] = [
   { componente: "Robótica", grupo: "baseComum", modulo: 2, lotacao: 1, afastados: 0, vacancias: 0 },
   { componente: "Tecnologias", grupo: "baseComum", modulo: 3, lotacao: 3, afastados: 0, vacancias: 1 },
   { componente: "Empreendedorismo", grupo: "baseComum", modulo: 2, lotacao: 2, afastados: 0, vacancias: 0 },
-  // Linguagens adicionais
   { componente: "Espanhol", grupo: "linguagensAdicionais", modulo: 2, lotacao: 6, afastados: 2, vacancias: 0 },
   { componente: "Inglês", grupo: "linguagensAdicionais", modulo: 4, lotacao: 8, afastados: 2, vacancias: 1 },
   { componente: "Libras", grupo: "linguagensAdicionais", modulo: 2, lotacao: 6, afastados: 2, vacancias: 0 },
