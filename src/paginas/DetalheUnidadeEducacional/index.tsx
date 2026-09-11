@@ -11,6 +11,7 @@ import { BannerVersaoHistorica } from "./componentes/BannerVersaoHistorica";
 import { CardComponentesDetalhe } from "./componentes/CardComponentesDetalhe";
 import { CardInformacoesUnidade } from "./componentes/CardInformacoesUnidade";
 import { LinhaHistoricoAlteracoes } from "./componentes/LinhaHistoricoAlteracoes";
+import { PainelHistorico } from "./componentes/PainelHistorico";
 import { PainelAfastados } from "./componentes/PainelAfastados";
 import { PainelLotacao } from "./componentes/PainelLotacao";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
@@ -140,6 +141,13 @@ export function DetalheUnidadeEducacional() {
         textoAcaoExtra="Salvar"
         aoAcaoExtra={estado.salvarESair}
         confirmandoAcaoExtra={estado.salvando}
+      />
+
+      <PainelHistorico
+        aberto={estado.painelHistoricoAberto}
+        registros={estado.historico}
+        aoFechar={estado.fecharPainelHistorico}
+        aoVisualizar={estado.visualizarVersao}
       />
 
       <PainelLotacao
