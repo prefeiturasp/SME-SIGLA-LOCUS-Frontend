@@ -3,7 +3,6 @@ import type { ColumnsType } from "antd/es/table";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
 import {
   InputDesabilitadoAzul,
-  Tabela,
   TagVagas,
   textoContagemComponentes,
 } from "@/estilos";
@@ -161,13 +160,13 @@ export function TabelaComponentesDetalhe({
   ];
 
   return (
-    <Tabela
+    <Table
       rowKey="id"
       columns={colunas}
       dataSource={linhas}
       loading={carregando}
       pagination={false}
-      rowClassName={(linha) => (linha as LinhaTabelaComponentes).classe}
+      rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
       summary={() => (
         <Table.Summary>
           <Table.Summary.Row>

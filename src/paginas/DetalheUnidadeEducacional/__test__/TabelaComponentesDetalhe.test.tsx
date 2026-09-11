@@ -47,27 +47,6 @@ describe("TabelaComponentesDetalhe", () => {
     expect(screen.getByText("Linguagens adicionais")).toBeInTheDocument();
   });
 
-  it("aplica a zebra contando apenas as linhas de componente", () => {
-    const { container } = render(
-      <ComProvedores>
-        <TabelaComponentesDetalhe
-          linhas={linhas}
-          totalComponentes={22}
-          componentesExibidos={22}
-          carregando={false}
-          aoAlterarModulo={jest.fn()}
-          aoAbrirLotacao={jest.fn()}
-          aoAbrirAfastados={jest.fn()}
-        />
-      </ComProvedores>,
-    );
-
-    const corpo = container.querySelectorAll(".ant-table-tbody > tr");
-    expect(corpo[0]).toHaveClass("linhaGrupo");
-    expect(corpo[1]).not.toHaveClass("linhaPar");
-    expect(corpo[2]).toHaveClass("linhaPar");
-  });
-
   it("exibe a contagem de componentes no rodape", () => {
     renderizarTabela();
     expect(
