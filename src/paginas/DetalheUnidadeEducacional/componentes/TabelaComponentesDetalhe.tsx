@@ -3,7 +3,6 @@ import type { ColumnsType } from "antd/es/table";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
 import {
   InputDesabilitadoAzul,
-  Tabela,
   TagVagas,
   textoContagemComponentes,
 } from "@/estilos";
@@ -98,7 +97,11 @@ export function TabelaComponentesDetalhe({
             $clicavel={!somenteLeitura && linha.lotacao > 0}
             value={String(linha.lotacao)}
             aria-label={`Lotação de ${linha.componente}`}
-            onClick={() => aoAbrirLotacao(linha)}
+            onClick={
+              somenteLeitura || linha.lotacao === 0
+                ? undefined
+                : () => aoAbrirLotacao(linha)
+            }
           />
         ),
     },
@@ -128,7 +131,8 @@ export function TabelaComponentesDetalhe({
             }
           />
         ),
-    },    {
+    },
+    {
       title: (
         <ColunaComInfo
           titulo="Vacâncias"
@@ -156,13 +160,13 @@ export function TabelaComponentesDetalhe({
   ];
 
   return (
-    <Tabela
+    <Table
       rowKey="id"
       columns={colunas}
       dataSource={linhas}
       loading={carregando}
       pagination={false}
-      rowClassName={(linha) => (linha as LinhaTabelaComponentes).classe}
+      rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
       summary={() => (
         <Table.Summary>
           <Table.Summary.Row>

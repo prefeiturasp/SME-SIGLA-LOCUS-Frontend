@@ -80,6 +80,49 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.colors.blue};
     font-size: 16px;
   }
+
+  .ant-table-tbody > tr.linhaPar > td {
+    background: ${({ theme }) => theme.colors.stripedBackground};
+  }
+
+  .ant-table-thead > tr > th {
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.primaryText};
+  }
+
+  .ant-table-tbody > tr.linhaGrupo > td {
+    height: 35px;
+    padding-block: 0;
+    background: ${({ theme }) => theme.colors.blueBackgroundSoft};
+    font-family: ${({ theme }) => theme.typography.fontFamily};
+    font-weight: 600;
+    font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: ${({ theme }) => theme.colors.primaryText};
+  }
+
+  .ant-table-tbody > tr.linhaGrupo > td:first-child {
+    border-left: 4px solid ${({ theme }) => theme.colors.blue};
+  }
+
+  .ant-pagination {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .ant-pagination-total-text {
+    position: absolute;
+    inset-inline-start: 0;
+    font-weight: 700;
+  }
+
+  .ant-pagination-item {
+    margin-inline-end: ${({ theme }) => theme.spacing.sm}px;
+  }
 `;
 
 export default GlobalStyle;

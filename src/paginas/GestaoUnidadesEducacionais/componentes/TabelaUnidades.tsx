@@ -2,7 +2,8 @@ import { DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
-import { criarPaginacaoPadrao, FormItem, TagVagas, Tabela } from "@/estilos";
+import { criarPaginacaoPadrao, FormItem, TagVagas } from "@/estilos";
+import { Table } from "antd";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/textos";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
@@ -83,7 +84,7 @@ export function TabelaUnidades({
         />
       </div>
 
-      <Tabela
+      <Table
         rowKey="codigoLotacao"
         columns={colunas}
         dataSource={unidades}
