@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { deveSimularListaVazia } from "@/servicos/recursos/unidadesEducacionais";
 import type {
   FiltrosUnidades,
   PainelComponente,
@@ -34,6 +35,11 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
   // Dados estaticos: os filtros ainda nao recortam a listagem, que sai
   // inteira do mock. `carregando`/`erro` seguem na interface porque a
   // tabela os consome; voltam a variar quando a API entrar.
+  //
+  // `?status=1` na URL forca a listagem vazia para demonstrar o estado
+  // "sem unidades cadastradas"; sai junto com o mock.
+  const listaVazia = deveSimularListaVazia();
+
   const painel = useMemo<PainelComponente>(
     () => ({
       componente: componenteSelecionado,
@@ -44,8 +50,8 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
 
   return useMemo(
     () => ({
-      unidades: linhasUnidades,
-      total: TOTAL_REGISTROS,
+      unidades: listaVazia ? [] : linhasUnidades,
+      total: listaVazia ? 0 : TOTAL_REGISTROS,
       painel,
       componenteSelecionado,
       carregando: false,
@@ -55,7 +61,7 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
         setFiltros((atuais) => ({ ...atuais, ...novos })),
       limparFiltros: () => setFiltros({}),
     }),
-    [painel, componenteSelecionado],
+    [painel, componenteSelecionado, listaVazia],
   );
 }
 

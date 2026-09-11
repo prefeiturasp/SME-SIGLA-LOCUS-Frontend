@@ -65,6 +65,7 @@ export function GestaoUnidadesEducacionais() {
           aoSelecionarUnidade={(unidade) =>
             navigate(caminhoDetalheUE(unidade.codigoLotacao))
           }
+          aoRegistrar={() => navigate(CAMINHOS.cadastroRegistrarUE)}
         />
       </ConteudoPagina>
     </>

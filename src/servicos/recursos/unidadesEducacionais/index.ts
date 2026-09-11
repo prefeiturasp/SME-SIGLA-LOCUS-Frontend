@@ -47,6 +47,23 @@ function deveSimularErroRegistro(): boolean {
 }
 
 /**
+ * Indica se a listagem de unidades deve vir vazia.
+ *
+ * Permite demonstrar o estado "sem unidades cadastradas" enquanto a listagem
+ * sai do mock.
+ *
+ * TODO: remover quando a listagem real entrar; o estado vazio passa a depender
+ * apenas da resposta da API.
+ *
+ * Returns:
+ *     `true` quando a URL atual traz `status=1`.
+ */
+export function deveSimularListaVazia(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("status") === "1";
+}
+
+/**
  * Estado mutavel dos modulos salvos, por codigo de lotacao e componente.
  *
  * Sem isso a releitura apos salvar recarrega o dado estatico e desfaz a

@@ -57,11 +57,35 @@ export const BotaoExcluir = styled(Button).attrs({
   }
 `;
 
-export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
+/** Props de estilo da `Tabela`, fora da API do Table do antd. */
+export interface PropsEstiloTabela {
+  /** Mantem o cursor de ponteiro nas linhas. Padrao: `true`. */
+  $linhasClicaveis?: boolean;
+  /** Esconde cabecalho e bordas para dar lugar ao estado vazio. */
+  $semDados?: boolean;
+}
+
+export const Tabela = styled(Table)<PropsEstiloTabela>`
   & .ant-table-tbody > tr {
     cursor: ${({ $linhasClicaveis = true }) =>
       $linhasClicaveis ? "pointer" : "default"};
   }
+
+  ${({ $semDados }) =>
+    $semDados &&
+    css`
+      & .ant-table-thead {
+        display: none;
+      }
+
+      & .ant-table-tbody > tr.ant-table-placeholder > td {
+        border-bottom: none;
+      }
+
+      & .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+        background: transparent;
+      }
+    `}
 
   & .ant-table-tbody > tr.linhaPar > td {
     background: ${({ theme }) => theme.colors.stripedBackground};
@@ -105,7 +129,9 @@ export const Tabela = styled(Table)<{ $linhasClicaveis?: boolean }>`
   & .ant-pagination-item {
     margin-inline-end: ${({ theme }) => theme.spacing.sm}px;
   }
-` as typeof Table;
+` as <RegistroTabela>(
+  props: ComponentProps<typeof Table<RegistroTabela>> & PropsEstiloTabela,
+) => ReturnType<typeof Table<RegistroTabela>>;
 
 export const ConteudoPagina = styled.div`
   display: flex;
