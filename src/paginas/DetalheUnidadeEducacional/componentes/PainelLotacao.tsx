@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { ColumnsType } from "antd/es/table";
 import { PainelLateral } from "@/componentes/PainelLateral";
-import { Tabela } from "@/estilos";
+import { Table } from "antd";
 import {
   professoresLotadosPadrao,
   professoresLotadosPorComponente,
@@ -57,8 +57,7 @@ export function PainelLotacao({
       largura="50%"
       aoFechar={aoFechar}
     >
-      <Tabela
-        $linhasClicaveis={false}
+      <Table
         rowKey="nome"
         columns={colunas}
         dataSource={dados ?? []}
