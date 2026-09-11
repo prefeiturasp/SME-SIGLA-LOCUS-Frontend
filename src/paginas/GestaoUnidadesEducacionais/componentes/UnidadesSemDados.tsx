@@ -1,17 +1,11 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import IlustracaoSemUnidades from "@/assets/sad-locus.svg?react";
-import {
-  EstadoVazioBotao,
-  EstadoVazioContainer,
-  EstadoVazioIlustracao,
-  EstadoVazioTitulo,
-} from "@/estilos";
+import { CardVazio, CardVazioImagem, CardVazioTitulo } from "@/estilos";
 
 const { Text } = Typography;
 
 const LARGURA_ILUSTRACAO = 181;
-const ALTURA_ILUSTRACAO = 207;
 
 export interface UnidadesSemDadosProps {
   aoRegistrar?: () => void;
@@ -19,26 +13,22 @@ export interface UnidadesSemDadosProps {
 
 export function UnidadesSemDados({ aoRegistrar }: UnidadesSemDadosProps) {
   return (
-    <EstadoVazioContainer>
-      <EstadoVazioIlustracao>
-        <IlustracaoSemUnidades
-          width={LARGURA_ILUSTRACAO}
-          height={ALTURA_ILUSTRACAO}
-          role="presentation"
-        />
-      </EstadoVazioIlustracao>
-      <EstadoVazioTitulo>
+    <CardVazio>
+      <CardVazioImagem>
+        <IlustracaoSemUnidades width={LARGURA_ILUSTRACAO} role="presentation" />
+      </CardVazioImagem>
+      <CardVazioTitulo>
         Não há unidades educacionais cadastradas
-      </EstadoVazioTitulo>
+      </CardVazioTitulo>
       <Text type="secondary">Que tal registrar a primeira UE agora?</Text>
-      <EstadoVazioBotao
+      <Button
         type="primary"
         icon={<AddRoundedIcon fontSize="small" />}
         onClick={aoRegistrar}
       >
         Registrar UE
-      </EstadoVazioBotao>
-    </EstadoVazioContainer>
+      </Button>
+    </CardVazio>
   );
 }
 

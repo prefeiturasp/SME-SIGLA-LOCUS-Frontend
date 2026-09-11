@@ -4,6 +4,7 @@ import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import {
   Button,
+  Card,
   Form,
   Input,
   InputNumber,
@@ -429,9 +430,7 @@ export const GridCardsDados = styled.div<{ $colunas?: number }>`
 `;
 
 
-export const LARGURA_BOTAO_ESTADO_VAZIO = 150;
-
-export const EstadoVazioContainer = styled.div`
+export const CardVazio = styled(Card)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -441,20 +440,14 @@ export const EstadoVazioContainer = styled.div`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
-export const EstadoVazioIlustracao = styled.div`
+export const CardVazioImagem = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
   line-height: 0;
 `;
 
-export const EstadoVazioTitulo = styled(Typography.Text)`
+export const CardVazioTitulo = styled(Typography.Text)`
   font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
   font-weight: 700;
-`;
-
-export const EstadoVazioBotao = styled(Button)`
-  width: ${LARGURA_BOTAO_ESTADO_VAZIO}px;
-  height: ${({ theme }) => theme.layout.controlHeight}px;
-  margin-top: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 const ALTURA_CONTROLE_NUMERO = 50;
