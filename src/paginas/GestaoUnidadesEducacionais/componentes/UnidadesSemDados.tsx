@@ -1,6 +1,6 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { Typography } from "antd";
-import IlustracaoSemUnidades from "@/assets/ilustracao-sem-unidades.svg?react";
+import IlustracaoSemUnidades from "@/assets/sad-locus.svg?react";
 import {
   EstadoVazioBotao,
   EstadoVazioContainer,
