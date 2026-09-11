@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 const { Paragraph, Text } = Typography;
 
-const LARGURA_PADRAO = "55%";
+const LARGURA_PADRAO = "50%";
 
 export interface PainelLateralProps {
   aberto: boolean;
