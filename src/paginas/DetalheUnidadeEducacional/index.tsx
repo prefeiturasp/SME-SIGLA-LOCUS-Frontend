@@ -11,6 +11,7 @@ import { BannerVersaoHistorica } from "./componentes/BannerVersaoHistorica";
 import { CardComponentesDetalhe } from "./componentes/CardComponentesDetalhe";
 import { CardInformacoesUnidade } from "./componentes/CardInformacoesUnidade";
 import { LinhaHistoricoAlteracoes } from "./componentes/LinhaHistoricoAlteracoes";
+import { PainelHistorico } from "./componentes/PainelHistorico";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
 
 export function DetalheUnidadeEducacional() {
@@ -114,6 +115,13 @@ export function DetalheUnidadeEducacional() {
 
         <LinhaHistoricoAlteracoes aoAbrir={estado.abrirPainelHistorico} />
       </ConteudoPagina>
+
+      <PainelHistorico
+        aberto={estado.painelHistoricoAberto}
+        registros={estado.historico}
+        aoFechar={estado.fecharPainelHistorico}
+        aoVisualizar={estado.visualizarVersao}
+      />
 
       <ModalConfirmacao
         aberto={estado.modalSaidaAberto}
