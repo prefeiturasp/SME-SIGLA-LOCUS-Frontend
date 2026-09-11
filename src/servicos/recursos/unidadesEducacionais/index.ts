@@ -20,9 +20,7 @@ import {
 
 export * from "./tipos";
 
-/**
- * Rotas HTTP da tela Registrar UE.
- */
+
 export const URL = {
   consultarLotacao: (codigo: string) =>
     `/api/v1/unidades-educacionais/lotacao/${encodeURIComponent(codigo)}/`,
@@ -46,14 +44,12 @@ function deveSimularErroRegistro(): boolean {
   return new URLSearchParams(window.location.search).get("erro") === "1";
 }
 
-/**
- * Estado mutavel dos modulos salvos, por codigo de lotacao e componente.
- *
- * Sem isso a releitura apos salvar recarrega o dado estatico e desfaz a
- * edicao do usuario na tela.
- *
- * TODO: substituir por chamada HTTP real.
- */
+export function deveSimularListaVazia(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("status") === "1";
+}
+
+
 const modulosSalvos = new Map<string, Map<string, number>>();
 
 function aplicarModulosSalvos(detalhe: DetalheUnidade): DetalheUnidade {
@@ -77,21 +73,10 @@ function aplicarModulosSalvos(detalhe: DetalheUnidade): DetalheUnidade {
 }
 
 export interface OpcoesLeituraDetalhe {
-  /**
-   * Quando falso devolve o registro original, sem as edicoes ja salvas — que
-   * e justamente o que uma versao historica representa.
-   */
+
   comEdicoesSalvas?: boolean;
 }
 
-/**
- * Detalhe da unidade lido direto dos dados estaticos, de forma sincrona.
- *
- * Devolve `undefined` quando o codigo nao existe, no lugar do erro que uma
- * chamada HTTP lancaria.
- *
- * TODO: substituir por chamada HTTP real.
- */
 export function lerDetalheEstatico(
   codigo: string,
   { comEdicoesSalvas = true }: OpcoesLeituraDetalhe = {},
@@ -149,7 +134,7 @@ export const excluirUnidade = (
   return { response, abort };
 };
 
-/** Limpa o estado mutavel do mock. Uso exclusivo dos testes. */
+
 export function reiniciarModulosSalvos(): void {
   modulosSalvos.clear();
 }

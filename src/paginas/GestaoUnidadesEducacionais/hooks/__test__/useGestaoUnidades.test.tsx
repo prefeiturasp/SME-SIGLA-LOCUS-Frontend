@@ -37,4 +37,32 @@ describe("useGestaoUnidades", () => {
     act(() => result.current.limparFiltros());
     await waitFor(() => expect(result.current.unidades).toHaveLength(10));
   });
+
+  describe("simulacao de listagem vazia via URL", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("devolve listagem vazia quando status=1", async () => {
+      window.history.pushState({}, "", "/?status=1");
+
+      const { result } = renderHook(() => useGestaoUnidades());
+
+      await waitFor(() => expect(result.current.carregando).toBe(false));
+
+      expect(result.current.unidades).toHaveLength(0);
+      expect(result.current.total).toBe(0);
+    });
+
+    it("mantem a listagem completa com outro valor de status", async () => {
+      window.history.pushState({}, "", "/?status=0");
+
+      const { result } = renderHook(() => useGestaoUnidades());
+
+      await waitFor(() => expect(result.current.carregando).toBe(false));
+
+      expect(result.current.unidades).toHaveLength(10);
+      expect(result.current.total).toBe(5985);
+    });
+  });
 });
