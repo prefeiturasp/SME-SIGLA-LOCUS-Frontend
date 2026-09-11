@@ -12,6 +12,8 @@ import { CardComponentesDetalhe } from "./componentes/CardComponentesDetalhe";
 import { CardInformacoesUnidade } from "./componentes/CardInformacoesUnidade";
 import { LinhaHistoricoAlteracoes } from "./componentes/LinhaHistoricoAlteracoes";
 import { PainelHistorico } from "./componentes/PainelHistorico";
+import { PainelAfastados } from "./componentes/PainelAfastados";
+import { PainelLotacao } from "./componentes/PainelLotacao";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
 
 export function DetalheUnidadeEducacional() {
@@ -146,6 +148,22 @@ export function DetalheUnidadeEducacional() {
         registros={estado.historico}
         aoFechar={estado.fecharPainelHistorico}
         aoVisualizar={estado.visualizarVersao}
+      />
+
+      <PainelLotacao
+        aberto={estado.painelProfessores?.tipo === "lotacao"}
+        codigoLotacao={unidade?.codigoLotacao ?? ""}
+        componenteId={estado.painelProfessores?.componente.id}
+        nomeComponente={estado.painelProfessores?.componente.componente}
+        aoFechar={estado.fecharPainelProfessores}
+      />
+
+      <PainelAfastados
+        aberto={estado.painelProfessores?.tipo === "afastados"}
+        codigoLotacao={unidade?.codigoLotacao ?? ""}
+        componenteId={estado.painelProfessores?.componente.id}
+        nomeComponente={estado.painelProfessores?.componente.componente}
+        aoFechar={estado.fecharPainelProfessores}
       />
     </>
   );

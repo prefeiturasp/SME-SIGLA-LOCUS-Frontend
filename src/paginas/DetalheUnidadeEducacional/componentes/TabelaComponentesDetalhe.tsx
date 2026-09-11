@@ -98,7 +98,11 @@ export function TabelaComponentesDetalhe({
             $clicavel={!somenteLeitura && linha.lotacao > 0}
             value={String(linha.lotacao)}
             aria-label={`Lotação de ${linha.componente}`}
-            onClick={() => aoAbrirLotacao(linha)}
+            onClick={
+              somenteLeitura || linha.lotacao === 0
+                ? undefined
+                : () => aoAbrirLotacao(linha)
+            }
           />
         ),
     },
@@ -128,7 +132,8 @@ export function TabelaComponentesDetalhe({
             }
           />
         ),
-    },    {
+    },
+    {
       title: (
         <ColunaComInfo
           titulo="Vacâncias"
@@ -156,7 +161,7 @@ export function TabelaComponentesDetalhe({
   ];
 
   return (
-    <Tabela
+    <Table
       rowKey="id"
       columns={colunas}
       dataSource={linhas}
