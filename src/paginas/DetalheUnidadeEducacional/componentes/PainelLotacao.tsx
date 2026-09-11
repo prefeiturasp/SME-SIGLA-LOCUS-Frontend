@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { PainelLateral } from "@/componentes/PainelLateral";
+import { Tabela } from "@/estilos";
 import {
   professoresLotadosPadrao,
   professoresLotadosPorComponente,
@@ -54,13 +54,16 @@ export function PainelLotacao({
       titulo="Lotação"
       descricao="Confira os professores em atividades neste componente curricular."
       contexto={`Componente curricular: ${nomeComponente ?? ""}`}
+      largura="50%"
       aoFechar={aoFechar}
     >
-      <Table
+      <Tabela
+        $linhasClicaveis={false}
         rowKey="nome"
         columns={colunas}
         dataSource={dados ?? []}
         pagination={false}
+        rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
       />
     </PainelLateral>
   );
