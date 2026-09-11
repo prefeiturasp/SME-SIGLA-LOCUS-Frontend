@@ -10,7 +10,6 @@ import {
   InputNumber,
   Modal,
   Select,
-  Table,
   Typography,
 } from "antd";
 import type { TablePaginationConfig } from "antd";
@@ -431,13 +430,17 @@ export const GridCardsDados = styled.div<{ $colunas?: number }>`
 
 
 export const CardVazio = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm}px;
-  padding: ${({ theme }) => theme.spacing.xl}px
-    ${({ theme }) => theme.spacing.md}px;
   color: ${({ theme }) => theme.colors.primaryText};
+
+  .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing.sm}px;
+    padding: ${({ theme }) => theme.spacing.xl}px
+      ${({ theme }) => theme.spacing.md}px;
+    text-align: center;
+  }
 `;
 
 export const CardVazioImagem = styled.div`

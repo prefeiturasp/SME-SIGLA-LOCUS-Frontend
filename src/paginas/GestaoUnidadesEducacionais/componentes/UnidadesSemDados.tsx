@@ -6,6 +6,7 @@ import { CardVazio, CardVazioImagem, CardVazioTitulo } from "@/estilos";
 const { Text } = Typography;
 
 const LARGURA_ILUSTRACAO = 181;
+const ALTURA_ILUSTRACAO = 207;
 
 export interface UnidadesSemDadosProps {
   aoRegistrar?: () => void;
@@ -15,7 +16,11 @@ export function UnidadesSemDados({ aoRegistrar }: UnidadesSemDadosProps) {
   return (
     <CardVazio>
       <CardVazioImagem>
-        <IlustracaoSemUnidades width={LARGURA_ILUSTRACAO} role="presentation" />
+        <IlustracaoSemUnidades
+          width={LARGURA_ILUSTRACAO}
+          height={ALTURA_ILUSTRACAO}
+          role="presentation"
+        />
       </CardVazioImagem>
       <CardVazioTitulo>
         Não há unidades educacionais cadastradas

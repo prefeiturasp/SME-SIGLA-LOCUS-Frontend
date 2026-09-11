@@ -89,39 +89,35 @@ export function TabelaUnidades({
         />
       </div>
 
-      <Table
-        rowKey="codigoLotacao"
-        columns={colunas}
-        dataSource={unidades}
-        loading={carregando}
-        $semDados={semDados}
-        locale={{
-          emptyText: <UnidadesSemDados aoRegistrar={aoRegistrar} />,
-        }}
-        rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
-        onRow={(unidade) => ({
-          onClick: () => aoSelecionarUnidade?.(unidade),
-          role: aoSelecionarUnidade ? "button" : undefined,
-          tabIndex: aoSelecionarUnidade ? 0 : undefined,
-          onKeyDown: (evento) => {
-            if (
-              aoSelecionarUnidade &&
-              (evento.key === "Enter" || evento.key === " ")
-            ) {
-              evento.preventDefault();
-              aoSelecionarUnidade(unidade);
-            }
-          },
-        })}
-        pagination={
-          semDados
-            ? false
-            : criarPaginacaoPadrao({
-                total,
-                pageSize: TAMANHO_PAGINA,
-              })
-        }
-      />
+      {semDados ? (
+        <UnidadesSemDados aoRegistrar={aoRegistrar} />
+      ) : (
+        <Table
+          rowKey="codigoLotacao"
+          columns={colunas}
+          dataSource={unidades}
+          loading={carregando}
+          rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
+          onRow={(unidade) => ({
+            onClick: () => aoSelecionarUnidade?.(unidade),
+            role: aoSelecionarUnidade ? "button" : undefined,
+            tabIndex: aoSelecionarUnidade ? 0 : undefined,
+            onKeyDown: (evento) => {
+              if (
+                aoSelecionarUnidade &&
+                (evento.key === "Enter" || evento.key === " ")
+              ) {
+                evento.preventDefault();
+                aoSelecionarUnidade(unidade);
+              }
+            },
+          })}
+          pagination={criarPaginacaoPadrao({
+            total,
+            pageSize: TAMANHO_PAGINA,
+          })}
+        />
+      )}
     </section>
   );
 }

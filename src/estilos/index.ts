@@ -1,7 +1,6 @@
 export {
   ModalPadrao,
   BotaoExcluir,
-  Tabela,
   ConteudoPagina,
   Tag,
   type VarianteTag,
