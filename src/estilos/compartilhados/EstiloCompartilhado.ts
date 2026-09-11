@@ -2,7 +2,16 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { Button, Form, Input, InputNumber, Modal, Select } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Typography,
+} from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
@@ -417,6 +426,31 @@ export const GridCardsDados = styled.div<{ $colunas?: number }>`
   @media (max-width: 576px) {
     grid-template-columns: 1fr;
   }
+`;
+
+
+export const CardVazio = styled(Card)`
+  color: ${({ theme }) => theme.colors.primaryText};
+
+  .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing.sm}px;
+    padding: ${({ theme }) => theme.spacing.xl}px
+      ${({ theme }) => theme.spacing.md}px;
+    text-align: center;
+  }
+`;
+
+export const CardVazioImagem = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  line-height: 0;
+`;
+
+export const CardVazioTitulo = styled(Typography.Text)`
+  font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
+  font-weight: 700;
 `;
 
 const ALTURA_CONTROLE_NUMERO = 50;

@@ -8,6 +8,7 @@ import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dados
 import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/textos";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
 import { formatarNumeroPadded } from "@/utilitarios/formatadores";
+import { UnidadesSemDados } from "./UnidadesSemDados";
 
 const { RangePicker } = DatePicker;
 
@@ -53,6 +54,7 @@ export interface TabelaUnidadesProps {
   total: number;
   carregando: boolean;
   aoSelecionarUnidade?: (unidade: UnidadeEducacional) => void;
+  aoRegistrar?: () => void;
 }
 
 export function TabelaUnidades({
@@ -60,7 +62,10 @@ export function TabelaUnidades({
   total,
   carregando,
   aoSelecionarUnidade,
+  aoRegistrar,
 }: TabelaUnidadesProps) {
+  const semDados = unidades.length === 0;
+
   return (
     <section>
       <div style={{ padding: "0 8px" }}>
@@ -84,31 +89,35 @@ export function TabelaUnidades({
         />
       </div>
 
-      <Table
-        rowKey="codigoLotacao"
-        columns={colunas}
-        dataSource={unidades}
-        loading={carregando}
-        rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
-        onRow={(unidade) => ({
-          onClick: () => aoSelecionarUnidade?.(unidade),
-          role: aoSelecionarUnidade ? "button" : undefined,
-          tabIndex: aoSelecionarUnidade ? 0 : undefined,
-          onKeyDown: (evento) => {
-            if (
-              aoSelecionarUnidade &&
-              (evento.key === "Enter" || evento.key === " ")
-            ) {
-              evento.preventDefault();
-              aoSelecionarUnidade(unidade);
-            }
-          },
-        })}
-        pagination={criarPaginacaoPadrao({
-          total,
-          pageSize: TAMANHO_PAGINA,
-        })}
-      />
+      {semDados ? (
+        <UnidadesSemDados aoRegistrar={aoRegistrar} />
+      ) : (
+        <Table
+          rowKey="codigoLotacao"
+          columns={colunas}
+          dataSource={unidades}
+          loading={carregando}
+          rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
+          onRow={(unidade) => ({
+            onClick: () => aoSelecionarUnidade?.(unidade),
+            role: aoSelecionarUnidade ? "button" : undefined,
+            tabIndex: aoSelecionarUnidade ? 0 : undefined,
+            onKeyDown: (evento) => {
+              if (
+                aoSelecionarUnidade &&
+                (evento.key === "Enter" || evento.key === " ")
+              ) {
+                evento.preventDefault();
+                aoSelecionarUnidade(unidade);
+              }
+            },
+          })}
+          pagination={criarPaginacaoPadrao({
+            total,
+            pageSize: TAMANHO_PAGINA,
+          })}
+        />
+      )}
     </section>
   );
 }
