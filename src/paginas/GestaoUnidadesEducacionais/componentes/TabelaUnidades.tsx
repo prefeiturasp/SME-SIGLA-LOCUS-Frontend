@@ -53,7 +53,6 @@ export interface TabelaUnidadesProps {
   total: number;
   carregando: boolean;
   aoSelecionarUnidade?: (unidade: UnidadeEducacional) => void;
-  /** Acionado pelo botao "Registrar UE" do estado vazio. */
   aoRegistrar?: () => void;
 }
 

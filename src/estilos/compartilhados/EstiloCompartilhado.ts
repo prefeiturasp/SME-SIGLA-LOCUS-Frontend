@@ -2,7 +2,16 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { Button, Form, Input, InputNumber, Modal, Select, Table } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Table,
+  Typography,
+} from "antd";
 import type { TablePaginationConfig } from "antd";
 import { createElement, type ComponentProps } from "react";
 import styled, { css, type DefaultTheme } from "styled-components";
@@ -57,11 +66,8 @@ export const BotaoExcluir = styled(Button).attrs({
   }
 `;
 
-/** Props de estilo da `Tabela`, fora da API do Table do antd. */
 export interface PropsEstiloTabela {
-  /** Mantem o cursor de ponteiro nas linhas. Padrao: `true`. */
   $linhasClicaveis?: boolean;
-  /** Esconde cabecalho e bordas para dar lugar ao estado vazio. */
   $semDados?: boolean;
 }
 
@@ -493,6 +499,35 @@ export const GridCardsDados = styled.div<{ $colunas?: number }>`
   @media (max-width: 576px) {
     grid-template-columns: 1fr;
   }
+`;
+
+
+export const LARGURA_BOTAO_ESTADO_VAZIO = 150;
+
+export const EstadoVazioContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+  padding: ${({ theme }) => theme.spacing.xl}px
+    ${({ theme }) => theme.spacing.md}px;
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
+export const EstadoVazioIlustracao = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  line-height: 0;
+`;
+
+export const EstadoVazioTitulo = styled(Typography.Text)`
+  font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
+  font-weight: 700;
+`;
+
+export const EstadoVazioBotao = styled(Button)`
+  width: ${LARGURA_BOTAO_ESTADO_VAZIO}px;
+  height: ${({ theme }) => theme.layout.controlHeight}px;
+  margin-top: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 const ALTURA_CONTROLE_NUMERO = 50;
