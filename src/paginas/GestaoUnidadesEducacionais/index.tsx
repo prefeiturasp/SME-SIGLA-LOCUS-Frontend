@@ -17,6 +17,7 @@ export function GestaoUnidadesEducacionais() {
     unidades,
     total,
     componenteSelecionado,
+    statusListagem,
     carregando,
     selecionarComponente,
     aplicarFiltros,
@@ -62,6 +63,7 @@ export function GestaoUnidadesEducacionais() {
           unidades={unidades}
           total={total}
           carregando={carregando}
+          statusListagem={statusListagem}
           aoSelecionarUnidade={(unidade) =>
             navigate(caminhoDetalheUE(unidade.codigoLotacao))
           }

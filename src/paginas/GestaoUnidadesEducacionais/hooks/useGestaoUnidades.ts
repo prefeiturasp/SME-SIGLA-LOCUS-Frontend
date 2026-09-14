@@ -1,5 +1,8 @@
 import { useMemo, useState } from "react";
-import { deveSimularListaVazia } from "@/servicos/recursos/unidadesEducacionais";
+import {
+  lerStatusSimuladoListagem,
+  type StatusListagemUnidades,
+} from "@/servicos/recursos/unidadesEducacionais";
 import type {
   FiltrosUnidades,
   PainelComponente,
@@ -20,6 +23,7 @@ export interface EstadoGestaoUnidades {
   total: number;
   painel: PainelComponente | undefined;
   componenteSelecionado: string;
+  statusListagem: StatusListagemUnidades;
   carregando: boolean;
   erro: boolean;
   selecionarComponente: (componente: string) => void;
@@ -32,8 +36,8 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
     useState(COMPONENTE_PADRAO);
   const [, setFiltros] = useState<FiltrosUnidades>({});
 
-
-  const listaVazia = deveSimularListaVazia();
+  const statusListagem = lerStatusSimuladoListagem();
+  const semDados = statusListagem !== "comDados";
 
   const painel = useMemo<PainelComponente>(
     () => ({
@@ -45,10 +49,11 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
 
   return useMemo(
     () => ({
-      unidades: listaVazia ? [] : linhasUnidades,
-      total: listaVazia ? 0 : TOTAL_REGISTROS,
+      unidades: semDados ? [] : linhasUnidades,
+      total: semDados ? 0 : TOTAL_REGISTROS,
       painel,
       componenteSelecionado,
+      statusListagem,
       carregando: false,
       erro: false,
       selecionarComponente: setComponenteSelecionado,
@@ -56,7 +61,7 @@ export function useGestaoUnidades(): EstadoGestaoUnidades {
         setFiltros((atuais) => ({ ...atuais, ...novos })),
       limparFiltros: () => setFiltros({}),
     }),
-    [painel, componenteSelecionado, listaVazia],
+    [painel, componenteSelecionado, statusListagem, semDados],
   );
 }
 
