@@ -3,7 +3,7 @@ import { Button, DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
-import { UnidadesSemDados } from "@/componentes/UnidadesSemDados";
+import { UnidadesSemDados } from "./UnidadesSemDados";
 import { criarPaginacaoPadrao, FormItem, TagVagas } from "@/estilos";
 import { Table } from "antd";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
