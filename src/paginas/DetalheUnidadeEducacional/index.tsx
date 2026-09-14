@@ -1,3 +1,4 @@
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
@@ -14,12 +15,46 @@ import { LinhaHistoricoAlteracoes } from "./componentes/LinhaHistoricoAlteracoes
 import { PainelHistorico } from "./componentes/PainelHistorico";
 import { PainelAfastados } from "./componentes/PainelAfastados";
 import { PainelLotacao } from "./componentes/PainelLotacao";
+import { UnidadeIndisponivel } from "./componentes/UnidadeIndisponivel";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
 
 export function DetalheUnidadeEducacional() {
   const navigate = useNavigate();
   const estado = useDetalheUnidade();
   const { unidade, somenteLeitura, versaoVisualizada } = estado;
+
+  if (estado.indisponivel) {
+    return (
+      <>
+        <CabecalhoPagina
+          titulo="Gestão das unidades educacionais"
+          acoes={
+            <>
+              <Button
+                type="primary"
+                icon={<AddRoundedIcon fontSize="small" />}
+                onClick={() => navigate(CAMINHOS.cadastroRegistrarUE)}
+              >
+                Registrar UE
+              </Button>
+              <Button
+                type="default"
+                icon={<FileUploadOutlinedIcon fontSize="small" />}
+              >
+                Exportar relatório
+              </Button>
+            </>
+          }
+        />
+
+        <ConteudoPagina>
+          <UnidadeIndisponivel
+            aoAtualizar={() => window.location.reload()}
+          />
+        </ConteudoPagina>
+      </>
+    );
+  }
 
   if (estado.naoEncontrada) {
     return (

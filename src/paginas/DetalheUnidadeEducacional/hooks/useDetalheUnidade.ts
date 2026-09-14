@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useNotificacao } from "@/hooks/useNotificacao";
 import { CAMINHOS } from "@/rotas/caminhos";
 import {
+  deveSimularUnidadeIndisponivel,
   excluirUnidade,
   lerDetalheEstatico,
   salvarModulos,
@@ -46,6 +47,7 @@ export interface EstadoDetalheUnidade {
   possuiAlteracoes: boolean;
   carregando: boolean;
   naoEncontrada: boolean;
+  indisponivel: boolean;
   salvando: boolean;
   excluindo: boolean;
   somenteLeitura: boolean;
@@ -123,6 +125,8 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
   );
 
   const naoEncontrada = Boolean(codigoLotacao) && unidade === undefined;
+  // A UE foi excluida por outro usuario enquanto esta tela estava aberta.
+  const indisponivel = deveSimularUnidadeIndisponivel();
   const historico = useMemo(
     () => (painelHistoricoAberto ? historicoExemplo : []),
     [painelHistoricoAberto],
@@ -336,6 +340,7 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       possuiAlteracoes,
       carregando: false,
       naoEncontrada,
+      indisponivel,
       salvando,
       excluindo,
       somenteLeitura,
@@ -377,6 +382,7 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       possuiAlteracoes,
       somenteLeitura,
       naoEncontrada,
+      indisponivel,
       salvando,
       excluindo,
       versaoVisualizada,
