@@ -63,6 +63,15 @@ describe("TabelaComponentesDetalhe", () => {
     );
   });
 
+  it("abre o painel ao clicar no numero de lotacao", async () => {
+    const { aoAbrirLotacao } = renderizarTabela();
+
+    await userEvent.click(screen.getByLabelText("Lotação de Arte"));
+    expect(aoAbrirLotacao).toHaveBeenCalledWith(
+      expect.objectContaining({ componente: "Arte" }),
+    );
+  });
+
   it("exibe a lotacao como input somente leitura", () => {
     renderizarTabela();
 
@@ -78,8 +87,37 @@ describe("TabelaComponentesDetalhe", () => {
     expect(aoAbrirAfastados).not.toHaveBeenCalled();
   });
 
+  it("nao abre painel de lotacao quando o valor e zero", async () => {
+    const aoAbrirLotacao = jest.fn();
+    const linhasComZero = montarLinhasAgrupadas([
+      {
+        ...componentesDetalhe[0],
+        id: "sem-lotacao",
+        componente: "Sem lotação",
+        lotacao: 0,
+      },
+    ]);
+
+    render(
+      <ComProvedores>
+        <TabelaComponentesDetalhe
+          linhas={linhasComZero}
+          totalComponentes={1}
+          componentesExibidos={1}
+          carregando={false}
+          aoAlterarModulo={jest.fn()}
+          aoAbrirLotacao={aoAbrirLotacao}
+          aoAbrirAfastados={jest.fn()}
+        />
+      </ComProvedores>,
+    );
+
+    await userEvent.click(screen.getByLabelText("Lotação de Sem lotação"));
+    expect(aoAbrirLotacao).not.toHaveBeenCalled();
+  });
+
   it("desabilita a edicao no modo somente leitura", async () => {
-    const { aoAbrirAfastados } = renderizarTabela({
+    const { aoAbrirAfastados, aoAbrirLotacao } = renderizarTabela({
       somenteLeitura: true,
     });
 
@@ -90,5 +128,8 @@ describe("TabelaComponentesDetalhe", () => {
 
     await userEvent.click(screen.getByLabelText("Afastados de Biologia"));
     expect(aoAbrirAfastados).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByLabelText("Lotação de Arte"));
+    expect(aoAbrirLotacao).not.toHaveBeenCalled();
   });
 });
