@@ -2,11 +2,14 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { Button, Result } from "antd";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
+import { EstadoErroPagina } from "@/componentes/EstadoErroPagina";
 import { ModalBase } from "@/componentes/ModalBase";
+import { NaoEncontrado } from "@/paginas/NaoEncontrado";
 import { ConteudoPagina } from "@/estilos";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { BannerVersaoHistorica } from "./componentes/BannerVersaoHistorica";
@@ -16,7 +19,6 @@ import { LinhaHistoricoAlteracoes } from "./componentes/LinhaHistoricoAlteracoes
 import { PainelHistorico } from "./componentes/PainelHistorico";
 import { PainelAfastados } from "./componentes/PainelAfastados";
 import { PainelLotacao } from "./componentes/PainelLotacao";
-import { UnidadeIndisponivel } from "./componentes/UnidadeIndisponivel";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
 import { useExportarPdf } from "@/hooks/useExportarPdf";
 
@@ -26,6 +28,10 @@ export function DetalheUnidadeEducacional() {
   const { exportarPdf, exportando } = useExportarPdf();
   const refConteudo = useRef<HTMLDivElement>(null);
   const { unidade, somenteLeitura, versaoVisualizada } = estado;
+
+  if (estado.paginaNaoEncontrada) {
+    return <NaoEncontrado />;
+  }
 
   if (estado.indisponivel) {
     return (
@@ -52,8 +58,18 @@ export function DetalheUnidadeEducacional() {
         />
 
         <ConteudoPagina>
-          <UnidadeIndisponivel
-            aoAtualizar={() => window.location.reload()}
+          <EstadoErroPagina
+            titulo="Esta informação não está mais disponível!"
+            descricao="Este UE não existe ou foi excluída por outro usuário e não pode mais ser editada. Atualize a página para exibir as informações mais recentes."
+            acao={
+              <Button
+                type="primary"
+                icon={<RefreshIcon fontSize="small" />}
+                onClick={() => window.location.reload()}
+              >
+                Atualizar página
+              </Button>
+            }
           />
         </ConteudoPagina>
       </>
