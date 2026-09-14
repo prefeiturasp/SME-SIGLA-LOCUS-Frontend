@@ -136,8 +136,8 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
         screen.getByRole("button", { name: /Registrar UE/ }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("button", { name: /Exportar relatório/ }),
-      ).toBeInTheDocument();
+        screen.queryByRole("button", { name: /Exportar relatório/ }),
+      ).not.toBeInTheDocument();
     });
 
     it("mostra o card de informacao indisponivel", async () => {
