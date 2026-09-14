@@ -120,12 +120,10 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       lerDetalheEstatico(codigoLotacao, {
         comEdicoesSalvas: !somenteLeitura,
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [codigoLotacao, somenteLeitura, versaoDados],
+      [codigoLotacao, somenteLeitura, versaoDados],
   );
 
   const naoEncontrada = Boolean(codigoLotacao) && unidade === undefined;
-  // A UE foi excluida por outro usuario enquanto esta tela estava aberta.
   const indisponivel = deveSimularUnidadeIndisponivel();
   const historico = useMemo(
     () => (painelHistoricoAberto ? historicoExemplo : []),

@@ -28,8 +28,12 @@ export function RotasApp() {
             <Navigate to={CAMINHOS.cadastroGestaoUnidades} replace />
           }
         />
+        <Route path={CAMINHOS.naoEncontrado} element={<NaoEncontrado />} />
+        <Route
+          path="*"
+          element={<Navigate to={CAMINHOS.naoEncontrado} replace />}
+        />
       </Route>
-      <Route path="*" element={<NaoEncontrado />} />
     </Routes>
   );
 }

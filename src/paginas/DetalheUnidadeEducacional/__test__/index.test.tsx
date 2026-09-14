@@ -6,8 +6,6 @@ import { CAMINHOS } from "@/rotas/caminhos";
 import { reiniciarModulosSalvos } from "@/servicos/recursos/unidadesEducacionais";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { DetalheUnidadeEducacional } from "../index";
-
-/** A casca completa pode passar do 1s padrao do findBy* com a suite em paralelo. */
 const ESPERA = { timeout: 5000 };
 
 function renderNaCasca(codigo = "091488") {
@@ -174,4 +172,5 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
       ).not.toBeInTheDocument();
     });
   });
+
 });
