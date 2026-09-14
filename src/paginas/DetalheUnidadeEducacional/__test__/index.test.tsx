@@ -80,9 +80,24 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     await waitFor(() => expect(salvar).toBeEnabled());
   });
 
-  // Os casos do painel de lotacao e do modal de exclusao sairam junto com a
-  // renderizacao desses overlays; devem voltar quando eles voltarem.
+  it("abre o painel de lotacao ao clicar em um numero diferente de zero", async () => {
+    renderNaCasca();
 
+    await userEvent.click(
+      await screen.findByLabelText("Lotação de Arte", {}, ESPERA),
+    );
+
+    expect(
+      await screen.findByText(
+        "Confira os professores em atividades neste componente curricular.",
+        {},
+        ESPERA,
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Componente curricular: Arte")).toBeInTheDocument();
+    expect(screen.getByText("João da Silva")).toBeInTheDocument();
+    expect(screen.getByText("Tipo de vaga")).toBeInTheDocument();
+  });
 
   it("exibe o estado de nao encontrada para codigo inexistente", async () => {
     renderNaCasca("999999");
