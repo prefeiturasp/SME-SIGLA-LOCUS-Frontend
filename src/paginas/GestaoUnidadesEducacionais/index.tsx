@@ -1,8 +1,10 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Button } from "antd";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
+import { useExportarPdf } from "@/hooks/useExportarPdf";
 import { ConteudoPagina } from "@/estilos";
 import { CAMINHOS, caminhoDetalheUE } from "@/rotas/caminhos";
 import { opcoesComponenteCurricular } from "./dados/dadosEstaticos";
@@ -13,6 +15,8 @@ import { TabelaUnidades } from "./componentes/TabelaUnidades";
 
 export function GestaoUnidadesEducacionais() {
   const navigate = useNavigate();
+  const { exportarPdf, exportando } = useExportarPdf();
+  const refConteudo = useRef<HTMLDivElement>(null);
   const {
     unidades,
     total,
@@ -40,6 +44,10 @@ export function GestaoUnidadesEducacionais() {
             <Button
               type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
+              loading={exportando}
+              onClick={() =>
+                exportarPdf(refConteudo, "relatorio-gestao-unidades")
+              }
             >
               Exportar relatório
             </Button>
@@ -47,7 +55,7 @@ export function GestaoUnidadesEducacionais() {
         }
       />
 
-      <ConteudoPagina>
+      <ConteudoPagina ref={refConteudo}>
         <CardComponenteCurricular
           opcoesComponente={opcoesComponenteCurricular}
           componenteSelecionado={componenteSelecionado}
