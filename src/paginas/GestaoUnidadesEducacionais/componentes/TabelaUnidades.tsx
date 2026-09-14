@@ -1,7 +1,9 @@
-import { DatePicker } from "antd";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { Button, DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
 import { ColunaComInfo } from "@/componentes/ColunaComInfo";
+import { UnidadesSemDados } from "@/componentes/UnidadesSemDados";
 import { criarPaginacaoPadrao, FormItem, TagVagas } from "@/estilos";
 import { Table } from "antd";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
@@ -9,8 +11,6 @@ import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/
 import type { StatusListagemUnidades } from "@/servicos/recursos/unidadesEducacionais";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
 import { formatarNumeroPadded } from "@/utilitarios/formatadores";
-import { UnidadesSemDados } from "./UnidadesSemDados";
-import { UnidadesSemResultado } from "./UnidadesSemResultado";
 
 const { RangePicker } = DatePicker;
 
@@ -95,9 +95,24 @@ export function TabelaUnidades({
       </div>
 
       {semResultado ? (
-        <UnidadesSemResultado />
+        <UnidadesSemDados
+          titulo="Não encontramos dados para esta busca"
+          descricao="Experimente remover alguns filtros ou selecionar outros critérios de busca."
+        />
       ) : statusListagem === "semCadastro" ? (
-        <UnidadesSemDados aoRegistrar={aoRegistrar} />
+        <UnidadesSemDados
+          titulo="Não há unidades educacionais cadastradas"
+          descricao="Que tal registrar a primeira UE agora?"
+          acao={
+            <Button
+              type="primary"
+              icon={<AddRoundedIcon fontSize="small" />}
+              onClick={aoRegistrar}
+            >
+              Registrar UE
+            </Button>
+          }
+        />
       ) : (
         <Table
           rowKey="codigoLotacao"
