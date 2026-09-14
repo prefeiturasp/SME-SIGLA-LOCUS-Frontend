@@ -7,7 +7,7 @@ import { NaoEncontrado } from "../index";
 
 function renderizar() {
   return render(
-    <ComProvedores rota="/rota/que/nao/existe">
+    <ComProvedores rota={CAMINHOS.naoEncontrado}>
       <Routes>
         <Route path="*" element={<NaoEncontrado />} />
         <Route
@@ -34,18 +34,16 @@ describe("NaoEncontrado", () => {
     ).toBeInTheDocument();
   });
 
-  it("mostra o cabecalho da gestao de UEs", () => {
+  it("nao renderiza cabecalho de pagina", () => {
     renderizar();
 
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Gestão das unidades educacionais" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: /Registrar UE/ }),
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Registrar UE/ }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Exportar relatório/ }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: /Exportar relatório/ }),
+    ).not.toBeInTheDocument();
   });
 
   it("oferece o botao de ir para a tela inicial", () => {

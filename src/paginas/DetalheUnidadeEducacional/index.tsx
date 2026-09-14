@@ -7,9 +7,8 @@ import { Button, Result } from "antd";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
-import { EstadoErroPagina } from "@/componentes/EstadoErroPagina";
 import { ModalBase } from "@/componentes/ModalBase";
-import { NaoEncontrado } from "@/paginas/NaoEncontrado";
+import { PaginaErro } from "@/componentes/PaginaErro";
 import { ConteudoPagina } from "@/estilos";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { BannerVersaoHistorica } from "./componentes/BannerVersaoHistorica";
@@ -29,10 +28,6 @@ export function DetalheUnidadeEducacional() {
   const refConteudo = useRef<HTMLDivElement>(null);
   const { unidade, somenteLeitura, versaoVisualizada } = estado;
 
-  if (estado.paginaNaoEncontrada) {
-    return <NaoEncontrado />;
-  }
-
   if (estado.indisponivel) {
     return (
       <>
@@ -47,18 +42,12 @@ export function DetalheUnidadeEducacional() {
               >
                 Registrar UE
               </Button>
-              <Button
-                type="default"
-                icon={<FileUploadOutlinedIcon fontSize="small" />}
-              >
-                Exportar relatório
-              </Button>
             </>
           }
         />
 
         <ConteudoPagina>
-          <EstadoErroPagina
+          <PaginaErro
             titulo="Esta informação não está mais disponível!"
             descricao="Este UE não existe ou foi excluída por outro usuário e não pode mais ser editada. Atualize a página para exibir as informações mais recentes."
             acao={

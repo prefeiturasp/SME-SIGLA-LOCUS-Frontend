@@ -429,23 +429,22 @@ export const GridCardsDados = styled.div<{ $colunas?: number }>`
 `;
 
 
-export const CardVazio = styled(Card)`
-  color: ${({ theme }) => theme.colors.primaryText};
-
-  .ant-card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: ${({ theme }) => theme.spacing.sm}px;
-    padding: ${({ theme }) => theme.spacing.xl}px
-      ${({ theme }) => theme.spacing.md}px;
-    text-align: center;
-  }
+export const CardVazio = styled.div`
+  color: ${({ theme }) => theme.colors.primaryText};  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+  padding: ${({ theme }) => theme.spacing.xl}px
+    ${({ theme }) => theme.spacing.md}px;
+  text-align: center;
+  
 `;
 
 export const CardVazioImagem = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
   line-height: 0;
+  
 `;
 
 export const CardVazioTitulo = styled(Typography.Text)`

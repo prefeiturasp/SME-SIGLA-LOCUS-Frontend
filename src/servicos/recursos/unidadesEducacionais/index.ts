@@ -63,11 +63,6 @@ export function deveSimularUnidadeIndisponivel(): boolean {
   return new URLSearchParams(window.location.search).get("status") === "3";
 }
 
-export function deveSimularPaginaNaoEncontrada(): boolean {
-  if (typeof window === "undefined") return false;
-  return new URLSearchParams(window.location.search).get("status") === "4";
-}
-
 
 const modulosSalvos = new Map<string, Map<string, number>>();
 

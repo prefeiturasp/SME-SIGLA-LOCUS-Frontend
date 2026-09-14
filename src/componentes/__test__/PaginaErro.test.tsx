@@ -2,13 +2,13 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "antd";
 import { ComTema } from "@/testes/renderizarComTema";
-import { EstadoErroPagina } from "../EstadoErroPagina";
+import { PaginaErro } from "../PaginaErro";
 
-describe("EstadoErroPagina", () => {
+describe("PaginaErro", () => {
   it("mostra o titulo recebido", () => {
     render(
       <ComTema>
-        <EstadoErroPagina titulo="Não encontramos esta página..." />
+        <PaginaErro titulo="Não encontramos esta página..." />
       </ComTema>,
     );
 
@@ -20,7 +20,7 @@ describe("EstadoErroPagina", () => {
   it("mostra a descricao quando recebida", () => {
     render(
       <ComTema>
-        <EstadoErroPagina titulo="Título" descricao="Detalhe do problema." />
+        <PaginaErro titulo="Título" descricao="Detalhe do problema." />
       </ComTema>,
     );
 
@@ -30,7 +30,7 @@ describe("EstadoErroPagina", () => {
   it("nao renderiza acao quando nao ha slot", () => {
     render(
       <ComTema>
-        <EstadoErroPagina titulo="Título" />
+        <PaginaErro titulo="Título" />
       </ComTema>,
     );
 
@@ -43,7 +43,7 @@ describe("EstadoErroPagina", () => {
 
     render(
       <ComTema>
-        <EstadoErroPagina
+        <PaginaErro
           titulo="Título"
           acao={
             <Button type="primary" onClick={aoClicar}>
@@ -64,7 +64,7 @@ describe("EstadoErroPagina", () => {
   it("aceita uma ilustracao customizada no lugar da padrao", () => {
     render(
       <ComTema>
-        <EstadoErroPagina
+        <PaginaErro
           titulo="Título"
           ilustracao={<img alt="Ilustração customizada" src="/exemplo.png" />}
         />

@@ -59,6 +59,13 @@ describe("breadcrumbDaRota", () => {
     ]);
   });
 
+  it("nomeia a rota de pagina nao encontrada", () => {
+    expect(breadcrumbDaRota(CAMINHOS.naoEncontrado)).toEqual([
+      { titulo: "Início" },
+      { titulo: "Página não encontrada" },
+    ]);
+  });
+
   it("volta ao fallback em rota desconhecida", () => {
     expect(breadcrumbDaRota("/rota/inexistente")).toEqual([
       { titulo: "Início" },

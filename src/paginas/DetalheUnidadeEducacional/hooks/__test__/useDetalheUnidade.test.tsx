@@ -230,45 +230,6 @@ describe("useDetalheUnidade", () => {
     });
   });
 
-  describe("simulacao de pagina nao encontrada via URL", () => {
-    afterEach(() => {
-      window.history.pushState({}, "", "/");
-    });
-
-    it("marca a pagina como nao encontrada quando status=4", async () => {
-      window.history.pushState({}, "", "/?status=4");
-
-      const result = await montarHook();
-
-      expect(result.current.paginaNaoEncontrada).toBe(true);
-    });
-
-    it("nao marca sem o parametro status", async () => {
-      const result = await montarHook();
-
-      expect(result.current.paginaNaoEncontrada).toBe(false);
-    });
-
-    it("nao confunde status=4 com o estado de unidade indisponivel", async () => {
-      window.history.pushState({}, "", "/?status=4");
-
-      const result = await montarHook();
-
-      expect(result.current.paginaNaoEncontrada).toBe(true);
-      expect(result.current.indisponivel).toBe(false);
-      expect(result.current.naoEncontrada).toBe(false);
-    });
-
-    it("nao marca quando o status e o de unidade indisponivel", async () => {
-      window.history.pushState({}, "", "/?status=3");
-
-      const result = await montarHook();
-
-      expect(result.current.paginaNaoEncontrada).toBe(false);
-      expect(result.current.indisponivel).toBe(true);
-    });
-  });
-
   it("entra em modo somente leitura ao visualizar uma versao", async () => {
     const result = await montarHook();
 

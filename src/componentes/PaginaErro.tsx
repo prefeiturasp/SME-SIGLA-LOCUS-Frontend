@@ -8,23 +8,21 @@ const { Text } = Typography;
 const LARGURA_ILUSTRACAO = 181;
 const ALTURA_ILUSTRACAO = 207;
 
-export interface EstadoErroPaginaProps {
+export interface PaginaErroProps {
   titulo: string;
   descricao?: ReactNode;
-  /** Slot da acao principal — normalmente um Button. */
   acao?: ReactNode;
-  /** Substitui a ilustracao padrao quando informada. */
   ilustracao?: ReactNode;
 }
 
-export function EstadoErroPagina({
+export function PaginaErro({
   titulo,
   descricao,
   acao,
   ilustracao,
-}: EstadoErroPaginaProps) {
+}: PaginaErroProps) {
   return (
-    <CardVazio>
+    <CardVazio style={{ marginTop: "100px" }}>
       <CardVazioImagem>
         {ilustracao ?? (
           <IlustracaoPadrao
@@ -41,4 +39,4 @@ export function EstadoErroPagina({
   );
 }
 
-export default EstadoErroPagina;
+export default PaginaErro;

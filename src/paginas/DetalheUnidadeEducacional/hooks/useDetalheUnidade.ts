@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useNotificacao } from "@/hooks/useNotificacao";
 import { CAMINHOS } from "@/rotas/caminhos";
 import {
-  deveSimularPaginaNaoEncontrada,
   deveSimularUnidadeIndisponivel,
   excluirUnidade,
   lerDetalheEstatico,
@@ -49,7 +48,6 @@ export interface EstadoDetalheUnidade {
   carregando: boolean;
   naoEncontrada: boolean;
   indisponivel: boolean;
-  paginaNaoEncontrada: boolean;
   salvando: boolean;
   excluindo: boolean;
   somenteLeitura: boolean;
@@ -122,15 +120,11 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       lerDetalheEstatico(codigoLotacao, {
         comEdicoesSalvas: !somenteLeitura,
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [codigoLotacao, somenteLeitura, versaoDados],
+      [codigoLotacao, somenteLeitura, versaoDados],
   );
 
   const naoEncontrada = Boolean(codigoLotacao) && unidade === undefined;
-  // A UE foi excluida por outro usuario enquanto esta tela estava aberta.
   const indisponivel = deveSimularUnidadeIndisponivel();
-  // O endereco digitado nao corresponde a nenhuma pagina do sistema.
-  const paginaNaoEncontrada = deveSimularPaginaNaoEncontrada();
   const historico = useMemo(
     () => (painelHistoricoAberto ? historicoExemplo : []),
     [painelHistoricoAberto],
@@ -345,7 +339,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       carregando: false,
       naoEncontrada,
       indisponivel,
-      paginaNaoEncontrada,
       salvando,
       excluindo,
       somenteLeitura,
@@ -388,7 +381,6 @@ export function useDetalheUnidade(): EstadoDetalheUnidade {
       somenteLeitura,
       naoEncontrada,
       indisponivel,
-      paginaNaoEncontrada,
       salvando,
       excluindo,
       versaoVisualizada,

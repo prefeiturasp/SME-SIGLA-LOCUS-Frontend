@@ -6,8 +6,6 @@ import { CAMINHOS } from "@/rotas/caminhos";
 import { reiniciarModulosSalvos } from "@/servicos/recursos/unidadesEducacionais";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { DetalheUnidadeEducacional } from "../index";
-
-/** A casca completa pode passar do 1s padrao do findBy* com a suite em paralelo. */
 const ESPERA = { timeout: 5000 };
 
 function renderNaCasca(codigo = "091488") {
@@ -175,42 +173,4 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     });
   });
 
-  describe("pagina nao encontrada (status=4)", () => {
-    afterEach(() => {
-      window.history.pushState({}, "", "/");
-    });
-
-    function renderPaginaNaoEncontrada() {
-      window.history.pushState({}, "", "/?status=4");
-      return renderNaCasca("093703");
-    }
-
-    it("mostra o estado de pagina nao encontrada", async () => {
-      renderPaginaNaoEncontrada();
-
-      expect(
-        await screen.findByText(
-          "Não encontramos esta página...",
-          {},
-          ESPERA,
-        ),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /Ir para tela inicial/ }),
-      ).toBeInTheDocument();
-    });
-
-    it("nao mostra o estado de unidade indisponivel nem os cartoes", async () => {
-      renderPaginaNaoEncontrada();
-
-      await screen.findByText("Não encontramos esta página...", {}, ESPERA);
-
-      expect(
-        screen.queryByText("Esta informação não está mais disponível!"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText("Informações da unidade educacional"),
-      ).not.toBeInTheDocument();
-    });
-  });
 });
