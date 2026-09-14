@@ -6,9 +6,11 @@ import { criarPaginacaoPadrao, FormItem, TagVagas } from "@/estilos";
 import { Table } from "antd";
 import { TAMANHO_PAGINA } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 import { DICAS_COLUNAS_UNIDADE } from "@/servicos/recursos/unidadesEducacionais/textos";
+import type { StatusListagemUnidades } from "@/servicos/recursos/unidadesEducacionais";
 import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
 import { formatarNumeroPadded } from "@/utilitarios/formatadores";
 import { UnidadesSemDados } from "./UnidadesSemDados";
+import { UnidadesSemResultado } from "./UnidadesSemResultado";
 
 const { RangePicker } = DatePicker;
 
@@ -53,6 +55,7 @@ export interface TabelaUnidadesProps {
   unidades: UnidadeEducacional[];
   total: number;
   carregando: boolean;
+  statusListagem: StatusListagemUnidades;
   aoSelecionarUnidade?: (unidade: UnidadeEducacional) => void;
   aoRegistrar?: () => void;
 }
@@ -61,10 +64,11 @@ export function TabelaUnidades({
   unidades,
   total,
   carregando,
+  statusListagem,
   aoSelecionarUnidade,
   aoRegistrar,
 }: TabelaUnidadesProps) {
-  const semDados = unidades.length === 0;
+  const semResultado = statusListagem === "semResultado";
 
   return (
     <section>
@@ -83,13 +87,16 @@ export function TabelaUnidades({
                 id="periodo"
                 format="DD/MM/YYYY"
                 placeholder={["00/00/0000", "00/00/0000"]}
+                disabled={semResultado}
               />
             </FormItem>
           }
         />
       </div>
 
-      {semDados ? (
+      {semResultado ? (
+        <UnidadesSemResultado />
+      ) : statusListagem === "semCadastro" ? (
         <UnidadesSemDados aoRegistrar={aoRegistrar} />
       ) : (
         <Table
@@ -97,7 +104,14 @@ export function TabelaUnidades({
           columns={colunas}
           dataSource={unidades}
           loading={carregando}
-          rowClassName={(_, indice) => (indice % 2 === 1 ? "linhaPar" : "")}
+          rowClassName={(_, indice) =>
+            [
+              indice % 2 === 1 ? "linhaPar" : "",
+              aoSelecionarUnidade ? "linhaClicavel" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")
+          }
           onRow={(unidade) => ({
             onClick: () => aoSelecionarUnidade?.(unidade),
             role: aoSelecionarUnidade ? "button" : undefined,

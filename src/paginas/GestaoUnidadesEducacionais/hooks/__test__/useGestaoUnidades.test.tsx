@@ -38,12 +38,12 @@ describe("useGestaoUnidades", () => {
     await waitFor(() => expect(result.current.unidades).toHaveLength(10));
   });
 
-  describe("simulacao de listagem vazia via URL", () => {
+  describe("simulacao de status da listagem via URL", () => {
     afterEach(() => {
       window.history.pushState({}, "", "/");
     });
 
-    it("devolve listagem vazia quando status=1", async () => {
+    it("devolve listagem vazia sem cadastro quando status=1", async () => {
       window.history.pushState({}, "", "/?status=1");
 
       const { result } = renderHook(() => useGestaoUnidades());
@@ -52,6 +52,19 @@ describe("useGestaoUnidades", () => {
 
       expect(result.current.unidades).toHaveLength(0);
       expect(result.current.total).toBe(0);
+      expect(result.current.statusListagem).toBe("semCadastro");
+    });
+
+    it("devolve listagem vazia sem resultado quando status=2", async () => {
+      window.history.pushState({}, "", "/?status=2");
+
+      const { result } = renderHook(() => useGestaoUnidades());
+
+      await waitFor(() => expect(result.current.carregando).toBe(false));
+
+      expect(result.current.unidades).toHaveLength(0);
+      expect(result.current.total).toBe(0);
+      expect(result.current.statusListagem).toBe("semResultado");
     });
 
     it("mantem a listagem completa com outro valor de status", async () => {
@@ -63,6 +76,7 @@ describe("useGestaoUnidades", () => {
 
       expect(result.current.unidades).toHaveLength(10);
       expect(result.current.total).toBe(5985);
+      expect(result.current.statusListagem).toBe("comDados");
     });
   });
 });

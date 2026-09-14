@@ -44,9 +44,18 @@ function deveSimularErroRegistro(): boolean {
   return new URLSearchParams(window.location.search).get("erro") === "1";
 }
 
-export function deveSimularListaVazia(): boolean {
-  if (typeof window === "undefined") return false;
-  return new URLSearchParams(window.location.search).get("status") === "1";
+export type StatusListagemUnidades =
+  | "comDados"
+  | "semCadastro"
+  | "semResultado";
+
+export function lerStatusSimuladoListagem(): StatusListagemUnidades {
+  if (typeof window === "undefined") return "comDados";
+
+  const status = new URLSearchParams(window.location.search).get("status");
+  if (status === "1") return "semCadastro";
+  if (status === "2") return "semResultado";
+  return "comDados";
 }
 
 

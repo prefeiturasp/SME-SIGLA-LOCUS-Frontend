@@ -2,6 +2,7 @@ import {
   consultarLotacao,
   excluirUnidade,
   lerDetalheEstatico,
+  lerStatusSimuladoListagem,
   registrar,
   reiniciarModulosSalvos,
   salvarModulos,
@@ -37,6 +38,40 @@ describe("dados estaticos da Gestao de UEs", () => {
   it("expoe a listagem e o total usados pela tela", () => {
     expect(linhasUnidades).toHaveLength(10);
     expect(TOTAL_REGISTROS).toBe(5985);
+  });
+});
+
+describe("lerStatusSimuladoListagem", () => {
+  afterEach(() => {
+    window.history.replaceState({}, "", "/");
+  });
+
+  it("devolve comDados quando a URL nao traz o parametro status", () => {
+    expect(lerStatusSimuladoListagem()).toBe("comDados");
+  });
+
+  it("devolve semCadastro quando status=1", () => {
+    window.history.replaceState({}, "", "/?status=1");
+
+    expect(lerStatusSimuladoListagem()).toBe("semCadastro");
+  });
+
+  it("devolve semResultado quando status=2", () => {
+    window.history.replaceState({}, "", "/?status=2");
+
+    expect(lerStatusSimuladoListagem()).toBe("semResultado");
+  });
+
+  it("devolve comDados para valores de status desconhecidos", () => {
+    window.history.replaceState({}, "", "/?status=99");
+
+    expect(lerStatusSimuladoListagem()).toBe("comDados");
+  });
+
+  it("ignora o status quando convive com outros parametros", () => {
+    window.history.replaceState({}, "", "/?erro=1&status=2&pagina=3");
+
+    expect(lerStatusSimuladoListagem()).toBe("semResultado");
   });
 });
 

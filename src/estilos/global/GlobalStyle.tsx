@@ -85,6 +85,10 @@ export const GlobalStyle = createGlobalStyle`
     background: ${({ theme }) => theme.colors.stripedBackground};
   }
 
+  .ant-table-tbody > tr.linhaClicavel {
+    cursor: pointer;
+  }
+
   .ant-table-thead > tr > th {
     font-weight: 700;
     color: ${({ theme }) => theme.colors.primaryText};
