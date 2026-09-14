@@ -2,6 +2,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Button, Result } from "antd";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ModalBase } from "@/componentes/ModalBase";
@@ -15,10 +16,13 @@ import { PainelHistorico } from "./componentes/PainelHistorico";
 import { PainelAfastados } from "./componentes/PainelAfastados";
 import { PainelLotacao } from "./componentes/PainelLotacao";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
+import { useExportarPdf } from "@/hooks/useExportarPdf";
 
 export function DetalheUnidadeEducacional() {
   const navigate = useNavigate();
   const estado = useDetalheUnidade();
+  const { exportarPdf, exportando } = useExportarPdf();
+  const refConteudo = useRef<HTMLDivElement>(null);
   const { unidade, somenteLeitura, versaoVisualizada } = estado;
 
   if (estado.naoEncontrada) {
@@ -62,6 +66,15 @@ export function DetalheUnidadeEducacional() {
             <Button
               type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
+              loading={exportando}
+              onClick={() =>
+                exportarPdf(
+                  refConteudo,
+                  unidade
+                    ? `relatorio-ue-${unidade.codigoLotacao}`
+                    : "relatorio-ue",
+                )
+              }
             >
               Exportar relatório
             </Button>
@@ -89,7 +102,7 @@ export function DetalheUnidadeEducacional() {
         }
       />
 
-      <ConteudoPagina>
+      <ConteudoPagina ref={refConteudo}>
         {somenteLeitura && versaoVisualizada ? (
           <BannerVersaoHistorica
             data={versaoVisualizada.data}
