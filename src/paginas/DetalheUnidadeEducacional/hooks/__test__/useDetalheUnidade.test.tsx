@@ -193,6 +193,43 @@ describe("useDetalheUnidade", () => {
     expect(result.current.painelHistoricoAberto).toBe(false);
   });
 
+  describe("simulacao de unidade indisponivel via URL", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("marca a unidade como indisponivel quando status=3", async () => {
+      window.history.pushState({}, "", "/?status=3");
+
+      const result = await montarHook();
+
+      expect(result.current.indisponivel).toBe(true);
+    });
+
+    it("nao marca como indisponivel sem o parametro status", async () => {
+      const result = await montarHook();
+
+      expect(result.current.indisponivel).toBe(false);
+    });
+
+    it("nao confunde indisponivel com nao encontrada para codigo valido", async () => {
+      window.history.pushState({}, "", "/?status=3");
+
+      const result = await montarHook();
+
+      expect(result.current.indisponivel).toBe(true);
+      expect(result.current.naoEncontrada).toBe(false);
+    });
+
+    it("ignora outros valores de status", async () => {
+      window.history.pushState({}, "", "/?status=1");
+
+      const result = await montarHook();
+
+      expect(result.current.indisponivel).toBe(false);
+    });
+  });
+
   it("entra em modo somente leitura ao visualizar uma versao", async () => {
     const result = await montarHook();
 

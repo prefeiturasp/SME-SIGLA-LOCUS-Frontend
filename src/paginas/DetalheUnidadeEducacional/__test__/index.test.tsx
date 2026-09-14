@@ -113,4 +113,65 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
       screen.getByRole("button", { name: "Voltar para a listagem" }),
     ).toBeInTheDocument();
   });
+
+  describe("unidade indisponivel (status=3)", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    function renderIndisponivel() {
+      window.history.pushState({}, "", "/?status=3");
+      return renderNaCasca("093703");
+    }
+
+    it("mostra o cabecalho da gestao de UEs", async () => {
+      renderIndisponivel();
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { name: "Gestão das unidades educacionais" },
+          ESPERA,
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Registrar UE/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Exportar relatório/ }),
+      ).toBeInTheDocument();
+    });
+
+    it("mostra o card de informacao indisponivel", async () => {
+      renderIndisponivel();
+
+      expect(
+        await screen.findByText(
+          "Esta informação não está mais disponível!",
+          {},
+          ESPERA,
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Atualizar página/ }),
+      ).toBeInTheDocument();
+    });
+
+    it("nao mostra os cartoes do detalhe nem o erro de nao encontrada", async () => {
+      renderIndisponivel();
+
+      await screen.findByText(
+        "Esta informação não está mais disponível!",
+        {},
+        ESPERA,
+      );
+
+      expect(
+        screen.queryByText("Informações da unidade educacional"),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Unidade educacional não encontrada"),
+      ).not.toBeInTheDocument();
+    });
+  });
 });

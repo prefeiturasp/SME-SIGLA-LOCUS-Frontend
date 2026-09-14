@@ -49,6 +49,11 @@ export function deveSimularListaVazia(): boolean {
   return new URLSearchParams(window.location.search).get("status") === "1";
 }
 
+export function deveSimularUnidadeIndisponivel(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("status") === "3";
+}
+
 
 const modulosSalvos = new Map<string, Map<string, number>>();
 
