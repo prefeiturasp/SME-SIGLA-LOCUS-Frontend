@@ -12,10 +12,16 @@ function normalizarBase(valor: string | undefined): string {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  console.log("VITE_BASE_PATH", env.VITE_BASE_PATH);
+  // process.env tem prioridade (Docker ARG/ENV no build). Arquivo .env e so fallback local.
+  const basePath = process.env.VITE_BASE_PATH ?? env.VITE_BASE_PATH;
+  const base = normalizarBase(basePath);
+
+  console.info(
+    `[vite] base = ${base} (VITE_BASE_PATH=${basePath ?? "(nao definido)"})`,
+  );
+
   return {
-    // Path publico da app (ex.: /locus/ em QA). Afeta assets e import.meta.env.BASE_URL.
-    base: normalizarBase(env.VITE_BASE_PATH),
+    base,
     plugins: [
       react(),
       svgr({
