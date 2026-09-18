@@ -2,12 +2,14 @@
 FROM node:22.14-alpine as builder
 WORKDIR /app
 
-# Path publico da app no ingress (ex.: /locus/). SERVER_NAME so afeta o nginx hostname.
-ARG VITE_BASE_PATH=/
+# OBRIGATORIO no build (nao funciona so com env no pod).
+# QA/homolog: /locus/  |  local na raiz: passe --build-arg VITE_BASE_PATH=/
+ARG VITE_BASE_PATH=/locus/
 ENV VITE_BASE_PATH=$VITE_BASE_PATH
 
 COPY . ./
-RUN export NODE_PATH=src/ \
+RUN echo "Building with VITE_BASE_PATH=${VITE_BASE_PATH}" \
+    && export NODE_PATH=src/ \
     && npm install --loglevel verbose \
     && npm list --depth=0 \
     && npm run build 
