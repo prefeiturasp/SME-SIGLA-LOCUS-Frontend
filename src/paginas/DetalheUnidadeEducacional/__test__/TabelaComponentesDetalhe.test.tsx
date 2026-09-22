@@ -38,53 +38,58 @@ function renderizarTabela({
 }
 
 describe("TabelaComponentesDetalhe", () => {
-  it("renderiza as linhas de grupo ocupando a largura da tabela", () => {
-    renderizarTabela();
+  describe("modo editavel", () => {
+    let mocks: ReturnType<typeof renderizarTabela>;
 
-    const celulaGrupo = screen.getByText("Base comum").closest("td");
-    expect(celulaGrupo).toHaveAttribute("colspan", "6");
+    manterMontado();
 
-    expect(screen.getByText("Linguagens adicionais")).toBeInTheDocument();
-  });
+    beforeAll(() => {
+      mocks = renderizarTabela();
+    });
 
-  it("exibe a contagem de componentes no rodape", () => {
-    renderizarTabela();
-    expect(
-      screen.getByText("Mostrando 22 de 22 componentes"),
-    ).toBeInTheDocument();
-  });
+    beforeEach(() => {
+      mocks.aoAbrirLotacao.mockClear();
+      mocks.aoAbrirAfastados.mockClear();
+      mocks.aoAlterarModulo.mockClear();
+    });
 
-  it("abre o painel ao clicar no numero de afastados", async () => {
-    const { aoAbrirAfastados } = renderizarTabela();
+    it("renderiza as linhas de grupo ocupando a largura da tabela", () => {
+      const celulaGrupo = screen.getByText("Base comum").closest("td");
+      expect(celulaGrupo).toHaveAttribute("colspan", "6");
 
-    await userEvent.click(screen.getByLabelText("Afastados de Biologia"));
-    expect(aoAbrirAfastados).toHaveBeenCalledWith(
-      expect.objectContaining({ componente: "Biologia" }),
-    );
-  });
+      expect(screen.getByText("Linguagens adicionais")).toBeInTheDocument();
+    });
 
-  it("abre o painel ao clicar no numero de lotacao", async () => {
-    const { aoAbrirLotacao } = renderizarTabela();
+    it("exibe a contagem de componentes no rodape", () => {
+      expect(
+        screen.getByText("Mostrando 22 de 22 componentes"),
+      ).toBeInTheDocument();
+    });
 
-    await userEvent.click(screen.getByLabelText("Lotação de Arte"));
-    expect(aoAbrirLotacao).toHaveBeenCalledWith(
-      expect.objectContaining({ componente: "Arte" }),
-    );
-  });
+    it("exibe a lotacao como input somente leitura", () => {
+      const campoLotacao = screen.getByLabelText("Lotação de Arte");
+      expect(campoLotacao).toHaveAttribute("readonly");
+      expect(campoLotacao).toHaveValue("5");
+    });
 
-  it("exibe a lotacao como input somente leitura", () => {
-    renderizarTabela();
+    it("abre o painel ao clicar no numero de afastados", async () => {
+      await userEvent.click(screen.getByLabelText("Afastados de Biologia"));
+      expect(mocks.aoAbrirAfastados).toHaveBeenCalledWith(
+        expect.objectContaining({ componente: "Biologia" }),
+      );
+    });
 
-    const campoLotacao = screen.getByLabelText("Lotação de Arte");
-    expect(campoLotacao).toHaveAttribute("readonly");
-    expect(campoLotacao).toHaveValue("5");
-  });
+    it("abre o painel ao clicar no numero de lotacao", async () => {
+      await userEvent.click(screen.getByLabelText("Lotação de Arte"));
+      expect(mocks.aoAbrirLotacao).toHaveBeenCalledWith(
+        expect.objectContaining({ componente: "Arte" }),
+      );
+    });
 
-  it("nao abre painel quando o valor e zero", async () => {
-    const { aoAbrirAfastados } = renderizarTabela();
-
-    await userEvent.click(screen.getByLabelText("Afastados de Arte"));
-    expect(aoAbrirAfastados).not.toHaveBeenCalled();
+    it("nao abre painel quando o valor e zero", async () => {
+      await userEvent.click(screen.getByLabelText("Afastados de Arte"));
+      expect(mocks.aoAbrirAfastados).not.toHaveBeenCalled();
+    });
   });
 
   it("nao abre painel de lotacao quando o valor e zero", async () => {

@@ -31,7 +31,23 @@ global.ResizeObserver = class {
   disconnect() {}
 };
 
-// jsdom nao implementa getComputedStyle(elt, pseudoElt); rc-table chama com o
-// 2o argumento ao medir a scrollbar. Ignora o pseudo-elemento.
+
 const getComputedStyleOriginal = window.getComputedStyle;
 window.getComputedStyle = (elt) => getComputedStyleOriginal(elt);
+process.env.RTL_SKIP_AUTO_CLEANUP = "true";
+const { cleanup } = require("@testing-library/react");
+let blocosMontados = 0;
+
+global.manterMontado = () => {
+  beforeAll(() => {
+    blocosMontados += 1;
+  });
+  afterAll(() => {
+    blocosMontados -= 1;
+    if (blocosMontados === 0) cleanup();
+  });
+};
+
+afterEach(() => {
+  if (blocosMontados === 0) cleanup();
+});

@@ -51,9 +51,7 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     expect(within(informacoes).getByText("Afastados")).toBeInTheDocument();
     expect(within(informacoes).getByText("Vagas")).toBeInTheDocument();
 
-    const breadcrumb = document.querySelector(
-      ".ant-breadcrumb",
-    ) as HTMLElement;
+    const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
     expect(within(breadcrumb).getByText("Início")).toBeInTheDocument();
     expect(within(breadcrumb).getByText("Cadastro")).toBeInTheDocument();
     expect(
@@ -71,7 +69,11 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     );
     expect(salvar).toBeDisabled();
 
-    const campoArte = await screen.findByLabelText("Módulo de Arte", {}, ESPERA);
+    const campoArte = await screen.findByLabelText(
+      "Módulo de Arte",
+      {},
+      ESPERA,
+    );
     await userEvent.clear(campoArte);
     await userEvent.type(campoArte, "9");
 
@@ -101,11 +103,7 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     renderNaCasca("999999");
 
     expect(
-      await screen.findByText(
-        "Unidade educacional não encontrada",
-        {},
-        ESPERA,
-      ),
+      await screen.findByText("Unidade educacional não encontrada", {}, ESPERA),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Voltar para a listagem" }),
@@ -113,24 +111,28 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
   });
 
   describe("unidade indisponivel (status=3)", () => {
-    afterEach(() => {
+    // Os tres casos so leem o DOM do mesmo estado, entao um render serve a todos.
+    manterMontado();
+
+    beforeAll(async () => {
+      window.history.pushState({}, "", "/?status=3");
+      renderNaCasca("093703");
+      await screen.findByText(
+        "Esta informação não está mais disponível!",
+        {},
+        ESPERA,
+      );
+    });
+
+    afterAll(() => {
       window.history.pushState({}, "", "/");
     });
 
-    function renderIndisponivel() {
-      window.history.pushState({}, "", "/?status=3");
-      return renderNaCasca("093703");
-    }
-
-    it("mostra o cabecalho da gestao de UEs", async () => {
-      renderIndisponivel();
-
+    it("mostra o cabecalho da gestao de UEs", () => {
       expect(
-        await screen.findByRole(
-          "heading",
-          { name: "Gestão das unidades educacionais" },
-          ESPERA,
-        ),
+        screen.getByRole("heading", {
+          name: "Gestão das unidades educacionais",
+        }),
       ).toBeInTheDocument();
       expect(
         screen.getByRole("button", { name: /Registrar UE/ }),
@@ -140,30 +142,16 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
       ).not.toBeInTheDocument();
     });
 
-    it("mostra o card de informacao indisponivel", async () => {
-      renderIndisponivel();
-
+    it("mostra o card de informacao indisponivel", () => {
       expect(
-        await screen.findByText(
-          "Esta informação não está mais disponível!",
-          {},
-          ESPERA,
-        ),
+        screen.getByText("Esta informação não está mais disponível!"),
       ).toBeInTheDocument();
       expect(
         screen.getByRole("button", { name: /Atualizar página/ }),
       ).toBeInTheDocument();
     });
 
-    it("nao mostra os cartoes do detalhe nem o erro de nao encontrada", async () => {
-      renderIndisponivel();
-
-      await screen.findByText(
-        "Esta informação não está mais disponível!",
-        {},
-        ESPERA,
-      );
-
+    it("nao mostra os cartoes do detalhe nem o erro de nao encontrada", () => {
       expect(
         screen.queryByText("Informações da unidade educacional"),
       ).not.toBeInTheDocument();
@@ -172,5 +160,4 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
       ).not.toBeInTheDocument();
     });
   });
-
 });

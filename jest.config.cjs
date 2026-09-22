@@ -1,7 +1,8 @@
 module.exports = {
   testEnvironment: "jsdom",
-  testTimeout: 30000,
-  maxWorkers: "50%",
+ 
+  testTimeout: 10000,
+  maxWorkers: 4,
   roots: ["<rootDir>/src"],
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",

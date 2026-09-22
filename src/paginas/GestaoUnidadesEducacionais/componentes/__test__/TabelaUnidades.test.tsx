@@ -19,44 +19,37 @@ function renderizarTabela(aoSelecionarUnidade?: jest.Mock) {
 }
 
 function campoPeriodoInicial() {
-  // O RangePicker renderiza um input para cada extremo do intervalo,
-  // ambos com o mesmo placeholder; basta conferir o primeiro.
   return screen.getAllByPlaceholderText("00/00/0000")[0];
 }
 
 describe("TabelaUnidades", () => {
-  it("renderiza uma linha por unidade e a contagem total", () => {
-    render(
-      <ComTema>
-        <TabelaUnidades
-          unidades={linhasUnidades}
-          total={5985}
-          carregando={false}
-          statusListagem="comDados"
-        />
-      </ComTema>,
-    );
+  describe("listagem com dados", () => {
+    manterMontado();
 
-    expect(screen.getByText("Cidade Tiradentes")).toBeInTheDocument();
-    expect(screen.getByText("Matheus Pacheco")).toBeInTheDocument();
-    expect(
-      screen.getByText("Mostrando 1-10 de 5.985 registro(s)"),
-    ).toBeInTheDocument();
-  });
+    beforeAll(() => {
+      render(
+        <ComTema>
+          <TabelaUnidades
+            unidades={linhasUnidades}
+            total={5985}
+            carregando={false}
+            statusListagem="comDados"
+          />
+        </ComTema>,
+      );
+    });
 
-  it("mostra o chip de vagas de acordo com o saldo da unidade", () => {
-    render(
-      <ComTema>
-        <TabelaUnidades
-          unidades={linhasUnidades}
-          total={5985}
-          carregando={false}
-          statusListagem="comDados"
-        />
-      </ComTema>,
-    );
+    it("renderiza uma linha por unidade e a contagem total", () => {
+      expect(screen.getByText("Cidade Tiradentes")).toBeInTheDocument();
+      expect(screen.getByText("Matheus Pacheco")).toBeInTheDocument();
+      expect(
+        screen.getByText("Mostrando 1-10 de 5.985 registro(s)"),
+      ).toBeInTheDocument();
+    });
 
-    expect(screen.getByText("+5 disponíveis")).toBeInTheDocument();
+    it("mostra o chip de vagas de acordo com o saldo da unidade", () => {
+      expect(screen.getByText("+5 disponíveis")).toBeInTheDocument();
+    });
   });
 
   it("renderiza as dicas das colunas", () => {
@@ -122,42 +115,41 @@ describe("TabelaUnidades", () => {
   });
 
   describe("sem unidades cadastradas", () => {
-    it("mostra a mensagem, o subtitulo e o botao de registrar", () => {
-      render(
-        <ComTema>
-          <TabelaUnidades
-            unidades={[]}
-            total={0}
-            carregando={false}
-            statusListagem="semCadastro"
-          />
-        </ComTema>,
-      );
+    describe("conteudo exibido", () => {
+      manterMontado();
 
-      expect(
-        screen.getByText("Não há unidades educacionais cadastradas"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Que tal registrar a primeira UE agora?"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /Registrar UE/ }),
-      ).toBeInTheDocument();
-    });
+      beforeAll(() => {
+        render(
+          <ComTema>
+            <TabelaUnidades
+              unidades={[]}
+              total={0}
+              carregando={false}
+              statusListagem="semCadastro"
+            />
+          </ComTema>,
+        );
+      });
 
-    it("esconde a paginacao", () => {
-      render(
-        <ComTema>
-          <TabelaUnidades
-            unidades={[]}
-            total={0}
-            carregando={false}
-            statusListagem="semCadastro"
-          />
-        </ComTema>,
-      );
+      it("mostra a mensagem, o subtitulo e o botao de registrar", () => {
+        expect(
+          screen.getByText("Não há unidades educacionais cadastradas"),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText("Que tal registrar a primeira UE agora?"),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByRole("button", { name: /Registrar UE/ }),
+        ).toBeInTheDocument();
+      });
 
-      expect(screen.queryByText(/Mostrando/)).not.toBeInTheDocument();
+      it("esconde a paginacao", () => {
+        expect(screen.queryByText(/Mostrando/)).not.toBeInTheDocument();
+      });
+
+      it("mantem o campo de periodo habilitado", () => {
+        expect(campoPeriodoInicial()).toBeEnabled();
+      });
     });
 
     it("aciona aoRegistrar no clique do botao", async () => {
@@ -180,25 +172,13 @@ describe("TabelaUnidades", () => {
 
       expect(aoRegistrar).toHaveBeenCalledTimes(1);
     });
-
-    it("mantem o campo de periodo habilitado", () => {
-      render(
-        <ComTema>
-          <TabelaUnidades
-            unidades={[]}
-            total={0}
-            carregando={false}
-            statusListagem="semCadastro"
-          />
-        </ComTema>,
-      );
-
-      expect(campoPeriodoInicial()).toBeEnabled();
-    });
   });
 
   describe("busca sem resultado", () => {
-    function renderizarSemResultado() {
+    // Todos os casos deste bloco apenas leem o DOM, entao compartilham um render.
+    manterMontado();
+
+    beforeAll(() => {
       render(
         <ComTema>
           <TabelaUnidades
@@ -210,11 +190,9 @@ describe("TabelaUnidades", () => {
           />
         </ComTema>,
       );
-    }
+    });
 
     it("mostra a mensagem e a orientacao de revisar os filtros", () => {
-      renderizarSemResultado();
-
       expect(
         screen.getByText("Não encontramos dados para esta busca"),
       ).toBeInTheDocument();
@@ -226,30 +204,22 @@ describe("TabelaUnidades", () => {
     });
 
     it("nao mostra a mensagem de nenhuma unidade cadastrada", () => {
-      renderizarSemResultado();
-
       expect(
         screen.queryByText("Não há unidades educacionais cadastradas"),
       ).not.toBeInTheDocument();
     });
 
     it("nao oferece o botao de registrar UE", () => {
-      renderizarSemResultado();
-
       expect(
         screen.queryByRole("button", { name: /Registrar UE/ }),
       ).not.toBeInTheDocument();
     });
 
     it("esconde a paginacao", () => {
-      renderizarSemResultado();
-
       expect(screen.queryByText(/Mostrando/)).not.toBeInTheDocument();
     });
 
     it("desabilita o campo de periodo", () => {
-      renderizarSemResultado();
-
       expect(campoPeriodoInicial()).toBeDisabled();
     });
   });
