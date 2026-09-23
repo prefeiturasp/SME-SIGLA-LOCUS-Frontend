@@ -1,13 +1,19 @@
 import type { ReactElement, ReactNode } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { App as AntdApp, ConfigProvider } from "antd";
+import { StyleProvider } from "@ant-design/cssinjs";
 import { MemoryRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { temaAntd } from "@/estilos/temas/temaAntd";
 import { tema } from "@/estilos/tokens/tokens";
 
+
 function ComTema({ children }: { children: ReactNode }) {
-  return <ThemeProvider theme={tema}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={tema}>
+      <StyleProvider mock="server">{children}</StyleProvider>
+    </ThemeProvider>
+  );
 }
 
 /** Render com ThemeProvider — necessario para styled-components. */
@@ -27,12 +33,6 @@ export interface ComProvedoresProps {
   rota?: string;
 }
 
-/**
- * Casca completa de providers para testes de integracao.
- *
- * Inclui o `App` do antd, exigido por `useNotificacao` (App.useApp) e pelo
- * contexto de portal de Drawer/Modal.
- */
 export function ComProvedores({ children, rota = "/" }: ComProvedoresProps) {
   return (
     <ComTema>

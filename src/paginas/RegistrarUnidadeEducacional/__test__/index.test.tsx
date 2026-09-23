@@ -28,6 +28,24 @@ function renderNaCasca(children: ReactNode) {
   );
 }
 
+function renderPagina(children: ReactNode) {
+  return render(
+    <ComTema>
+      <AntdApp>
+        <MemoryRouter initialEntries={[CAMINHOS.cadastroRegistrarUE]}>
+          <Routes>
+            <Route path={CAMINHOS.cadastroRegistrarUE} element={children} />
+            <Route
+              path={CAMINHOS.cadastroGestaoUnidades}
+              element={<div>Gestão</div>}
+            />
+          </Routes>
+        </MemoryRouter>
+      </AntdApp>
+    </ComTema>,
+  );
+}
+
 describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
   it("renderiza titulo, breadcrumb e cards do formulario", () => {
     renderNaCasca(<RegistrarUnidadeEducacional />);
@@ -39,26 +57,32 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
     ).toBeInTheDocument();
 
     expect(screen.getByText("Início")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Cadastro" })).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "Cadastro" }),
+      screen.getByText("Registrar Unidade Educacional"),
     ).toBeInTheDocument();
-    expect(screen.getByText("Registrar Unidade Educacional")).toBeInTheDocument();
 
-    expect(screen.getByText("Dados da unidade educacional")).toBeInTheDocument();
+    expect(
+      screen.getByText("Dados da unidade educacional"),
+    ).toBeInTheDocument();
     expect(
       screen.getByText("Características da unidade educacional"),
     ).toBeInTheDocument();
     expect(screen.getByText("Componentes curriculares")).toBeInTheDocument();
-    expect(screen.getByText("Nenhum componente adicionado")).toBeInTheDocument();
+    expect(
+      screen.getByText("Nenhum componente adicionado"),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Contabilizar UE")).toBeChecked();
   });
 
   it("mantem campos de dados da unidade desabilitados e preenche ao consultar lotacao", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     expect(screen.getByPlaceholderText("Exemplo: 123")).toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: "Tipo da unidade" })).toBeDisabled();
+    expect(
+      screen.getByRole("combobox", { name: "Tipo da unidade" }),
+    ).toBeDisabled();
     expect(
       screen.getByRole("combobox", {
         name: "Diretoria Regional de Educação (DRE)",
@@ -80,7 +104,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("mantem campo de ano da municipalizacao visivel e habilita ao ativar escola municipalizada", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     const campoAno = screen.getByRole("combobox", {
       name: "Ano da municipalização",
@@ -96,7 +120,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("exibe textarea de motivo ao desabilitar contabilizar UE", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     expect(
       screen.queryByLabelText("Por que a unidade não deve ser contabilizada?"),
@@ -114,7 +138,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("valida visualmente o motivo obrigatorio ao registrar sem preencher", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     await usuario.type(screen.getByPlaceholderText("Exemplo: 123"), "123");
     await usuario.click(screen.getByRole("button", { name: "Consultar" }));
@@ -130,7 +154,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("valida codigo de lotacao obrigatorio e incorreto com Zod", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     await usuario.click(screen.getByRole("button", { name: "Consultar" }));
     expect(await screen.findByText("Campo obrigatório")).toBeInTheDocument();
@@ -144,7 +168,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("valida componente curricular obrigatorio ao adicionar", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     await usuario.click(
       screen.getByRole("button", { name: "Adicionar componente" }),
@@ -155,7 +179,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("bloqueia registro sem consulta e exibe campos obrigatorios", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     await usuario.click(screen.getByRole("button", { name: "Registrar UE" }));
 
@@ -176,7 +200,7 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
 
   it("bloqueia registro com lotacao consultada sem componente curricular", async () => {
     const usuario = userEvent.setup();
-    renderNaCasca(<RegistrarUnidadeEducacional />);
+    renderPagina(<RegistrarUnidadeEducacional />);
 
     await usuario.type(screen.getByPlaceholderText("Exemplo: 123"), "123");
     await usuario.click(screen.getByRole("button", { name: "Consultar" }));
