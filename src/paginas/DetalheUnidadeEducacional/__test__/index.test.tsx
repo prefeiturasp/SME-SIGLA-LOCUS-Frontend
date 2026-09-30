@@ -1,0 +1,163 @@
+import { render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Route, Routes } from "react-router-dom";
+import { LayoutBase } from "@/componentes/layout/LayoutBase";
+import { CAMINHOS } from "@/rotas/caminhos";
+import { reiniciarModulosSalvos } from "@/servicos/recursos/unidadesEducacionais";
+import { ComProvedores } from "@/testes/renderizarComTema";
+import { DetalheUnidadeEducacional } from "../index";
+const ESPERA = { timeout: 5000 };
+
+function renderNaCasca(codigo = "091488") {
+  return render(
+    <ComProvedores rota={`/cadastro/unidade-educacional/${codigo}`}>
+      <Routes>
+        <Route element={<LayoutBase />}>
+          <Route
+            path={CAMINHOS.cadastroDetalheUE}
+            element={<DetalheUnidadeEducacional />}
+          />
+        </Route>
+      </Routes>
+    </ComProvedores>,
+  );
+}
+
+describe("DetalheUnidadeEducacional (integração com a casca)", () => {
+  beforeEach(() => reiniciarModulosSalvos());
+
+  it("renderiza cabecalho, subtitulo e cartoes dentro do layout", async () => {
+    renderNaCasca();
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: "CECI Cidade Tiradentes" },
+        ESPERA,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("DRE Itaquera | Código 091488"),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Informações da unidade educacional"),
+    ).toBeInTheDocument();
+    const informacoes = screen
+      .getByText("Informações da unidade educacional")
+      .closest(".ant-card") as HTMLElement;
+    expect(within(informacoes).getByText("Módulos")).toBeInTheDocument();
+    expect(within(informacoes).getByText("Lotação")).toBeInTheDocument();
+    expect(within(informacoes).getByText("Afastados")).toBeInTheDocument();
+    expect(within(informacoes).getByText("Vagas")).toBeInTheDocument();
+
+    const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
+    expect(within(breadcrumb).getByText("Início")).toBeInTheDocument();
+    expect(within(breadcrumb).getByText("Cadastro")).toBeInTheDocument();
+    expect(
+      within(breadcrumb).getByText("Unidade Educacional"),
+    ).toBeInTheDocument();
+  });
+
+  it("mantem Salvar desabilitado ate existir alteracao", async () => {
+    renderNaCasca();
+
+    const salvar = await screen.findByRole(
+      "button",
+      { name: "Salvar" },
+      ESPERA,
+    );
+    expect(salvar).toBeDisabled();
+
+    const campoArte = await screen.findByLabelText(
+      "Módulo de Arte",
+      {},
+      ESPERA,
+    );
+    await userEvent.clear(campoArte);
+    await userEvent.type(campoArte, "9");
+
+    await waitFor(() => expect(salvar).toBeEnabled());
+  });
+
+  it("abre o painel de lotacao ao clicar em um numero diferente de zero", async () => {
+    renderNaCasca();
+
+    await userEvent.click(
+      await screen.findByLabelText("Lotação de Arte", {}, ESPERA),
+    );
+
+    expect(
+      await screen.findByText(
+        "Confira os professores em atividades neste componente curricular.",
+        {},
+        ESPERA,
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Componente curricular: Arte")).toBeInTheDocument();
+    expect(screen.getByText("João da Silva")).toBeInTheDocument();
+    expect(screen.getByText("Tipo de vaga")).toBeInTheDocument();
+  });
+
+  it("exibe o estado de nao encontrada para codigo inexistente", async () => {
+    renderNaCasca("999999");
+
+    expect(
+      await screen.findByText("Unidade educacional não encontrada", {}, ESPERA),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Voltar para a listagem" }),
+    ).toBeInTheDocument();
+  });
+
+  describe("unidade indisponivel (status=3)", () => {
+    // Os tres casos so leem o DOM do mesmo estado, entao um render serve a todos.
+    manterMontado();
+
+    beforeAll(async () => {
+      window.history.pushState({}, "", "/?status=3");
+      renderNaCasca("093703");
+      await screen.findByText(
+        "Esta informação não está mais disponível!",
+        {},
+        ESPERA,
+      );
+    });
+
+    afterAll(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("mostra o cabecalho da gestao de UEs", () => {
+      expect(
+        screen.getByRole("heading", {
+          name: "Gestão das unidades educacionais",
+        }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Registrar UE/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /Exportar relatório/ }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("mostra o card de informacao indisponivel", () => {
+      expect(
+        screen.getByText("Esta informação não está mais disponível!"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Atualizar página/ }),
+      ).toBeInTheDocument();
+    });
+
+    it("nao mostra os cartoes do detalhe nem o erro de nao encontrada", () => {
+      expect(
+        screen.queryByText("Informações da unidade educacional"),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Unidade educacional não encontrada"),
+      ).not.toBeInTheDocument();
+    });
+  });
+});
