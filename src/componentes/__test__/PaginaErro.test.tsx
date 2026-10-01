@@ -61,6 +61,30 @@ describe("PaginaErro", () => {
     expect(aoClicar).toHaveBeenCalledTimes(1);
   });
 
+  it("afasta 100px do topo por padrao, como nas paginas de erro", () => {
+    render(
+      <ComTema>
+        <PaginaErro titulo="Título" />
+      </ComTema>,
+    );
+
+    expect(screen.getByText("Título").parentElement).toHaveStyle({
+      marginTop: "100px",
+    });
+  });
+
+  it("aceita outra margem no topo para uso dentro da pagina", () => {
+    render(
+      <ComTema>
+        <PaginaErro titulo="Título" margemTopo={0} />
+      </ComTema>,
+    );
+
+    expect(screen.getByText("Título").parentElement).toHaveStyle({
+      marginTop: "0px",
+    });
+  });
+
   it("aceita uma ilustracao customizada no lugar da padrao", () => {
     render(
       <ComTema>

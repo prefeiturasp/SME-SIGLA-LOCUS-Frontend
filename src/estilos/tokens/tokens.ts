@@ -54,6 +54,8 @@ export const spacing = {
 
 export const layout = {
   menuWidth: 104,
+  submenuWidth: 260,
+  submenuIndent: 8,
   headerHeight: 72,
   footerHeight: 65,
   controlHeight: 40,

@@ -26,6 +26,7 @@ export {
   PaginaTextos,
   PaginaTitulo,
   PaginaSubtitulo,
+  PaginaDescricao,
   PaginaAcoes,
   SecaoCabecalho,
   SecaoTextos,
@@ -63,6 +64,8 @@ export {
   MenuLateralMenu,
   MenuRodape,
   BotaoSairMenu,
+  PainelSubmenuDrawer,
+  PainelSubmenuMenu,
   Rodape,
 } from "./compartilhados/EstiloLayoutBase";
 export { GlobalStyle } from "./global/GlobalStyle";

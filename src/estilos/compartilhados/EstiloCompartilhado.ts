@@ -309,6 +309,12 @@ export const PaginaSubtitulo = styled.span`
   color: ${({ theme }) => theme.colors.blue};
 `;
 
+export const PaginaDescricao = styled.p`
+  margin: 0;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
 export const PaginaTitulo = styled.h1`
   margin: 0;
   font-size: ${({ theme }) => theme.typography.fontSizeTitle}px;

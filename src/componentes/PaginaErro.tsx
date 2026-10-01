@@ -7,12 +7,15 @@ const { Text } = Typography;
 
 const LARGURA_ILUSTRACAO = 181;
 const ALTURA_ILUSTRACAO = 207;
+const MARGEM_TOPO_PADRAO = 100;
 
 export interface PaginaErroProps {
   titulo: string;
   descricao?: ReactNode;
   acao?: ReactNode;
   ilustracao?: ReactNode;
+  /** Distancia do topo em px; 100 nas paginas de erro, menor dentro da tela. */
+  margemTopo?: number;
 }
 
 export function PaginaErro({
@@ -20,9 +23,10 @@ export function PaginaErro({
   descricao,
   acao,
   ilustracao,
+  margemTopo = MARGEM_TOPO_PADRAO,
 }: PaginaErroProps) {
   return (
-    <CardVazio style={{ marginTop: "100px" }}>
+    <CardVazio style={{ marginTop: margemTopo }}>
       <CardVazioImagem>
         {ilustracao ?? (
           <IlustracaoPadrao

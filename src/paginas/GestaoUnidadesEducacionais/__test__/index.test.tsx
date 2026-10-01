@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
@@ -30,7 +30,9 @@ describe("GestaoUnidadesEducacionais (integração com a casca)", () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText("Início")).toBeInTheDocument();
+    const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
+    expect(within(breadcrumb).getByText("Início")).toBeInTheDocument();
+    expect(within(breadcrumb).queryByText("Cadastro")).not.toBeInTheDocument();
 
     expect(
       await screen.findByText(
