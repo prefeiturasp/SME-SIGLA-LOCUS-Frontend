@@ -13,8 +13,7 @@ export interface PaginaErroProps {
   titulo: string;
   descricao?: ReactNode;
   acao?: ReactNode;
-  ilustracao?: ReactNode;
-  /** Distancia do topo em px; 100 nas paginas de erro, menor dentro da tela. */
+  ilustracao?: ReactNode;  
   margemTopo?: number;
 }
 

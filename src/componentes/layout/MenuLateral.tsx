@@ -21,7 +21,6 @@ export function MenuLateral() {
   const [chavePainel, setChavePainel] = useState<string>();
   const [rotaAnterior, setRotaAnterior] = useState(pathname);
 
-  // Qualquer troca de rota fecha o painel, inclusive voltar pelo historico.
   if (rotaAnterior !== pathname) {
     setRotaAnterior(pathname);
     setChavePainel(undefined);

@@ -116,10 +116,6 @@ export const temaAntd: ThemeConfig = {
   },
 };
 
-/**
- * Lista de sugestoes da busca de servidor: opcoes de 32px, como no Figma.
- * No tema global as opcoes herdam o controlHeight de 40px.
- */
 export const temaListaSugestoes: ThemeConfig = {
   components: { Select: { optionHeight: 32, optionPadding: "5px 12px" } },
 };

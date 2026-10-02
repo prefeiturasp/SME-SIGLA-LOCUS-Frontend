@@ -41,15 +41,12 @@ function caminhosPorChave(
   return mapa;
 }
 
-/* Sem animacao: o deslize padrao do Drawer passava por cima do menu lateral,
-   e os grupos abrem e fecham na hora. */
 const SEM_ANIMACAO = {
   motionAppear: false,
   motionEnter: false,
   motionLeave: false,
 };
 
-/** Painel aberto ao lado do menu lateral, abaixo do cabeçalho. */
 export function PainelSubmenu({
   aberto,
   titulo,

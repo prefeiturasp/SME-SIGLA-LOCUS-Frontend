@@ -8,7 +8,6 @@ import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import { IconeExcluir } from "@/componentes/IconeExcluir";
 import { CAMINHOS } from "@/rotas/caminhos";
 
-/** Item do painel aberto por um item do menu; `filhos` o torna um grupo. */
 export interface SubitemMenu {
   key: string;
   label: string;
@@ -22,7 +21,6 @@ export interface ItemMenu {
   icone: ComponentType<{ fontSize?: "inherit" | "small" | "medium" | "large" }>;
   path?: string;
   prefix: string[];
-  /** Quando presente, o clique abre o painel em vez de navegar. */
   submenu?: SubitemMenu[];
 }
 
@@ -59,8 +57,6 @@ const SUBMENU_CADASTRO: SubitemMenu[] = [
   { key: "cadastro-classificacao", label: "Classificação" },
 ];
 
-// A ordem importa: menuItemAtivo devolve o primeiro item cujo prefixo casa,
-// entao as rotas de UE (Inicio) precisam vir antes do "/cadastro" generico.
 export const ITENS_MENU: ItemMenu[] = [
   {
     key: "inicio",
@@ -120,8 +116,7 @@ export function menuItemAtivo(pathname: string): string {
 }
 
 export interface SubitemAtivo {
-  chave: string;
-  /** Grupos acima do subitem, do mais externo ao mais interno. */
+  chave: string;  
   chavesPais: string[];
 }
 

@@ -196,8 +196,6 @@ export const MenuLogoImagem = styled.img`
   flex-shrink: 0;
 `;
 
-/* O styled-components consome a prop `theme` e ela nunca chegaria ao Menu do
-   antd; por isso o tema escuro vai fixo aqui. */
 function MenuTemaEscuro(props: MenuProps) {
   return createElement(Menu, { ...props, theme: "dark" });
 }
@@ -277,16 +275,10 @@ export const BotaoSairMenu = styled.button`
   }
 `;
 
-/* ======= PainelSubmenu ======= */
-
-/* Medidas do Figma: titulo e grupos a 26px da borda, filhos a 34px e seta
-   a 30px da borda direita. A direita o respiro e menor para caber
-   "Sem RF ou código da unidade" sem reticencias. */
 const PAINEL_PADDING = 14;
 const PAINEL_PADDING_DIREITA = 8;
 const MARGEM_ITEM_ANTD = 4;
 
-/* O className do Drawer cai em .ant-drawer-content (o painel em si). */
 export const PainelSubmenuDrawer = styled(Drawer)`
   & .ant-drawer-header {
     padding: ${({ theme }) => theme.spacing.xl}px
