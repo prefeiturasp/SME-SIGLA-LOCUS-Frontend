@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
+import { AtualizacaoRegistroFuncional } from "@/paginas/AtualizacaoRegistroFuncional";
 import { DetalheUnidadeEducacional } from "@/paginas/DetalheUnidadeEducacional";
 import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais";
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
@@ -21,6 +22,10 @@ export function RotasApp() {
         <Route
           path={CAMINHOS.cadastroDetalheUE}
           element={<DetalheUnidadeEducacional />}
+        />
+        <Route
+          path={CAMINHOS.cadastroAtualizacaoRF}
+          element={<AtualizacaoRegistroFuncional />}
         />
         <Route
           index

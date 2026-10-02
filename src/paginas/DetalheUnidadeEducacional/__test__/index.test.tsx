@@ -52,8 +52,10 @@ describe("DetalheUnidadeEducacional (integração com a casca)", () => {
     expect(within(informacoes).getByText("Vagas")).toBeInTheDocument();
 
     const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
-    expect(within(breadcrumb).getByText("Início")).toBeInTheDocument();
-    expect(within(breadcrumb).getByText("Cadastro")).toBeInTheDocument();
+    expect(
+      within(breadcrumb).getByRole("link", { name: "Início" }),
+    ).toBeInTheDocument();
+    expect(within(breadcrumb).queryByText("Cadastro")).not.toBeInTheDocument();
     expect(
       within(breadcrumb).getByText("Unidade Educacional"),
     ).toBeInTheDocument();

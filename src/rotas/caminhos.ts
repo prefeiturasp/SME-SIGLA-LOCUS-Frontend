@@ -3,6 +3,7 @@ export const CAMINHOS = {
   cadastroGestaoUnidades: "/cadastro/gestao-unidades-educacionais",
   cadastroRegistrarUE: "/cadastro/registrar-unidade-educacional",
   cadastroDetalheUE: "/cadastro/unidade-educacional/:codigoLotacao",
+  cadastroAtualizacaoRF: "/cadastro/atualizacao/registro-funcional",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
@@ -20,20 +21,25 @@ export interface ItemBreadcrumb {
   caminho?: string;
 }
 
+/** A Gestão das unidades educacionais é a tela inicial do sistema. */
+const INICIO: ItemBreadcrumb = {
+  titulo: "Início",
+  caminho: CAMINHOS.cadastroGestaoUnidades,
+};
+
 export const BREADCRUMB_POR_ROTA: Record<string, ItemBreadcrumb[]> = {
-  [CAMINHOS.cadastroGestaoUnidades]: [
-    { titulo: "Início" },
-    { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
-  ],
+  [CAMINHOS.cadastroGestaoUnidades]: [{ titulo: "Início" }],
   [CAMINHOS.cadastroRegistrarUE]: [
-    { titulo: "Início" },
-    { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
+    INICIO,
     { titulo: "Registrar Unidade Educacional" },
   ],
-  [CAMINHOS.naoEncontrado]: [
-    { titulo: "Início" },
-    { titulo: "Página não encontrada" },
+  [CAMINHOS.cadastroAtualizacaoRF]: [
+    INICIO,
+    { titulo: "Cadastro" },
+    { titulo: "Atualização" },
+    { titulo: "Por registro funcional (RF)" },
   ],
+  [CAMINHOS.naoEncontrado]: [INICIO, { titulo: "Página não encontrada" }],
 };
 
 interface PadraoBreadcrumb {
@@ -44,11 +50,7 @@ interface PadraoBreadcrumb {
 const BREADCRUMB_POR_PADRAO: PadraoBreadcrumb[] = [
   {
     padrao: CAMINHOS.cadastroDetalheUE,
-    itens: () => [
-      { titulo: "Início" },
-      { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
-      { titulo: "Unidade Educacional" },
-    ],
+    itens: () => [INICIO, { titulo: "Unidade Educacional" }],
   },
 ];
 

@@ -15,14 +15,22 @@ function renderComRota(rota: string) {
 }
 
 describe("Cabecalho", () => {
-  it("mostra a logo da Prefeitura e o breadcrumb da rota de cadastro", () => {
-    renderComRota("/cadastro/gestao-unidades-educacionais");
+  it("mostra a logo da Prefeitura e o breadcrumb da rota atual", () => {
+    renderComRota("/cadastro/atualizacao/registro-funcional");
 
     expect(
       screen.getByRole("img", { name: /prefeitura de são paulo/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Início")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Início" })).toHaveAttribute(
+      "href",
+      "/cadastro/gestao-unidades-educacionais",
+    );
     expect(screen.getByText("Cadastro")).toBeInTheDocument();
+    expect(screen.getByText("Atualização")).toBeInTheDocument();
+    expect(screen.getByText("Por registro funcional (RF)")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Cadastro" }),
+    ).not.toBeInTheDocument();
   });
 
   it("exibe o RF e o nome do usuario logado", () => {

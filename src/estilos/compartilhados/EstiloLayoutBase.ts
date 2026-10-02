@@ -1,4 +1,6 @@
-import { Breadcrumb as AntBreadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb as AntBreadcrumb, Drawer, Layout, Menu } from "antd";
+import type { MenuProps } from "antd";
+import { createElement } from "react";
 import styled from "styled-components";
 import { colors, layout, spacing } from "@/estilos/tokens/tokens";
 
@@ -28,8 +30,6 @@ export const LayoutConteudo = styled(AntContent)`
 `;
 
 export const LayoutConteudoInterno = styled.div`
-  max-width: 1440px;
-  margin: 0 auto;
   padding-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
@@ -196,7 +196,11 @@ export const MenuLogoImagem = styled.img`
   flex-shrink: 0;
 `;
 
-export const MenuLateralMenu = styled(Menu)`
+function MenuTemaEscuro(props: MenuProps) {
+  return createElement(Menu, { ...props, theme: "dark" });
+}
+
+export const MenuLateralMenu = styled(MenuTemaEscuro)`
   flex: 1;
   border-inline-end: 0 !important;
   background: transparent !important;
@@ -237,6 +241,14 @@ export const MenuLateralMenu = styled(Menu)`
   & .ant-menu-item-selected .ant-menu-item-icon {
     color: ${colors.white} !important;
   }
+
+  /* Destaque troca na hora ao abrir/fechar o painel, e cliques seguidos
+     nao selecionam o texto do rotulo. */
+  & .ant-menu-item,
+  & .ant-menu-item * {
+    transition: none !important;
+    user-select: none;
+  }
 `;
 
 export const MenuRodape = styled.div`
@@ -260,6 +272,107 @@ export const BotaoSairMenu = styled.button`
 
   & svg {
     font-size: 26px;
+  }
+`;
+
+const PAINEL_PADDING = 14;
+const PAINEL_PADDING_DIREITA = 8;
+const MARGEM_ITEM_ANTD = 4;
+
+export const PainelSubmenuDrawer = styled(Drawer)`
+  & .ant-drawer-header {
+    padding: ${({ theme }) => theme.spacing.xl}px
+      ${({ theme }) =>
+        PAINEL_PADDING + MARGEM_ITEM_ANTD + theme.layout.submenuIndent}px
+      ${({ theme }) => theme.spacing.md}px;
+    border-bottom: 0;
+  }
+
+  & .ant-drawer-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  & .ant-drawer-body {
+    padding: 0 ${PAINEL_PADDING_DIREITA}px ${({ theme }) => theme.spacing.lg}px
+      ${PAINEL_PADDING}px;
+  }
+`;
+
+export const PainelSubmenuMenu = styled(Menu)`
+  border-inline-end: 0 !important;
+  background: transparent;
+
+  /* As margens verticais entre os itens colapsam: 48 + 8 = 56px por linha. */
+  && .ant-menu-item,
+  && .ant-menu-submenu-title {
+    height: 48px;
+    line-height: 48px;
+    margin-block: ${({ theme }) => theme.spacing.sm}px;
+    padding-inline-end: ${({ theme }) => theme.spacing.sm}px;
+    color: ${({ theme }) => theme.colors.headerUserText};
+    font-size: 14px;
+    user-select: none;
+  }
+
+  /* Seta propria (ExpandMore/ExpandLess) alinhada a direita do titulo. */
+  && .ant-menu-submenu-title {
+    display: flex;
+    align-items: center;
+    padding-inline-end: 18px;
+  }
+
+  && .ant-menu-submenu-title .ant-menu-title-content {
+    flex: 1;
+  }
+
+  && .ant-menu-submenu-title > svg {
+    flex-shrink: 0;
+    font-size: 20px;
+    color: ${({ theme }) => theme.colors.tertiaryText};
+  }
+
+  && > .ant-menu-item,
+  && > .ant-menu-submenu > .ant-menu-submenu-title {
+    font-weight: 600;
+  }
+
+  /* Dentro do grupo aberto as margens nao colapsam com as do titulo. */
+  && .ant-menu-sub.ant-menu-inline {
+    background: transparent;
+  }
+
+  && .ant-menu-sub > .ant-menu-item:first-child {
+    margin-top: 0;
+  }
+
+  && .ant-menu-sub > .ant-menu-item:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Selecionado e pressionado em azul suave: o padrao do antd, derivado do
+     azul-marinho primario, fica cinza-escuro. */
+  && .ant-menu-item-selected,
+  && .ant-menu-item:active,
+  && .ant-menu-submenu-title:active {
+    background: ${({ theme }) => theme.colors.blueBackground};
+  }
+
+  && .ant-menu-item-selected {
+    color: ${({ theme }) => theme.colors.blue};
+  }
+
+  /* Itens ainda sem tela seguem o print: mesma cor dos itens ativos. */
+  && .ant-menu-item-disabled,
+  && .ant-menu-submenu-disabled > .ant-menu-submenu-title {
+    color: ${({ theme }) => theme.colors.headerUserText} !important;
+  }
+
+  /* O antd ja tira o fundo dos itens desabilitados; o titulo de grupo
+     desabilitado (Inclusao) nao reage ao mouse da mesma forma. */
+  && .ant-menu-submenu-disabled > .ant-menu-submenu-title {
+    background: transparent !important;
   }
 `;
 

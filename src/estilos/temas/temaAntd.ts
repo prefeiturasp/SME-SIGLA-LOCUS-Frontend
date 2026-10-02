@@ -116,4 +116,8 @@ export const temaAntd: ThemeConfig = {
   },
 };
 
+export const temaListaSugestoes: ThemeConfig = {
+  components: { Select: { optionHeight: 32, optionPadding: "5px 12px" } },
+};
+
 export default temaAntd;
