@@ -30,8 +30,6 @@ export const LayoutConteudo = styled(AntContent)`
 `;
 
 export const LayoutConteudoInterno = styled.div`
-  max-width: 1440px;
-  margin: 0 auto;
   padding-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
