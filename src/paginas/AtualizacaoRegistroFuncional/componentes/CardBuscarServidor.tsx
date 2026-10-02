@@ -9,7 +9,6 @@ import { RotuloSugestaoServidor } from "./RotuloSugestaoServidor";
 
 const { Title, Paragraph } = Typography;
 
-/** Mostra 10 sugestoes (32px cada) antes de rolar, como no Figma. */
 const ALTURA_LISTA_SUGESTOES = 320;
 
 export interface CardBuscarServidorProps {
@@ -22,8 +21,7 @@ export interface CardBuscarServidorProps {
   aoBuscar: () => void;
 }
 
-/* A opcao leva o servidor: no onChange ela so vem quando o valor e o de uma
-   sugestao, o que separa a escolha na lista da digitacao. */
+// So vem no onChange quando o valor e de uma sugestao.
 function servidorDaOpcao(opcao: unknown): ServidorResumo | undefined {
   return (opcao as { servidor?: ServidorResumo } | undefined)?.servidor;
 }
@@ -54,7 +52,7 @@ export function CardBuscarServidor({
 
       <Form layout="vertical">
         <Form.Item
-          label="Nome, RF ou Cpf"
+          label="Nome, RF ou CPF"
           validateStatus={erroBusca ? "error" : undefined}
           help={erroBusca}
           style={{ marginBottom: 0 }}
@@ -62,7 +60,7 @@ export function CardBuscarServidor({
           <LinhaCampoCentralizada>
             <ConfigProvider theme={temaListaSugestoes}>
               <CampoBuscaServidor
-                aria-label="Nome, RF ou Cpf"
+                aria-label="Nome, RF ou CPF"
                 placeholder="Digite o nome, RF ou CPF..."
                 value={termo}
                 options={opcoes}

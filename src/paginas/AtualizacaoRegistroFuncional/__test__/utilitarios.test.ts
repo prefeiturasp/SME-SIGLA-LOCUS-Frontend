@@ -29,12 +29,15 @@ const GABRIEL_ARANTES: ServidorResumo = {
 };
 
 describe("partesDaSugestao", () => {
-  it("separa o RF e o CPF formatados do nome", () => {
-    expect(partesDaSugestao(GABRIEL_ARANTES)).toEqual({
-      prefixo: "123.456.7 - ",
-      nome: "Gabriel Nascimento Arantes",
-      sufixo: " [CPF 045.783.708-02]",
-    });
+  it("devolve os trechos em ordem, marcando o que pode ser destacado", () => {
+    expect(partesDaSugestao(GABRIEL_ARANTES)).toEqual([
+      { texto: "123.456.7", destaque: "digitos" },
+      { texto: " - " },
+      { texto: "Gabriel Nascimento Arantes", destaque: "nome" },
+      { texto: " [CPF " },
+      { texto: "045.783.708-02", destaque: "digitos" },
+      { texto: "]" },
+    ]);
   });
 });
 

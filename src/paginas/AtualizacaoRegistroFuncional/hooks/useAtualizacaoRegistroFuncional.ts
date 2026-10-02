@@ -12,11 +12,9 @@ export interface EstadoAtualizacaoRegistroFuncional {
   sugestoes: ServidorResumo[];
   servidorEncontrado?: ServidorResumo;
   erroBusca?: string;
-  /** A ultima busca nao encontrou ninguem (mostra o sad-locus). */
   semResultado: boolean;
   buscando: boolean;
   alterarTermo: (valor: string) => void;
-  /** Escolha de uma sugestao: o campo passa a mostrar o texto completo dela. */
   selecionarServidor: (servidor: ServidorResumo) => void;
   buscarServidor: () => Promise<void>;
 }
@@ -61,7 +59,7 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
   }, []);
 
   const selecionarServidor = useCallback((servidor: ServidorResumo) => {
-    ultimaConsulta.current += 1; // descarta sugestoes ainda pendentes
+    ultimaConsulta.current += 1;
     setTermo(textoDaSugestao(servidor));
     setServidorSelecionado(servidor);
     setSugestoes([]);
@@ -78,11 +76,9 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
       return;
     }
 
-    // Com uma sugestao escolhida, o campo tem o texto completo dela: busca
-    // pelo RF, que identifica o servidor.
+    // Sugestao escolhida: busca pelo RF.
     const termoDaBusca = servidorSelecionado?.rf ?? validacao.termo;
 
-    // Fecha a lista: sugestoes que ainda estao chegando nao a reabrem.
     ultimaConsulta.current += 1;
     setSugestoes([]);
     setBuscando(true);

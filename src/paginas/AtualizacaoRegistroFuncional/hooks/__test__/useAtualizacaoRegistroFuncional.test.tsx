@@ -8,7 +8,7 @@ import {
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { useAtualizacaoRegistroFuncional } from "../useAtualizacaoRegistroFuncional";
 
-// Mantem o servico real (mock estatico) e permite simular a latencia da API.
+// Servico real, com latencia simulavel.
 jest.mock("@/servicos/recursos/servidores", () => {
   const real = jest.requireActual("@/servicos/recursos/servidores");
   return { ...real, pesquisarServidores: jest.fn(real.pesquisarServidores) };

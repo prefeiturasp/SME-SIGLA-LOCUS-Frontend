@@ -1,6 +1,10 @@
 import type { AxiosRequestConfig } from "axios";
 import { servidoresExemplo } from "@/paginas/AtualizacaoRegistroFuncional/dados/dadosEstaticos";
-import { normalizarTexto, somenteDigitos } from "@/utilitarios/formatadores";
+import {
+  ehTermoNumerico,
+  normalizarTexto,
+  somenteDigitos,
+} from "@/utilitarios/formatadores";
 import { listaServidoresSchema, type ServidorResumo } from "./tipos";
 
 export * from "./tipos";
@@ -11,23 +15,16 @@ export const URL = {
 
 export const LIMITE_SUGESTOES = 50;
 
-const SO_NUMERO_E_MASCARA = /^[\d.\-\s]+$/;
-
 function casaComTermo(termo: string): (servidor: ServidorResumo) => boolean {
-  if (SO_NUMERO_E_MASCARA.test(termo)) {
+  if (ehTermoNumerico(termo)) {
     const digitos = somenteDigitos(termo);
-    return ({ rf, cpf }) =>
-      Boolean(digitos) && (rf.startsWith(digitos) || cpf.startsWith(digitos));
+    return ({ rf, cpf }) => rf.startsWith(digitos) || cpf.startsWith(digitos);
   }
 
   const nome = normalizarTexto(termo);
   return (servidor) => normalizarTexto(servidor.nome).includes(nome);
 }
 
-/**
- * Nome: qualquer trecho, sem acento. RF/CPF: pelo inicio, com ou sem
- * mascara. O resultado vem em ordem alfabetica de nome.
- */
 export function filtrarServidores(
   servidores: ServidorResumo[],
   termo: string,

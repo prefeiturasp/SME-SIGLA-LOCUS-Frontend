@@ -22,7 +22,7 @@ function renderNaCasca() {
 }
 
 function campoBusca(): HTMLElement {
-  return screen.getByRole("combobox", { name: "Nome, RF ou Cpf" });
+  return screen.getByRole("combobox", { name: "Nome, RF ou CPF" });
 }
 
 async function buscar() {
@@ -31,7 +31,6 @@ async function buscar() {
   );
 }
 
-// O rotulo da sugestao vem quebrado em trechos (o termo digitado em negrito).
 function textosDasSugestoes(): string[] {
   return [...document.querySelectorAll(".ant-select-item-option-content")].map(
     (opcao) => opcao.textContent ?? "",
@@ -130,6 +129,37 @@ describe("AtualizacaoRegistroFuncional (integração com a casca)", () => {
       "812.341.7 - Maria Clara Souza Ribeiro [CPF 628.493.157-04]",
     );
     expect(within(opcao).getByText("Mar").tagName).toBe("STRONG");
+    expect(opcao.querySelectorAll("strong")).toHaveLength(1);
+  });
+
+  it("destaca em negrito o inicio do RF digitado", async () => {
+    renderNaCasca();
+
+    await userEvent.type(campoBusca(), "1234");
+
+    const opcao = await sugestao(
+      "123.456.7 - Gabriel Nascimento Arantes [CPF 045.783.708-02]",
+    );
+    expect(within(opcao).getByText("123.4").tagName).toBe("STRONG");
+    expect(opcao.querySelectorAll("strong")).toHaveLength(1);
+  });
+
+  it("destaca em negrito o inicio do CPF digitado, mesmo com mascara", async () => {
+    renderNaCasca();
+
+    await userEvent.type(campoBusca(), "045.7");
+
+    const opcao = await sugestao(
+      "123.456.7 - Gabriel Nascimento Arantes [CPF 045.783.708-02]",
+    );
+    expect(within(opcao).getByText("045.7").tagName).toBe("STRONG");
+    expect(opcao.querySelectorAll("strong")).toHaveLength(1);
+  });
+
+  it("mostra o rotulo do campo com CPF em maiusculas", () => {
+    renderNaCasca();
+
+    expect(screen.getByText("Nome, RF ou CPF")).toBeInTheDocument();
   });
 
   it("lista as sugestoes do exemplo do Figma em ordem alfabetica", async () => {

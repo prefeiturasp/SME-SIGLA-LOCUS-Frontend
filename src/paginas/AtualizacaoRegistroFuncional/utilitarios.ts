@@ -7,35 +7,32 @@ import {
   somenteDigitos,
 } from "@/utilitarios/formatadores";
 
-export interface PartesSugestao {
-  prefixo: string;
-  nome: string;
-  sufixo: string;
+export interface TrechoSugestao {
+  texto: string;
+  
+  destaque?: "nome" | "digitos";
 }
 
-/** Fonte unica do formato: o rotulo da lista so destaca o nome. */
 export function partesDaSugestao({
   rf,
   nome,
   cpf,
-}: ServidorResumo): PartesSugestao {
-  return {
-    prefixo: `${formatarRf(rf)} - `,
-    nome,
-    sufixo: ` [CPF ${formatarCpf(cpf)}]`,
-  };
+}: ServidorResumo): TrechoSugestao[] {
+  return [
+    { texto: formatarRf(rf), destaque: "digitos" },
+    { texto: " - " },
+    { texto: nome, destaque: "nome" },
+    { texto: " [CPF " },
+    { texto: formatarCpf(cpf), destaque: "digitos" },
+    { texto: "]" },
+  ];
 }
 
-/**
- * Texto da sugestao, que tambem vai para o campo ao escolher o servidor.
- *
- * @example
- * textoDaSugestao(servidor)
- * // "123.456.7 - Gabriel Nascimento Arantes [CPF 045.783.708-02]"
- */
+
 export function textoDaSugestao(servidor: ServidorResumo): string {
-  const { prefixo, nome, sufixo } = partesDaSugestao(servidor);
-  return `${prefixo}${nome}${sufixo}`;
+  return partesDaSugestao(servidor)
+    .map(({ texto }) => texto)
+    .join("");
 }
 
 export type ResultadoBuscaServidor =
@@ -54,10 +51,7 @@ function correspondeExatamente(
   return normalizarTexto(servidor.nome) === normalizarTexto(termo);
 }
 
-/**
- * Decide qual servidor a busca encontrou: o de RF, CPF ou nome exato; senao,
- * o unico resultado. Com varios resultados, devolve a mensagem para o campo.
- */
+
 export function resolverServidorDaBusca(
   termo: string,
   resultados: ServidorResumo[],

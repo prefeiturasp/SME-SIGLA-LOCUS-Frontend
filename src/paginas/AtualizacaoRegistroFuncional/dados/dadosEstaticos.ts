@@ -1,9 +1,6 @@
 import type { ServidorResumo } from "@/servicos/recursos/servidores/tipos";
 
-/**
- * Servidores ficticios para a busca por nome, RF ou CPF. Os CPFs falham no
- * digito verificador de proposito.
- */
+/** Dados ficticios; CPFs invalidos de proposito. */
 export const servidoresExemplo: ServidorResumo[] = [
   { rf: "7311452", nome: "Ana Beatriz Conceição Lima", cpf: "39145678201" },
   { rf: "7311460", nome: "João Pedro Araújo Santos", cpf: "28473619502" },
@@ -13,7 +10,6 @@ export const servidoresExemplo: ServidorResumo[] = [
   { rf: "6540026", nome: "Luciana Gonçalves Pereira", cpf: "84061537906" },
   { rf: "9087653", nome: "Paulo Henrique Moreira", cpf: "95172648007" },
   { rf: "9087661", nome: "Fernanda Oliveira Costa", cpf: "16283759108" },
-  // Exemplo do Figma: "Gabriel Nascim" traz uma lista longa, com rolagem.
   { rf: "1234567", nome: "Gabriel Nascimento Arantes", cpf: "04578370802" },
   {
     rf: "1345678",
@@ -45,7 +41,6 @@ export const servidoresExemplo: ServidorResumo[] = [
   { rf: "2890123", nome: "Gabriel Nascimento Vieira", cpf: "10871494443" },
   { rf: "2901234", nome: "Gabriel Nascimento Xavier", cpf: "10923078003" },
   { rf: "3012345", nome: "Gabriel Nascimento Zanetti", cpf: "11344661611" },
-  // Demais servidores.
   { rf: "4102385", nome: "Beatriz Helena Cardoso", cpf: "15388282512" },
   { rf: "4102393", nome: "Bruno Henrique Tavares", cpf: "15398785037" },
   { rf: "4215507", nome: "Camila Rodrigues Freitas", cpf: "15827779777" },
