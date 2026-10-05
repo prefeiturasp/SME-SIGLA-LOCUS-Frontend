@@ -116,7 +116,7 @@ export function menuItemAtivo(pathname: string): string {
 }
 
 export interface SubitemAtivo {
-  chave: string;  
+  chave: string;
   chavesPais: string[];
 }
 

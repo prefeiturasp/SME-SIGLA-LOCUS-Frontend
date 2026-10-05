@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useNotificacao } from "@/hooks/useNotificacao";
 import { validarTermoBuscaServidor } from "@/paginas/validacoes/buscarServidor";
+import { caminhoAtualizacaoRegistroFuncional } from "@/rotas/caminhos";
 import { API } from "@/servicos";
 import type { ServidorResumo } from "@/servicos/recursos/servidores";
 import { resolverServidorDaBusca, textoDaSugestao } from "../utilitarios";
@@ -20,6 +22,7 @@ export interface EstadoAtualizacaoRegistroFuncional {
 }
 
 export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFuncional {
+  const navigate = useNavigate();
   const notificacao = useNotificacao();
   const [termo, setTermo] = useState("");
   const [sugestoes, setSugestoes] = useState<ServidorResumo[]>([]);
@@ -90,6 +93,9 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
       setServidorEncontrado(
         resolucao.situacao === "encontrado" ? resolucao.servidor : undefined,
       );
+      if (resolucao.situacao === "encontrado") {
+        navigate(caminhoAtualizacaoRegistroFuncional(resolucao.servidor.rf));
+      }
       setSemResultado(resolucao.situacao === "naoEncontrado");
       setErroBusca(
         resolucao.situacao === "varios" ? resolucao.mensagem : undefined,
@@ -102,7 +108,7 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
     } finally {
       setBuscando(false);
     }
-  }, [termo, servidorSelecionado, notificacao]);
+  }, [termo, servidorSelecionado, notificacao, navigate]);
 
   return useMemo(
     () => ({

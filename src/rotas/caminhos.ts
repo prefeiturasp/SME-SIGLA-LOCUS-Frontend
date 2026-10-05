@@ -4,6 +4,8 @@ export const CAMINHOS = {
   cadastroRegistrarUE: "/cadastro/registrar-unidade-educacional",
   cadastroDetalheUE: "/cadastro/unidade-educacional/:codigoLotacao",
   cadastroAtualizacaoRF: "/cadastro/atualizacao/registro-funcional",
+  cadastroAtualizacaoRegistroFuncional:
+    "/cadastro/atualizacao/registro-funcional/:rf",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
@@ -16,12 +18,18 @@ export function caminhoDetalheUE(codigoLotacao: string): string {
   );
 }
 
+export function caminhoAtualizacaoRegistroFuncional(rf: string): string {
+  return CAMINHOS.cadastroAtualizacaoRegistroFuncional.replace(
+    ":rf",
+    encodeURIComponent(rf),
+  );
+}
+
 export interface ItemBreadcrumb {
   titulo: string;
   caminho?: string;
 }
 
-/** A Gestão das unidades educacionais é a tela inicial do sistema. */
 const INICIO: ItemBreadcrumb = {
   titulo: "Início",
   caminho: CAMINHOS.cadastroGestaoUnidades,
@@ -48,6 +56,15 @@ interface PadraoBreadcrumb {
 }
 
 const BREADCRUMB_POR_PADRAO: PadraoBreadcrumb[] = [
+  {
+    padrao: CAMINHOS.cadastroAtualizacaoRegistroFuncional,
+    itens: () => [
+      INICIO,
+      { titulo: "Cadastro" },
+      { titulo: "Atualização" },
+      { titulo: "Por registro funcional (RF)" },
+    ],
+  },
   {
     padrao: CAMINHOS.cadastroDetalheUE,
     itens: () => [INICIO, { titulo: "Unidade Educacional" }],

@@ -8,7 +8,7 @@ import { AtualizacaoRegistroFuncional } from "../index";
 
 function renderNaCasca() {
   return render(
-    <ComProvedores rota="/cadastro/atualizacao/registro-funcional">
+    <ComProvedores rota={CAMINHOS.cadastroAtualizacaoRF}>
       <Routes>
         <Route element={<LayoutBase />}>
           <Route
