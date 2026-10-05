@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { AtualizacaoRegistroFuncional } from "@/paginas/AtualizacaoRegistroFuncional";
+import { DetalheServidor } from "@/paginas/DetalheServidor";
 import { DetalheUnidadeEducacional } from "@/paginas/DetalheUnidadeEducacional";
 import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais";
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
@@ -28,10 +29,12 @@ export function RotasApp() {
           element={<AtualizacaoRegistroFuncional />}
         />
         <Route
+          path={CAMINHOS.cadastroAtualizacaoRegistroFuncional}
+          element={<DetalheServidor />}
+        />
+        <Route
           index
-          element={
-            <Navigate to={CAMINHOS.cadastroGestaoUnidades} replace />
-          }
+          element={<Navigate to={CAMINHOS.cadastroGestaoUnidades} replace />}
         />
         <Route path={CAMINHOS.naoEncontrado} element={<NaoEncontrado />} />
         <Route

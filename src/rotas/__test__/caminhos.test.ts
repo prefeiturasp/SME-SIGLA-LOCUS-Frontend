@@ -1,6 +1,7 @@
 import {
   CAMINHOS,
   breadcrumbDaRota,
+  caminhoAtualizacaoRegistroFuncional,
   caminhoDetalheUE,
   casarPadrao,
 } from "../caminhos";
@@ -22,7 +23,10 @@ describe("caminhoDetalheUE", () => {
 describe("casarPadrao", () => {
   it("extrai os parametros quando o padrao casa", () => {
     expect(
-      casarPadrao(CAMINHOS.cadastroDetalheUE, "/cadastro/unidade-educacional/091488"),
+      casarPadrao(
+        CAMINHOS.cadastroDetalheUE,
+        "/cadastro/unidade-educacional/091488",
+      ),
     ).toEqual({ codigoLotacao: "091488" });
   });
 
@@ -66,8 +70,21 @@ describe("breadcrumbDaRota", () => {
   });
 
   it("nomeia a rota de atualizacao por registro funcional", () => {
+    expect(breadcrumbDaRota(CAMINHOS.cadastroAtualizacaoRF)).toEqual([
+      INICIO_COM_LINK,
+      { titulo: "Cadastro" },
+      { titulo: "Atualização" },
+      { titulo: "Por registro funcional (RF)" },
+    ]);
+  });
+
+  it("resolve a atualizacao pelo RF da pessoa servidora", () => {
+    expect(caminhoAtualizacaoRegistroFuncional("123.456.7")).toBe(
+      "/cadastro/atualizacao/registro-funcional/123.456.7",
+    );
+
     expect(
-      breadcrumbDaRota("/cadastro/atualizacao/registro-funcional"),
+      breadcrumbDaRota(caminhoAtualizacaoRegistroFuncional("123.456.7")),
     ).toEqual([
       INICIO_COM_LINK,
       { titulo: "Cadastro" },
