@@ -1,4 +1,4 @@
-import { Alert, Collapse, DatePicker, Divider, Segmented } from "antd";
+import { Alert, Collapse, Divider, Segmented } from "antd";
 import styled, { css } from "styled-components";
 import { CardTituloIcone } from "@/estilos";
 
@@ -75,7 +75,6 @@ export const BlocoInformacoes = styled.section`
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
-/** Acordeões em cartões separados. O projeto ainda não estiliza Collapse. */
 export const InformacoesCadastroSecoes = styled(Collapse)`
   background: transparent;
 
@@ -126,15 +125,6 @@ export const InformacoesCadastroSecoes = styled(Collapse)`
   }
 `;
 
-/** Não há campo de data compartilhado com largura total. */
-export const CampoData = styled(DatePicker)`
-  width: 100%;
-` as typeof DatePicker;
-
-/**
- * Título azul de grupo (Classificação, Etapas de ingresso).
- * `PaginaSubtitulo` é azul, mas não é negrito.
- */
 export const TituloGrupo = styled.h3`
   margin: ${({ theme }) => theme.spacing.lg}px 0
     ${({ theme }) => theme.spacing.md}px;
@@ -147,10 +137,6 @@ export const TituloGrupo = styled.h3`
   }
 `;
 
-/**
- * Troca lotação/exercício. `FiltroSituacao` é um filtro com borda,
- * e este controle é uma faixa cinza sem essa borda.
- */
 export const AlternadorUnidade = styled(Segmented)`
   width: 100%;
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
@@ -169,8 +155,7 @@ export const AlternadorUnidade = styled(Segmented)`
   }
 `;
 
-/** Rótulo e interruptor na mesma linha. A lista compartilhada ocupa a largura inteira. */
-export const LinhaInterruptor = styled.div`
+export const RealocadoSecao = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;

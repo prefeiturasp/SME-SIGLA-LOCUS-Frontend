@@ -1,8 +1,8 @@
-import { Col, Form, Row, Switch, Typography } from "antd";
+import { Col, DatePicker, Form, Row, Switch, Typography } from "antd";
 import type { Dayjs } from "dayjs";
 import { SelectForm } from "@/estilos";
 import { opcoesAtividade, opcoesTipoVaga } from "../dados/dadosEstaticos";
-import { CampoData, LinhaInterruptor } from "../Estilos";
+import { RealocadoSecao } from "../Estilos";
 
 const { Text } = Typography;
 
@@ -38,13 +38,14 @@ export function CardAtividade({
             htmlFor="data-retorno-afastamento"
             style={{ marginBottom: 16 }}
           >
-            <CampoData
+            <DatePicker
               id="data-retorno-afastamento"
               format="DD/MM/YYYY"
               placeholder="00/00/0000"
               allowClear={false}
               inputReadOnly
               value={dataRetorno}
+              style={{ width: "100%" }}
             />
           </Form.Item>
         </Col>
@@ -61,7 +62,7 @@ export function CardAtividade({
         </Col>
         <Col xs={24} md={12}>
           <Form.Item label="Realocado" style={{ marginBottom: 0 }}>
-            <LinhaInterruptor>
+            <RealocadoSecao>
               <Text style={{ fontSize: 13 }}>
                 Selecione caso o servidor tenha sido realocado.
               </Text>
@@ -71,7 +72,7 @@ export function CardAtividade({
                 unCheckedChildren="Não"
                 aria-label="Realocado"
               />
-            </LinhaInterruptor>
+            </RealocadoSecao>
           </Form.Item>
         </Col>
       </Row>

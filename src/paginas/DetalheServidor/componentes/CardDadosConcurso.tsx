@@ -1,7 +1,7 @@
-import { Col, Form, Row } from "antd";
+import { Col, DatePicker, Form, Row } from "antd";
 import type { Dayjs } from "dayjs";
 import { InputForm } from "@/estilos";
-import { CampoData, TituloGrupo } from "../Estilos";
+import { TituloGrupo } from "../Estilos";
 
 export interface CardDadosConcursoProps {
   classificacaoGeral: string;
@@ -75,13 +75,14 @@ export function CardDadosConcurso({
             htmlFor="data-convocacao"
             style={{ marginBottom: 16 }}
           >
-            <CampoData
+            <DatePicker
               id="data-convocacao"
               format="DD/MM/YYYY"
               placeholder="00/00/0000"
               allowClear={false}
               inputReadOnly
               value={dataConvocacao}
+              style={{ width: "100%" }}
             />
           </Form.Item>
         </Col>
@@ -91,13 +92,14 @@ export function CardDadosConcurso({
             htmlFor="data-escolha-concurso"
             style={{ marginBottom: 16 }}
           >
-            <CampoData
+            <DatePicker
               id="data-escolha-concurso"
               format="DD/MM/YYYY"
               placeholder="00/00/0000"
               allowClear={false}
               inputReadOnly
               value={dataEscolha}
+              style={{ width: "100%" }}
             />
           </Form.Item>
         </Col>
@@ -107,13 +109,14 @@ export function CardDadosConcurso({
             htmlFor="data-nomeacao"
             style={{ marginBottom: 0 }}
           >
-            <CampoData
+            <DatePicker
               id="data-nomeacao"
               format="DD/MM/YYYY"
               placeholder="00/00/0000"
               allowClear={false}
               inputReadOnly
               value={dataNomeacao}
+              style={{ width: "100%" }}
             />
           </Form.Item>
         </Col>

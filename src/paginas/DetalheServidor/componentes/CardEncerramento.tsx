@@ -1,8 +1,8 @@
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Form } from "antd";
+import { DatePicker, Form } from "antd";
 import type { Dayjs } from "dayjs";
 import { encerramentoEstatico } from "../dados/dadosEstaticos";
-import { AvisoVacancia, CampoData } from "../Estilos";
+import { AvisoVacancia } from "../Estilos";
 
 export interface CardEncerramentoProps {
   dataEscolha: Dayjs | null;
@@ -17,13 +17,14 @@ export function CardEncerramento({ dataEscolha }: CardEncerramentoProps) {
         help={encerramentoEstatico.ajuda}
         style={{ marginBottom: 0 }}
       >
-        <CampoData
+        <DatePicker
           id="data-escolha-encerramento"
           format="DD/MM/YYYY"
           placeholder="00/00/0000"
           allowClear={false}
           inputReadOnly
           value={dataEscolha}
+          style={{ width: "100%" }}
         />
       </Form.Item>
       <AvisoVacancia
