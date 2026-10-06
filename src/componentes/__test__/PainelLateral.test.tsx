@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PainelLateral } from "../PainelLateral";
 import { ComProvedores } from "@/testes/renderizarComTema";
@@ -45,5 +45,31 @@ describe("PainelLateral", () => {
     await userEvent.click(screen.getByRole("button", { name: "Fechar" }));
 
     expect(aoFechar).toHaveBeenCalledTimes(1);
+  });
+
+  it("nao renderiza rodape quando nao informado", () => {
+    renderizarPainel(true);
+
+    expect(document.querySelector(".ant-drawer-footer")).not.toBeInTheDocument();
+  });
+
+  it("renderiza o rodape quando informado", () => {
+    render(
+      <ComProvedores>
+        <PainelLateral
+          aberto
+          titulo="Lotação"
+          aoFechar={jest.fn()}
+          rodape={<button type="button">acao do rodape</button>}
+        >
+          <p>conteudo do painel</p>
+        </PainelLateral>
+      </ComProvedores>,
+    );
+
+    const rodape = document.querySelector(".ant-drawer-footer") as HTMLElement;
+    expect(
+      within(rodape).getByRole("button", { name: "acao do rodape" }),
+    ).toBeInTheDocument();
   });
 });
