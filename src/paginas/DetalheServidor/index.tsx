@@ -30,6 +30,7 @@ export function DetalheServidor() {
             <Button
               type="default"
               icon={<AccessTimeOutlinedIcon fontSize="small" />}
+              onClick={estado.abrirPainelHistorico}
             >
               Histórico de atualizações
             </Button>

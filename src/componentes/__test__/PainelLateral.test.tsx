@@ -72,4 +72,30 @@ describe("PainelLateral", () => {
 
     expect(aoFechar).toHaveBeenCalledTimes(1);
   });
+
+  it("nao renderiza rodape quando nao informado", () => {
+    renderizarPainel(true);
+
+    expect(document.querySelector(".ant-drawer-footer")).not.toBeInTheDocument();
+  });
+
+  it("renderiza o rodape quando informado", () => {
+    render(
+      <ComProvedores>
+        <PainelLateral
+          aberto
+          titulo="Lotação"
+          aoFechar={jest.fn()}
+          rodape={<button type="button">acao do rodape</button>}
+        >
+          <p>conteudo do painel</p>
+        </PainelLateral>
+      </ComProvedores>,
+    );
+
+    const rodape = document.querySelector(".ant-drawer-footer") as HTMLElement;
+    expect(
+      within(rodape).getByRole("button", { name: "acao do rodape" }),
+    ).toBeInTheDocument();
+  });
 });

@@ -19,6 +19,41 @@ export const servidorEstatico: ServidorCadastro = {
   codigoCargo: "1234",
 };
 
+export interface RegistroAtualizacao {
+  id: string;
+  motivo: string;
+  data: string;
+  portaria: string;
+  documento?: string;
+}
+
+export const historicoAtualizacoesEstatico: RegistroAtualizacao[] = [
+  {
+    id: "a1",
+    motivo: "Realocação",
+    data: "2026-03-15",
+    portaria: "184/2026",
+  },
+  {
+    id: "a2",
+    motivo: "Retorno afastamento",
+    data: "2026-01-10",
+    portaria: "125/2026",
+  },
+  {
+    id: "a3",
+    motivo: "Fixação de lotação",
+    data: "2025-08-20",
+    portaria: "328/2025",
+  },
+  {
+    id: "a4",
+    motivo: "Ingresso",
+    data: "2021-03-08",
+    portaria: "491/2021",
+  },
+];
+
 function opcoes(rotulos: string[]) {
   return rotulos.map((rotulo) => ({ value: rotulo, label: rotulo }));
 }
