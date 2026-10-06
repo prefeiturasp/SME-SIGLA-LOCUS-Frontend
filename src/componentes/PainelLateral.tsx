@@ -1,20 +1,11 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Button, Drawer, Typography } from "antd";
-import type { CSSProperties, ReactNode } from "react";
-import { spacing } from "@/estilos/tokens/tokens";
+import { Button, Typography } from "antd";
+import type { ReactNode } from "react";
+import { PainelLateralDrawer } from "@/estilos";
 
 const { Paragraph, Text } = Typography;
 
 const LARGURA_PADRAO = "50%";
-
-/** Rodape alinhado ao conteudo do painel, sem a linha divisoria do Drawer. */
-const ESTILO_RODAPE: CSSProperties = {
-  display: "flex",
-  justifyContent: "flex-end",
-  gap: spacing.sm,
-  padding: spacing.lg,
-  borderTop: "none",
-};
 
 export interface PainelLateralProps {
   aberto: boolean;
@@ -22,7 +13,6 @@ export interface PainelLateralProps {
   descricao?: ReactNode;
   contexto?: ReactNode;
   largura?: number | string;
-  /** Acoes fixas no rodape do painel, alinhadas a direita. */
   rodape?: ReactNode;
   aoFechar: () => void;
   children: ReactNode;
@@ -39,7 +29,7 @@ export function PainelLateral({
   children,
 }: PainelLateralProps) {
   return (
-    <Drawer
+    <PainelLateralDrawer
       open={aberto}
       title={titulo}
       width={largura}
@@ -48,7 +38,6 @@ export function PainelLateral({
       closable={false}
       destroyOnHidden
       footer={rodape}
-      styles={{ footer: ESTILO_RODAPE }}
       extra={
         <Button
           type="default"
@@ -65,7 +54,7 @@ export function PainelLateral({
         </Paragraph>
       ) : null}
       {children}
-    </Drawer>
+    </PainelLateralDrawer>
   );
 }
 
