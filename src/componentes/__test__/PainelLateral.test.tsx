@@ -39,6 +39,32 @@ describe("PainelLateral", () => {
     expect(screen.getByText("conteudo do painel")).toBeInTheDocument();
   });
 
+  it("nao renderiza rodape quando nao informado", () => {
+    renderizarPainel(true);
+
+    expect(document.querySelector(".ant-drawer-footer")).toBeNull();
+  });
+
+  it("renderiza o rodape informado", () => {
+    render(
+      <ComProvedores>
+        <PainelLateral
+          aberto
+          titulo="Lotação"
+          aoFechar={jest.fn()}
+          rodape={<button type="button">Confirmar</button>}
+        >
+          <p>conteudo do painel</p>
+        </PainelLateral>
+      </ComProvedores>,
+    );
+
+    const rodape = document.querySelector(".ant-drawer-footer") as HTMLElement;
+    expect(
+      within(rodape).getByRole("button", { name: "Confirmar" }),
+    ).toBeInTheDocument();
+  });
+
   it("dispara aoFechar ao clicar no botao de fechar", async () => {
     const aoFechar = renderizarPainel(true);
 

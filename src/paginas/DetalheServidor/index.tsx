@@ -5,11 +5,13 @@ import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ConteudoPagina } from "@/estilos";
 import { CardServidor } from "./componentes/CardServidor";
 import { ListaInformacoesCadastro } from "./componentes/ListaInformacoesCadastro";
-import { PainelHistoricoAtualizacoes } from "./componentes/PainelHistoricoAtualizacoes";
+import { PainelRegistrarAtualizacao } from "./componentes/PainelRegistrarAtualizacao";
 import { useDetalheServidor } from "./hooks/useDetalheServidor";
+import { useRegistrarAtualizacao } from "./hooks/useRegistrarAtualizacao";
 
 export function DetalheServidor() {
   const estado = useDetalheServidor();
+  const atualizacao = useRegistrarAtualizacao();
 
   return (
     <>
@@ -18,7 +20,11 @@ export function DetalheServidor() {
         descricao="Consulte ou atualize os dados funcionais de uma pessoa servidora."
         acoes={
           <>
-            <Button type="primary" icon={<AddRoundedIcon fontSize="small" />}>
+            <Button
+              type="primary"
+              icon={<AddRoundedIcon fontSize="small" />}
+              onClick={atualizacao.abrir}
+            >
               Nova atualização
             </Button>
             <Button
@@ -37,11 +43,7 @@ export function DetalheServidor() {
         <ListaInformacoesCadastro estado={estado} />
       </ConteudoPagina>
 
-      <PainelHistoricoAtualizacoes
-        aberto={estado.painelHistoricoAberto}
-        registros={estado.historico}
-        aoFechar={estado.fecharPainelHistorico}
-      />
+      <PainelRegistrarAtualizacao estado={atualizacao} />
     </>
   );
 }
