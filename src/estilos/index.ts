@@ -1,5 +1,6 @@
 export {
   ModalPadrao,
+  PainelLateralDrawer,
   BotaoExcluir,
   ConteudoPagina,
   Tag,

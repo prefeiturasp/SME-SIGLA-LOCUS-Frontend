@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
@@ -76,6 +76,40 @@ describe("DetalheServidor", () => {
     expect(
       within(breadcrumb).getByText("Por registro funcional (RF)"),
     ).toBeInTheDocument();
+  });
+
+  it("abre e fecha o painel de historico de atualizacoes", async () => {
+    renderNaCasca();
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Histórico de atualizações" }),
+    );
+
+    const painel = await screen.findByRole("dialog");
+    expect(
+      within(painel).getByText("Histórico de atualizações"),
+    ).toBeInTheDocument();
+    expect(
+      within(painel).getByText(
+        "Consulte os motivos e as datas das atualizações realizadas no cadastro.",
+      ),
+    ).toBeInTheDocument();
+    expect(within(painel).getByText("Realocação")).toBeInTheDocument();
+    expect(within(painel).getByText("15/03/2026")).toBeInTheDocument();
+    expect(document.querySelector(".ant-drawer-open")).toBeInTheDocument();
+
+    const rodape = document.querySelector(".ant-drawer-footer") as HTMLElement;
+    await userEvent.click(
+      within(rodape).getByRole("button", { name: "Fechar" }),
+    );
+
+    await waitFor(() =>
+      expect(
+        document.querySelector(".ant-drawer-open"),
+      ).not.toBeInTheDocument(),
+    );
   });
 
   it("abre cada secao dentro da pagina", async () => {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import dayjs, { type Dayjs } from "dayjs";
 import {
@@ -6,9 +6,11 @@ import {
   concursoEstatico,
   dadosFuncionaisEstaticos,
   encerramentoEstatico,
+  historicoAtualizacoesEstatico,
   lotacaoEstatica,
   servidorEstatico,
   type AbaUnidade,
+  type RegistroAtualizacao,
   type ServidorCadastro,
 } from "../dados/dadosEstaticos";
 
@@ -34,6 +36,10 @@ export interface EstadoDetalheServidor {
   tipoLaudo?: string;
   atividadeReadaptacao?: string;
   dataEscolhaEncerramento: Dayjs | null;
+  historico: RegistroAtualizacao[];
+  painelHistoricoAberto: boolean;
+  abrirPainelHistorico: () => void;
+  fecharPainelHistorico: () => void;
 }
 
 export function useDetalheServidor(): EstadoDetalheServidor {
@@ -74,6 +80,20 @@ export function useDetalheServidor(): EstadoDetalheServidor {
     dayjs(encerramentoEstatico.dataEscolha),
   );
 
+  const [painelHistoricoAberto, setPainelHistoricoAberto] = useState(false);
+  const historico = useMemo(
+    () => (painelHistoricoAberto ? historicoAtualizacoesEstatico : []),
+    [painelHistoricoAberto],
+  );
+  const abrirPainelHistorico = useCallback(
+    () => setPainelHistoricoAberto(true),
+    [],
+  );
+  const fecharPainelHistorico = useCallback(
+    () => setPainelHistoricoAberto(false),
+    [],
+  );
+
   return useMemo(
     () => ({
       servidor,
@@ -97,6 +117,10 @@ export function useDetalheServidor(): EstadoDetalheServidor {
       tipoLaudo,
       atividadeReadaptacao,
       dataEscolhaEncerramento,
+      historico,
+      painelHistoricoAberto,
+      abrirPainelHistorico,
+      fecharPainelHistorico,
     }),
     [
       servidor,
@@ -120,6 +144,10 @@ export function useDetalheServidor(): EstadoDetalheServidor {
       tipoLaudo,
       atividadeReadaptacao,
       dataEscolhaEncerramento,
+      historico,
+      painelHistoricoAberto,
+      abrirPainelHistorico,
+      fecharPainelHistorico,
     ],
   );
 }

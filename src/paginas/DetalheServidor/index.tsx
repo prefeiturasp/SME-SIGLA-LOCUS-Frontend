@@ -5,6 +5,7 @@ import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ConteudoPagina } from "@/estilos";
 import { CardServidor } from "./componentes/CardServidor";
 import { ListaInformacoesCadastro } from "./componentes/ListaInformacoesCadastro";
+import { PainelHistoricoAtualizacoes } from "./componentes/PainelHistoricoAtualizacoes";
 import { useDetalheServidor } from "./hooks/useDetalheServidor";
 
 export function DetalheServidor() {
@@ -23,6 +24,7 @@ export function DetalheServidor() {
             <Button
               type="default"
               icon={<AccessTimeOutlinedIcon fontSize="small" />}
+              onClick={estado.abrirPainelHistorico}
             >
               Histórico de atualizações
             </Button>
@@ -34,6 +36,12 @@ export function DetalheServidor() {
         <CardServidor servidor={estado.servidor} />
         <ListaInformacoesCadastro estado={estado} />
       </ConteudoPagina>
+
+      <PainelHistoricoAtualizacoes
+        aberto={estado.painelHistoricoAberto}
+        registros={estado.historico}
+        aoFechar={estado.fecharPainelHistorico}
+      />
     </>
   );
 }
