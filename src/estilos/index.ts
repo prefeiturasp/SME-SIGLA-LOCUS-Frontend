@@ -28,6 +28,7 @@ export {
   PaginaSubtitulo,
   PaginaDescricao,
   PaginaAcoes,
+  PainelRodape,
   SecaoCabecalho,
   SecaoTextos,
   SecaoAcao,

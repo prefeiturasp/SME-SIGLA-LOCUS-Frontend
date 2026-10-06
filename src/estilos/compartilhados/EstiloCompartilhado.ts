@@ -328,6 +328,14 @@ export const PaginaAcoes = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
+/* ======= PainelLateral ======= */
+
+export const PainelRodape = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing.md}px;
+`;
+
 /* ======= CardDados ======= */
 
 export const CardDiv = styled.div`
