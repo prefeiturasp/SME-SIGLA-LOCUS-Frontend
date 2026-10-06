@@ -1,5 +1,6 @@
 export {
   ModalPadrao,
+  PainelLateralDrawer,
   BotaoExcluir,
   ConteudoPagina,
   Tag,
@@ -28,7 +29,6 @@ export {
   PaginaSubtitulo,
   PaginaDescricao,
   PaginaAcoes,
-  PainelRodape,
   SecaoCabecalho,
   SecaoTextos,
   SecaoAcao,

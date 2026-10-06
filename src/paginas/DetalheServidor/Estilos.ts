@@ -1,4 +1,4 @@
-import { Alert, Collapse, Divider, Segmented } from "antd";
+import { Alert, Collapse, Divider, Form, Segmented } from "antd";
 import styled, { css } from "styled-components";
 import { CardTituloIcone } from "@/estilos";
 
@@ -173,5 +173,19 @@ export const AvisoVacancia = styled(Alert)`
   .ant-alert-message,
   .ant-alert-icon {
     color: ${({ theme }) => theme.colors.error};
+  }
+`;
+
+export const FormularioRegistrarAtualizacao = styled(Form)`
+  .ant-picker {
+    width: 100%;
+  }
+
+  textarea.ant-input {
+    resize: none;
+  }
+
+  .ant-form-item:last-child {
+    margin-bottom: 0;
   }
 `;

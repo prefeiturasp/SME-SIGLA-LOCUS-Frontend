@@ -1,7 +1,8 @@
-import { Button, DatePicker, Form } from "antd";
+import { Button, DatePicker } from "antd";
 import { PainelLateral } from "@/componentes/PainelLateral";
 import { FormItem, SelectForm, TextAreaForm } from "@/estilos";
 import { opcoesMotivoAtualizacao } from "../dados/dadosEstaticos";
+import { FormularioRegistrarAtualizacao } from "../Estilos";
 import type { EstadoRegistrarAtualizacao } from "../hooks/useRegistrarAtualizacao";
 
 export interface PainelRegistrarAtualizacaoProps {
@@ -28,7 +29,7 @@ export function PainelRegistrarAtualizacao({
         </>
       }
     >
-      <Form layout="vertical">
+      <FormularioRegistrarAtualizacao layout="vertical">
         <FormItem
           label="Motivo da atualização"
           validateStatus={estado.erroMotivo ? "error" : undefined}
@@ -61,24 +62,18 @@ export function PainelRegistrarAtualizacao({
             status={estado.erroDataDocumento ? "error" : undefined}
             value={estado.dataDocumento}
             onChange={estado.alterarDataDocumento}
-            style={{ width: "100%" }}
           />
         </FormItem>
 
-        <FormItem
-          label="Documento (opcional)"
-          htmlFor="documento-atualizacao"
-          style={{ marginBottom: 0 }}
-        >
+        <FormItem label="Documento (opcional)" htmlFor="documento-atualizacao">
           <TextAreaForm
             id="documento-atualizacao"
             placeholder="Exemplo: Portaria nº 123/2026"
             value={estado.documento}
             onChange={(evento) => estado.alterarDocumento(evento.target.value)}
-            style={{ resize: "none" }}
           />
         </FormItem>
-      </Form>
+      </FormularioRegistrarAtualizacao>
     </PainelLateral>
   );
 }
