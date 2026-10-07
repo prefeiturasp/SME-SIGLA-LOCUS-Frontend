@@ -5,6 +5,7 @@ import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ConteudoPagina } from "@/estilos";
 import { CardServidor } from "./componentes/CardServidor";
 import { ListaInformacoesCadastro } from "./componentes/ListaInformacoesCadastro";
+import { PainelHistoricoAtualizacoes } from "./componentes/PainelHistoricoAtualizacoes";
 import { PainelRegistrarAtualizacao } from "./componentes/PainelRegistrarAtualizacao";
 import { useDetalheServidor } from "./hooks/useDetalheServidor";
 import { useRegistrarAtualizacao } from "./hooks/useRegistrarAtualizacao";
@@ -44,6 +45,11 @@ export function DetalheServidor() {
       </ConteudoPagina>
 
       <PainelRegistrarAtualizacao estado={atualizacao} />
+      <PainelHistoricoAtualizacoes
+        aberto={estado.painelHistoricoAberto}
+        registros={estado.historico}
+        aoFechar={estado.fecharPainelHistorico}
+      />
     </>
   );
 }
