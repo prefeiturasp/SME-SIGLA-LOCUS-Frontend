@@ -58,7 +58,7 @@ export const http = axios.create({
 });
 
 export const httpAdminUsuarios = axios.create({
-  baseURL: obterUrlBase("VITE_ADMIN_USUARIOS_API_URL"),
+  baseURL: "https://qa-sigla.sme.prefeitura.sp.gov.br",
 });
 
 adicionarInterceptors(http);

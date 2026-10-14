@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from "axios";
-import { httpAdminUsuarios } from "@sigla/servicos/http";
+import { httpAdminUsuarios } from "../../http";
 import type { ILoginRequest, ILoginResponse } from "./ILogin";
 
 export type { ILoginRequest, ILoginResponse };
