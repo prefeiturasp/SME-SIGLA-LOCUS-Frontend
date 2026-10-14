@@ -2,6 +2,12 @@ import { render, screen } from "@testing-library/react";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { RotasApp } from "../index";
 
+// Mock da aplicação SIGLA para evitar carregar seus serviços HTTP
+jest.mock("../../../modules/sigla/app/App", () => ({
+  __esModule: true,
+  SiglaApp: () => null,
+}));
+
 describe("RotasApp", () => {
   it("abre a atualizacao por registro funcional na rota do menu", async () => {
     render(
