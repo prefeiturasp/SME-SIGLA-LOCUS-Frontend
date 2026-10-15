@@ -3,6 +3,9 @@ export const CAMINHOS = {
   cadastroGestaoUnidades: "/cadastro/gestao-unidades-educacionais",
   cadastroRegistrarUE: "/cadastro/registrar-unidade-educacional",
   cadastroDetalheUE: "/cadastro/unidade-educacional/:codigoLotacao",
+  cadastroAtualizacaoRF: "/cadastro/atualizacao/registro-funcional",
+  cadastroAtualizacaoRegistroFuncional:
+    "/cadastro/atualizacao/registro-funcional/:rf",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
@@ -15,25 +18,36 @@ export function caminhoDetalheUE(codigoLotacao: string): string {
   );
 }
 
+export function caminhoAtualizacaoRegistroFuncional(rf: string): string {
+  return CAMINHOS.cadastroAtualizacaoRegistroFuncional.replace(
+    ":rf",
+    encodeURIComponent(rf),
+  );
+}
+
 export interface ItemBreadcrumb {
   titulo: string;
   caminho?: string;
 }
 
+const INICIO: ItemBreadcrumb = {
+  titulo: "Início",
+  caminho: CAMINHOS.cadastroGestaoUnidades,
+};
+
 export const BREADCRUMB_POR_ROTA: Record<string, ItemBreadcrumb[]> = {
-  [CAMINHOS.cadastroGestaoUnidades]: [
-    { titulo: "Início" },
-    { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
-  ],
+  [CAMINHOS.cadastroGestaoUnidades]: [{ titulo: "Início" }],
   [CAMINHOS.cadastroRegistrarUE]: [
-    { titulo: "Início" },
-    { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
+    INICIO,
     { titulo: "Registrar Unidade Educacional" },
   ],
-  [CAMINHOS.naoEncontrado]: [
-    { titulo: "Início" },
-    { titulo: "Página não encontrada" },
+  [CAMINHOS.cadastroAtualizacaoRF]: [
+    INICIO,
+    { titulo: "Cadastro" },
+    { titulo: "Atualização" },
+    { titulo: "Por registro funcional (RF)" },
   ],
+  [CAMINHOS.naoEncontrado]: [INICIO, { titulo: "Página não encontrada" }],
 };
 
 interface PadraoBreadcrumb {
@@ -43,12 +57,17 @@ interface PadraoBreadcrumb {
 
 const BREADCRUMB_POR_PADRAO: PadraoBreadcrumb[] = [
   {
-    padrao: CAMINHOS.cadastroDetalheUE,
+    padrao: CAMINHOS.cadastroAtualizacaoRegistroFuncional,
     itens: () => [
-      { titulo: "Início" },
-      { titulo: "Cadastro", caminho: CAMINHOS.cadastroGestaoUnidades },
-      { titulo: "Unidade Educacional" },
+      INICIO,
+      { titulo: "Cadastro" },
+      { titulo: "Atualização" },
+      { titulo: "Por registro funcional (RF)" },
     ],
+  },
+  {
+    padrao: CAMINHOS.cadastroDetalheUE,
+    itens: () => [INICIO, { titulo: "Unidade Educacional" }],
   },
 ];
 

@@ -4,6 +4,7 @@ import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import {
   Button,
+  Drawer,
   Form,
   Input,
   InputNumber,
@@ -48,6 +49,16 @@ export const ModalPadrao = styled(Modal).attrs({
     padding-inline: 8px;
   }
 ` as typeof Modal;
+
+export const PainelLateralDrawer = styled(Drawer)`
+  .ant-drawer-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: ${({ theme }) => theme.spacing.sm}px;
+    padding: ${({ theme }) => theme.spacing.lg}px;
+    border-top: none;
+  }
+`;
 
 export const BotaoExcluir = styled(Button).attrs({
   type: "text",
@@ -307,6 +318,12 @@ export const PaginaTextos = styled.div`
 export const PaginaSubtitulo = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
   color: ${({ theme }) => theme.colors.blue};
+`;
+
+export const PaginaDescricao = styled.p`
+  margin: 0;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  color: ${({ theme }) => theme.colors.primaryText};
 `;
 
 export const PaginaTitulo = styled.h1`

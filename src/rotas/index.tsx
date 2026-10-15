@@ -1,14 +1,18 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
+import { AtualizacaoRegistroFuncional } from "@/paginas/AtualizacaoRegistroFuncional";
+import { DetalheServidor } from "@/paginas/DetalheServidor";
 import { DetalheUnidadeEducacional } from "@/paginas/DetalheUnidadeEducacional";
 import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais";
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
 import { NaoEncontrado } from "@/paginas/NaoEncontrado";
+import { SiglaApp } from "../../modules/sigla/app/App";
 import { CAMINHOS } from "./caminhos";
 
 export function RotasApp() {
   return (
     <Routes>
+      <Route path="/sigla/*" element={<SiglaApp />} />
       <Route element={<LayoutBase />}>
         <Route
           path={CAMINHOS.cadastroGestaoUnidades}
@@ -23,10 +27,16 @@ export function RotasApp() {
           element={<DetalheUnidadeEducacional />}
         />
         <Route
+          path={CAMINHOS.cadastroAtualizacaoRF}
+          element={<AtualizacaoRegistroFuncional />}
+        />
+        <Route
+          path={CAMINHOS.cadastroAtualizacaoRegistroFuncional}
+          element={<DetalheServidor />}
+        />
+        <Route
           index
-          element={
-            <Navigate to={CAMINHOS.cadastroGestaoUnidades} replace />
-          }
+          element={<Navigate to={CAMINHOS.cadastroGestaoUnidades} replace />}
         />
         <Route path={CAMINHOS.naoEncontrado} element={<NaoEncontrado />} />
         <Route

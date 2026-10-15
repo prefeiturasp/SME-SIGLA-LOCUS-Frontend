@@ -1,0 +1,52 @@
+<svg width="1440" height="698" viewBox="0 -200 1440 698" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    viewBox com area acima (y negativo) + filtro com y negativo:
+    o blur sobe em transparencia (sem corte reto / "fundo").
+  -->
+  <g filter="url(#filter0_fn_2052_505)">
+    <ellipse cx="711.5" cy="896.5" rx="1305.5" ry="772.5" fill="url(#paint0_radial_2052_505)"/>
+  </g>
+  <defs>
+    <filter
+      id="filter0_fn_2052_505"
+      x="-718"
+      y="-400"
+      width="2859"
+      height="2400"
+      filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB"
+    >
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="62" result="effect1_foregroundBlur_2052_505"/>
+      <feTurbulence type="fractalNoise" baseFrequency="2 2" stitchTiles="stitch" numOctaves="3" result="noise" seed="5026"/>
+      <feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise"/>
+      <feComponentTransfer in="alphaNoise" result="coloredNoise1">
+        <feFuncA type="discrete" tableValues="1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+      </feComponentTransfer>
+      <feComposite operator="in" in2="effect1_foregroundBlur_2052_505" in="coloredNoise1" result="noise1Clipped"/>
+      <feFlood flood-color="rgba(0, 0, 0, 0.15)" result="color1Flood"/>
+      <feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1"/>
+      <feMerge result="effect2_noise_2052_505">
+        <feMergeNode in="effect1_foregroundBlur_2052_505"/>
+        <feMergeNode in="color1"/>
+      </feMerge>
+    </filter>
+    <radialGradient
+      id="paint0_radial_2052_505"
+      cx="0"
+      cy="0"
+      r="1"
+      gradientUnits="userSpaceOnUse"
+      gradientTransform="translate(711.5 896.5) rotate(90) scale(772.5 1305.5)"
+    >
+      <stop offset="0.600862" stop-color="#006A6A" stop-opacity="0.6"/>
+      <stop offset="0.600962" stop-color="#009797" stop-opacity="0.5"/>
+      <stop offset="0.692308" stop-color="#71FFFF" stop-opacity="0.5"/>
+      <stop offset="0.778846" stop-color="white" stop-opacity="0.85"/>
+      <stop offset="0.822015" stop-color="#00D8D8" stop-opacity="0.5"/>
+      <stop offset="0.894231" stop-color="#009797" stop-opacity="0.3"/>
+      <stop offset="0.966346" stop-color="#006A6A" stop-opacity="0.1"/>
+    </radialGradient>
+  </defs>
+</svg>

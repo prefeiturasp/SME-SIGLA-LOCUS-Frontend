@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import {
   PaginaAcoes,
   PaginaCabecalho,
+  PaginaDescricao,
   PaginaSubtitulo,
   PaginaTextos,
   PaginaTitulo,
@@ -10,12 +11,15 @@ import {
 export interface CabecalhoPaginaProps {
   titulo: string;
   subtitulo?: ReactNode;
+  /** Texto de apoio abaixo do titulo, na cor do texto principal. */
+  descricao?: ReactNode;
   acoes?: ReactNode;
 }
 
 export function CabecalhoPagina({
   titulo,
   subtitulo,
+  descricao,
   acoes,
 }: CabecalhoPaginaProps) {
   return (
@@ -23,6 +27,7 @@ export function CabecalhoPagina({
       <PaginaTextos>
         <PaginaTitulo>{titulo}</PaginaTitulo>
         {subtitulo ? <PaginaSubtitulo>{subtitulo}</PaginaSubtitulo> : null}
+        {descricao ? <PaginaDescricao>{descricao}</PaginaDescricao> : null}
       </PaginaTextos>
       {acoes ? <PaginaAcoes>{acoes}</PaginaAcoes> : null}
     </PaginaCabecalho>

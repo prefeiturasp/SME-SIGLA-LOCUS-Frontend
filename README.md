@@ -54,7 +54,15 @@ comum vindo de `componentes/` e o tema de `estilos/`.
 
 - Casca do sistema (menu lateral com logo LOCUS, topo com brasão da Prefeitura +
   breadcrumb + usuário logado + botão Sair, rodapé padronizado).
+- Menu lateral: **Início** abre a Gestão das unidades educacionais e
+  **Cadastro** abre um painel com Inclusão, Atualização e Classificação. Só
+  Atualização > Por registro funcional (RF) tem tela; os demais itens aparecem
+  desabilitados.
 - Tela **Gestão das unidades educacionais** em
   `/cadastro/gestao-unidades-educacionais`, fiel ao Figma, com **dados
   estáticos**. A camada de serviço já tem a assinatura pronta para a API real.
+- Tela **Atualização por registro funcional (RF)** em
+  `/cadastro/atualizacao/registro-funcional`: busca de servidor por nome, RF ou
+  CPF (AutoComplete do antd) com **dados estáticos**. A área de resultado ainda
+  não existe.
 - Sem fluxo de login nesta entrega: o usuário logado vem de um mock fixo.

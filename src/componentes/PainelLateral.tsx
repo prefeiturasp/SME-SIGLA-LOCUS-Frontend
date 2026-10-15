@@ -1,6 +1,7 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Button, Drawer, Typography } from "antd";
+import { Button, Typography } from "antd";
 import type { ReactNode } from "react";
+import { PainelLateralDrawer } from "@/estilos";
 
 const { Paragraph, Text } = Typography;
 
@@ -12,6 +13,7 @@ export interface PainelLateralProps {
   descricao?: ReactNode;
   contexto?: ReactNode;
   largura?: number | string;
+  rodape?: ReactNode;
   aoFechar: () => void;
   children: ReactNode;
 }
@@ -22,11 +24,12 @@ export function PainelLateral({
   descricao,
   contexto,
   largura = LARGURA_PADRAO,
+  rodape,
   aoFechar,
   children,
 }: PainelLateralProps) {
   return (
-    <Drawer
+    <PainelLateralDrawer
       open={aberto}
       title={titulo}
       width={largura}
@@ -34,6 +37,7 @@ export function PainelLateral({
       onClose={aoFechar}
       closable={false}
       destroyOnHidden
+      footer={rodape}
       extra={
         <Button
           type="default"
@@ -50,7 +54,7 @@ export function PainelLateral({
         </Paragraph>
       ) : null}
       {children}
-    </Drawer>
+    </PainelLateralDrawer>
   );
 }
 

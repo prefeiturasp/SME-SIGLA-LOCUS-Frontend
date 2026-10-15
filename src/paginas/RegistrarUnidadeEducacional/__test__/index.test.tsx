@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App as AntdApp } from "antd";
@@ -56,8 +56,11 @@ describe("RegistrarUnidadeEducacional (integração com a casca)", () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText("Início")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Cadastro" })).toBeInTheDocument();
+    const breadcrumb = document.querySelector(".ant-breadcrumb") as HTMLElement;
+    expect(
+      within(breadcrumb).getByRole("link", { name: "Início" }),
+    ).toBeInTheDocument();
+    expect(within(breadcrumb).queryByText("Cadastro")).not.toBeInTheDocument();
     expect(
       screen.getByText("Registrar Unidade Educacional"),
     ).toBeInTheDocument();
