@@ -51,7 +51,11 @@ const SUBMENU_CADASTRO: SubitemMenu[] = [
         label: "Por registro funcional (RF)",
         path: CAMINHOS.cadastroAtualizacaoRF,
       },
-      { key: "cadastro-atualizacao-vacancia", label: "Vacância" },
+      {
+        key: "cadastro-atualizacao-vacancia",
+        label: "Vacância",
+        path: CAMINHOS.cadastroAtualizacaoVacancia,
+      },
     ],
   },
   { key: "cadastro-classificacao", label: "Classificação" },
