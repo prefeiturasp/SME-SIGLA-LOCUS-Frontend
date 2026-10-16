@@ -93,6 +93,15 @@ describe("breadcrumbDaRota", () => {
     ]);
   });
 
+  it("nomeia a rota de atualizacao de vacancia", () => {
+    expect(breadcrumbDaRota(CAMINHOS.cadastroAtualizacaoVacancia)).toEqual([
+      INICIO_COM_LINK,
+      { titulo: "Cadastro" },
+      { titulo: "Atualização" },
+      { titulo: "Vacância" },
+    ]);
+  });
+
   it("nomeia a rota de pagina nao encontrada", () => {
     expect(breadcrumbDaRota(CAMINHOS.naoEncontrado)).toEqual([
       INICIO_COM_LINK,

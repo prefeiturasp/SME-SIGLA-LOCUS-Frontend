@@ -28,6 +28,7 @@ describe("menuItemAtivo", () => {
     ["/cadastro/registrar-unidade-educacional", "inicio"],
     ["/cadastro/unidade-educacional/091488", "inicio"],
     ["/cadastro/atualizacao/registro-funcional", "cadastro"],
+    ["/cadastro/atualizacao/vacancia", "cadastro"],
     ["/cadastro/rota-ainda-inexistente", "cadastro"],
     ["/vagas/listagem", "vagas"],
     ["/pagina-nao-encontrada", ""],
@@ -68,6 +69,15 @@ describe("localizarSubitemAtivo", () => {
       ),
     ).toEqual({
       chave: "cadastro-atualizacao-registro-funcional",
+      chavesPais: ["cadastro-atualizacao"],
+    });
+  });
+
+  it("localiza a tela de vacancia dentro do grupo Atualização", () => {
+    expect(
+      localizarSubitemAtivo(SUBMENU_CADASTRO, "/cadastro/atualizacao/vacancia"),
+    ).toEqual({
+      chave: "cadastro-atualizacao-vacancia",
       chavesPais: ["cadastro-atualizacao"],
     });
   });

@@ -22,4 +22,17 @@ describe("RotasApp", () => {
       }),
     ).toBeInTheDocument();
   });
+
+  it("abre a atualizacao de vacancia na rota do menu", async () => {
+    render(
+      <ComProvedores rota="/cadastro/atualizacao/vacancia">
+        <RotasApp />
+      </ComProvedores>,
+    );
+
+    expect(await screen.findByText("Vacância")).toBeInTheDocument();
+    expect(
+      screen.queryByText("Não encontramos esta página..."),
+    ).not.toBeInTheDocument();
+  });
 });

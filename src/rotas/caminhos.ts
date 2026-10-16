@@ -6,6 +6,7 @@ export const CAMINHOS = {
   cadastroAtualizacaoRF: "/cadastro/atualizacao/registro-funcional",
   cadastroAtualizacaoRegistroFuncional:
     "/cadastro/atualizacao/registro-funcional/:rf",
+  cadastroAtualizacaoVacancia: "/cadastro/atualizacao/vacancia",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
@@ -46,6 +47,12 @@ export const BREADCRUMB_POR_ROTA: Record<string, ItemBreadcrumb[]> = {
     { titulo: "Cadastro" },
     { titulo: "Atualização" },
     { titulo: "Por registro funcional (RF)" },
+  ],
+  [CAMINHOS.cadastroAtualizacaoVacancia]: [
+    INICIO,
+    { titulo: "Cadastro" },
+    { titulo: "Atualização" },
+    { titulo: "Vacância" },
   ],
   [CAMINHOS.naoEncontrado]: [INICIO, { titulo: "Página não encontrada" }],
 };
