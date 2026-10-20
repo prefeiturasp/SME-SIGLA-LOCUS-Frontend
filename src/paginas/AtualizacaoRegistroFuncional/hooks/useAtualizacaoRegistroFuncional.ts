@@ -21,7 +21,9 @@ export interface EstadoAtualizacaoRegistroFuncional {
   buscarServidor: () => Promise<void>;
 }
 
-export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFuncional {
+export function useAtualizacaoRegistroFuncional(
+  caminhoDoServidor: (rf: string) => string = caminhoAtualizacaoRegistroFuncional,
+): EstadoAtualizacaoRegistroFuncional {
   const navigate = useNavigate();
   const notificacao = useNotificacao();
   const [termo, setTermo] = useState("");
@@ -35,7 +37,6 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
     ServidorResumo | undefined
   >();
   const [buscando, setBuscando] = useState(false);
-  // So a consulta mais recente atualiza as sugestoes.
   const ultimaConsulta = useRef(0);
 
   const alterarTermo = useCallback((valor: string) => {
@@ -79,7 +80,6 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
       return;
     }
 
-    // Sugestao escolhida: busca pelo RF.
     const termoDaBusca = servidorSelecionado?.rf ?? validacao.termo;
 
     ultimaConsulta.current += 1;
@@ -94,7 +94,7 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
         resolucao.situacao === "encontrado" ? resolucao.servidor : undefined,
       );
       if (resolucao.situacao === "encontrado") {
-        navigate(caminhoAtualizacaoRegistroFuncional(resolucao.servidor.rf));
+        navigate(caminhoDoServidor(resolucao.servidor.rf));
       }
       setSemResultado(resolucao.situacao === "naoEncontrado");
       setErroBusca(
@@ -108,7 +108,7 @@ export function useAtualizacaoRegistroFuncional(): EstadoAtualizacaoRegistroFunc
     } finally {
       setBuscando(false);
     }
-  }, [termo, servidorSelecionado, notificacao, navigate]);
+  }, [termo, servidorSelecionado, notificacao, navigate, caminhoDoServidor]);
 
   return useMemo(
     () => ({
