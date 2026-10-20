@@ -7,6 +7,8 @@ export const CAMINHOS = {
   cadastroAtualizacaoRegistroFuncional:
     "/cadastro/atualizacao/registro-funcional/:rf",
   cadastroAtualizacaoVacancia: "/cadastro/atualizacao/vacancia",
+  cadastroAtualizacaoVacanciaServidor:
+    "/cadastro/atualizacao/vacancia-servidor/:rf",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
@@ -21,6 +23,13 @@ export function caminhoDetalheUE(codigoLotacao: string): string {
 
 export function caminhoAtualizacaoRegistroFuncional(rf: string): string {
   return CAMINHOS.cadastroAtualizacaoRegistroFuncional.replace(
+    ":rf",
+    encodeURIComponent(rf),
+  );
+}
+
+export function caminhoAtualizacaoVacanciaServidor(rf: string): string {
+  return CAMINHOS.cadastroAtualizacaoVacanciaServidor.replace(
     ":rf",
     encodeURIComponent(rf),
   );
@@ -70,6 +79,15 @@ const BREADCRUMB_POR_PADRAO: PadraoBreadcrumb[] = [
       { titulo: "Cadastro" },
       { titulo: "Atualização" },
       { titulo: "Por registro funcional (RF)" },
+    ],
+  },
+  {
+    padrao: CAMINHOS.cadastroAtualizacaoVacanciaServidor,
+    itens: () => [
+      INICIO,
+      { titulo: "Cadastro" },
+      { titulo: "Atualização" },
+      { titulo: "Vacância" },
     ],
   },
   {

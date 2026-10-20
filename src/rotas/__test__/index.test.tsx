@@ -30,7 +30,9 @@ describe("RotasApp", () => {
       </ComProvedores>,
     );
 
-    expect(await screen.findByText("Vacância")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "Vacância" }),
+    ).toBeInTheDocument();
     expect(
       screen.queryByText("Não encontramos esta página..."),
     ).not.toBeInTheDocument();
