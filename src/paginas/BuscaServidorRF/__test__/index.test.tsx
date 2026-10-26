@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
 import { ComProvedores } from "@/testes/renderizarComTema";
-import { AtualizacaoRegistroFuncional } from "../index";
+import { BuscaServidorRF } from "../index";
 
 function renderNaCasca() {
   return render(
@@ -13,7 +13,7 @@ function renderNaCasca() {
         <Route element={<LayoutBase />}>
           <Route
             path={CAMINHOS.cadastroAtualizacaoRF}
-            element={<AtualizacaoRegistroFuncional />}
+            element={<BuscaServidorRF />}
           />
         </Route>
       </Routes>
@@ -45,7 +45,7 @@ function sugestao(texto: string): Promise<HTMLElement> {
   );
 }
 
-describe("AtualizacaoRegistroFuncional (integração com a casca)", () => {
+describe("BuscaServidorRF (integração com a casca)", () => {
   it("renderiza titulo, descricao, breadcrumb e o card de busca", () => {
     renderNaCasca();
 

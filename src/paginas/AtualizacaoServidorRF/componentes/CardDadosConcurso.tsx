@@ -10,6 +10,7 @@ export interface CardDadosConcursoProps {
   dataConvocacao: Dayjs | null;
   dataEscolha: Dayjs | null;
   dataNomeacao: Dayjs | null;
+  desabilitado?: boolean;
 }
 
 export function CardDadosConcurso({
@@ -19,9 +20,10 @@ export function CardDadosConcurso({
   dataConvocacao,
   dataEscolha,
   dataNomeacao,
+  desabilitado = false,
 }: CardDadosConcursoProps) {
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" disabled={desabilitado}>
       <TituloGrupo>Classificação</TituloGrupo>
       <Row gutter={16}>
         <Col xs={24} md={8}>

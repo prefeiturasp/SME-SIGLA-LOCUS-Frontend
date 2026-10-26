@@ -2,10 +2,37 @@ import { Alert, Collapse, Divider, Form, Segmented } from "antd";
 import styled, { css } from "styled-components";
 import { CardTituloIcone } from "@/estilos";
 
-export const IdentidadeServidor = styled.div`
+export const FaixaIdentidade = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  padding: ${({ theme }) => theme.spacing.md}px;
+  background: #e6f0f9;
+  border-radius: ${({ theme }) => theme.layout.radius}px;
+`;
+
+export const IdentidadeServidor = styled.div<{ $comLateral?: boolean }>`
+  display: flex;
+  align-items: ${({ $comLateral }) => ($comLateral ? "center" : "flex-start")};
+  width: 100%;
+  min-width: 0;
+  gap: ${({ theme }) => theme.spacing.md}px;
+`;
+
+export const LateralCard = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.lg}px;
+  margin-left: auto;
+`;
+
+export const LinhaCampos = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: ${({ theme }) => theme.spacing.md}px;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.xl}px;
+
+  > :nth-child(3) {
+    min-width: 0;
+  }
 `;
 
 export const LinhaNome = styled.div`
@@ -19,11 +46,18 @@ export const DivisorCard = styled(Divider)`
   margin: ${({ theme }) => theme.spacing.md}px 0;
 `;
 
-export const CampoIdentificacao = styled.div`
+export const CampoIdentificacao = styled.div<{ $semQuebra?: boolean }>`
   display: flex;
   min-width: 0;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs}px;
+
+  ${({ $semQuebra }) =>
+    $semQuebra &&
+    css`
+      min-width: max-content;
+      white-space: nowrap;
+    `}
 `;
 
 export const RotuloCampo = styled.span`

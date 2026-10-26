@@ -28,6 +28,8 @@ import { CardReadaptacao } from "./CardReadaptacao";
 
 export interface ListaInformacoesCadastroProps {
   estado: EstadoDetalheServidor;
+  exibirEncerramento?: boolean;
+  desabilitado?: boolean;
 }
 
 function Rotulo({
@@ -56,6 +58,8 @@ function Rotulo({
 
 export function ListaInformacoesCadastro({
   estado,
+  exibirEncerramento = true,
+  desabilitado = false,
 }: ListaInformacoesCadastroProps) {
   const itens: CollapseProps["items"] = [
     {
@@ -71,6 +75,7 @@ export function ListaInformacoesCadastro({
         <CardDadosFuncionais
           registroFuncional={estado.registroFuncional}
           situacaoCargoBase={estado.situacaoCargoBase}
+          desabilitado={desabilitado}
         />
       ),
     },
@@ -89,6 +94,7 @@ export function ListaInformacoesCadastro({
           tipoVaga={estado.tipoVaga}
           dataRetorno={estado.dataRetorno}
           realocado={estado.realocado}
+          desabilitado={desabilitado}
         />
       ),
     },
@@ -106,6 +112,8 @@ export function ListaInformacoesCadastro({
           aba={estado.abaUnidade}
           codigoEol={estado.codigoEol}
           tipoLotacao={estado.tipoLotacao}
+          aoSelecionarAba={estado.selecionarAbaUnidade}
+          desabilitado={desabilitado}
         />
       ),
     },
@@ -126,6 +134,7 @@ export function ListaInformacoesCadastro({
           dataConvocacao={estado.dataConvocacao}
           dataEscolha={estado.dataEscolhaConcurso}
           dataNomeacao={estado.dataNomeacao}
+          desabilitado={desabilitado}
         />
       ),
     },
@@ -142,6 +151,7 @@ export function ListaInformacoesCadastro({
         <CardInformacoesAdicionais
           liminar={estado.liminar}
           remocao={estado.remocao}
+          desabilitado={desabilitado}
         />
       ),
     },
@@ -158,6 +168,7 @@ export function ListaInformacoesCadastro({
         <CardReadaptacao
           tipoLaudo={estado.tipoLaudo}
           atividade={estado.atividadeReadaptacao}
+          desabilitado={desabilitado}
         />
       ),
     },
@@ -190,7 +201,11 @@ export function ListaInformacoesCadastro({
         expandIcon={() => (
           <ExpandMoreRoundedIcon aria-hidden fontSize="small" />
         )}
-        items={itens}
+        items={
+          exibirEncerramento
+            ? itens
+            : itens.filter((item) => item.key !== "encerramento-vinculo")
+        }
       />
     </BlocoInformacoes>
   );

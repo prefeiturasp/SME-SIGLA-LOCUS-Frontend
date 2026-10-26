@@ -8,14 +8,16 @@ import {
 export interface CardReadaptacaoProps {
   tipoLaudo?: string;
   atividade?: string;
+  desabilitado?: boolean;
 }
 
 export function CardReadaptacao({
   tipoLaudo,
   atividade,
+  desabilitado = false,
 }: CardReadaptacaoProps) {
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" disabled={desabilitado}>
       <Row gutter={16}>
         <Col xs={24} md={12}>
           <Form.Item label="Tipo de laudo" style={{ marginBottom: 0 }}>

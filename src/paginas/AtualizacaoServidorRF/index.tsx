@@ -10,7 +10,7 @@ import { PainelRegistrarAtualizacao } from "./componentes/PainelRegistrarAtualiz
 import { useDetalheServidor } from "./hooks/useDetalheServidor";
 import { useRegistrarAtualizacao } from "./hooks/useRegistrarAtualizacao";
 
-export function DetalheServidor() {
+export function AtualizacaoServidorRF() {
   const estado = useDetalheServidor();
   const atualizacao = useRegistrarAtualizacao();
 
@@ -54,4 +54,4 @@ export function DetalheServidor() {
   );
 }
 
-export default DetalheServidor;
+export default AtualizacaoServidorRF;

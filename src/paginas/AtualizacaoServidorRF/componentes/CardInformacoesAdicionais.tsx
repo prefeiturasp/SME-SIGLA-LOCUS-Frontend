@@ -5,11 +5,13 @@ const { Text } = Typography;
 export interface CardInformacoesAdicionaisProps {
   liminar: boolean;
   remocao: boolean;
+  desabilitado?: boolean;
 }
 
 export function CardInformacoesAdicionais({
   liminar,
   remocao,
+  desabilitado = false,
 }: CardInformacoesAdicionaisProps) {
   return (
     <List itemLayout="horizontal">
@@ -18,6 +20,7 @@ export function CardInformacoesAdicionais({
           <Switch
             key="liminar"
             checked={liminar}
+            disabled={desabilitado}
             checkedChildren="Sim"
             unCheckedChildren="Não"
             aria-label="Liminar"
@@ -38,6 +41,7 @@ export function CardInformacoesAdicionais({
           <Switch
             key="remocao"
             checked={remocao}
+            disabled={desabilitado}
             checkedChildren="Sim"
             unCheckedChildren="Não"
             aria-label="Remoção"

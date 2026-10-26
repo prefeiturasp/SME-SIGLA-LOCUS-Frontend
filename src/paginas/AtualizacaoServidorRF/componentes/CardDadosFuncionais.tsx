@@ -9,14 +9,16 @@ import {
 export interface CardDadosFuncionaisProps {
   registroFuncional: string;
   situacaoCargoBase: string;
+  desabilitado?: boolean;
 }
 
 export function CardDadosFuncionais({
   registroFuncional,
   situacaoCargoBase,
+  desabilitado = false,
 }: CardDadosFuncionaisProps) {
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" disabled={desabilitado}>
       <Row gutter={16}>
         <Col xs={24} md={8}>
           <Form.Item

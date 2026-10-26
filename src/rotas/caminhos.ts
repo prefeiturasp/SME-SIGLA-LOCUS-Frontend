@@ -83,12 +83,7 @@ const BREADCRUMB_POR_PADRAO: PadraoBreadcrumb[] = [
   },
   {
     padrao: CAMINHOS.cadastroAtualizacaoVacanciaServidor,
-    itens: () => [
-      INICIO,
-      { titulo: "Cadastro" },
-      { titulo: "Atualização" },
-      { titulo: "Vacância" },
-    ],
+    itens: () => [INICIO, { titulo: "Cadastro" }, { titulo: "Vacância" }],
   },
   {
     padrao: CAMINHOS.cadastroDetalheUE,

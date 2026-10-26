@@ -11,6 +11,7 @@ export interface CardAtividadeProps {
   tipoVaga: string;
   dataRetorno: Dayjs | null;
   realocado: boolean;
+  desabilitado?: boolean;
 }
 
 export function CardAtividade({
@@ -18,9 +19,10 @@ export function CardAtividade({
   tipoVaga,
   dataRetorno,
   realocado,
+  desabilitado = false,
 }: CardAtividadeProps) {
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" disabled={desabilitado}>
       <Row gutter={16}>
         <Col xs={24} md={12}>
           <Form.Item label="Atividade" style={{ marginBottom: 16 }}>
@@ -68,6 +70,7 @@ export function CardAtividade({
               </Text>
               <Switch
                 checked={realocado}
+                disabled={desabilitado}
                 checkedChildren="Sim"
                 unCheckedChildren="Não"
                 aria-label="Realocado"
