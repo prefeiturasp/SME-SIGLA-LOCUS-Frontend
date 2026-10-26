@@ -8,7 +8,7 @@ import {
 } from "@/rotas/caminhos";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { servidorEstatico } from "../dados/dadosEstaticos";
-import { DetalheServidor } from "../index";
+import { AtualizacaoServidorRF } from "../index";
 
 function renderNaCasca(rf = servidorEstatico.registroFuncional) {
   return render(
@@ -17,7 +17,7 @@ function renderNaCasca(rf = servidorEstatico.registroFuncional) {
         <Route element={<LayoutBase />}>
           <Route
             path={CAMINHOS.cadastroAtualizacaoRegistroFuncional}
-            element={<DetalheServidor />}
+            element={<AtualizacaoServidorRF />}
           />
         </Route>
       </Routes>
@@ -25,7 +25,7 @@ function renderNaCasca(rf = servidorEstatico.registroFuncional) {
   );
 }
 
-describe("DetalheServidor", () => {
+describe("AtualizacaoServidorRF", () => {
   it("renderiza o cadastro estatico dentro do layout", () => {
     renderNaCasca();
 

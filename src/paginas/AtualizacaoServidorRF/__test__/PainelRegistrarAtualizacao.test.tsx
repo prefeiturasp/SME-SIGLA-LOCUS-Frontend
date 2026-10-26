@@ -10,7 +10,7 @@ import {
   opcoesMotivoAtualizacao,
   servidorEstatico,
 } from "../dados/dadosEstaticos";
-import { DetalheServidor } from "../index";
+import { AtualizacaoServidorRF } from "../index";
 
 function renderPagina() {
   return render(
@@ -22,7 +22,7 @@ function renderPagina() {
       <Routes>
         <Route
           path={CAMINHOS.cadastroAtualizacaoRegistroFuncional}
-          element={<DetalheServidor />}
+          element={<AtualizacaoServidorRF />}
         />
       </Routes>
     </ComProvedores>,

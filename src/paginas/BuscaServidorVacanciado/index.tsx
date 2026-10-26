@@ -1,10 +1,11 @@
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { PaginaErro } from "@/componentes/PaginaErro";
 import { ConteudoPagina } from "@/estilos";
-import { CardBuscarServidor } from "./componentes/CardBuscarServidor";
-import { useAtualizacaoRegistroFuncional } from "./hooks/useAtualizacaoRegistroFuncional";
+import { CardBuscarServidor } from "@/paginas/BuscaServidorRF/componentes/CardBuscarServidor";
+import { useAtualizacaoRegistroFuncional } from "@/paginas/BuscaServidorRF/hooks/useAtualizacaoRegistroFuncional";
+import { caminhoAtualizacaoVacanciaServidor } from "@/rotas/caminhos";
 
-export function AtualizacaoRegistroFuncional() {
+export function BuscaServidorVacanciado() {
   const {
     termo,
     sugestoes,
@@ -14,13 +15,13 @@ export function AtualizacaoRegistroFuncional() {
     alterarTermo,
     selecionarServidor,
     buscarServidor,
-  } = useAtualizacaoRegistroFuncional();
+  } = useAtualizacaoRegistroFuncional(caminhoAtualizacaoVacanciaServidor);
 
   return (
     <>
       <CabecalhoPagina
-        titulo="Atualização por registro funcional (RF)"
-        descricao="Consulte ou atualize os dados funcionais de uma pessoa servidora."
+        titulo="Vacância"
+        descricao="Pesquise pelo nome, RF ou CPF para consultar o cadastro funcional."
       />
 
       <ConteudoPagina>
@@ -46,4 +47,4 @@ export function AtualizacaoRegistroFuncional() {
   );
 }
 
-export default AtualizacaoRegistroFuncional;
+export default BuscaServidorVacanciado;

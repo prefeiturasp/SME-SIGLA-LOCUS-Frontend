@@ -6,6 +6,7 @@ import {
   concursoEstatico,
   dadosFuncionaisEstaticos,
   encerramentoEstatico,
+  exercicioEstatico,
   historicoAtualizacoesEstatico,
   lotacaoEstatica,
   servidorEstatico,
@@ -25,6 +26,7 @@ export interface EstadoDetalheServidor {
   abaUnidade: AbaUnidade;
   codigoEol: string;
   tipoLotacao?: string;
+  selecionarAbaUnidade: (aba: AbaUnidade) => void;
   classificacaoGeral: string;
   classificacaoNna: string;
   classificacaoPcd: string;
@@ -57,9 +59,14 @@ export function useDetalheServidor(): EstadoDetalheServidor {
   const [tipoVaga] = useState(atividadeEstatica.tipoVaga);
   const [dataRetorno] = useState<Dayjs | null>(null);
   const [realocado] = useState(atividadeEstatica.realocado);
-  const [abaUnidade] = useState<AbaUnidade>("lotacao");
+  const [abaUnidade, setAbaUnidade] = useState<AbaUnidade>("lotacao");
   const [codigoEol] = useState(lotacaoEstatica.codigoEol);
-  const [tipoLotacao] = useState(lotacaoEstatica.tipoLotacao);
+  const [tipoLotacao, setTipoLotacao] = useState(lotacaoEstatica.tipoLotacao);
+  const selecionarAbaUnidade = useCallback((aba: AbaUnidade) => {
+    const unidade = aba === "lotacao" ? lotacaoEstatica : exercicioEstatico;
+    setAbaUnidade(aba);
+    setTipoLotacao(unidade.tipoLotacao);
+  }, []);
   const [classificacaoGeral] = useState(concursoEstatico.classificacaoGeral);
   const [classificacaoNna] = useState("");
   const [classificacaoPcd] = useState("");
@@ -106,6 +113,7 @@ export function useDetalheServidor(): EstadoDetalheServidor {
       abaUnidade,
       codigoEol,
       tipoLotacao,
+      selecionarAbaUnidade,
       classificacaoGeral,
       classificacaoNna,
       classificacaoPcd,
@@ -133,6 +141,7 @@ export function useDetalheServidor(): EstadoDetalheServidor {
       abaUnidade,
       codigoEol,
       tipoLotacao,
+      selecionarAbaUnidade,
       classificacaoGeral,
       classificacaoNna,
       classificacaoPcd,

@@ -1,4 +1,4 @@
-import { Col, Form, Row } from "antd";
+import { Col, ConfigProvider, Form, Row } from "antd";
 import { InputForm, SelectForm } from "@/estilos";
 import {
   exercicioEstatico,
@@ -17,18 +17,29 @@ export interface CardLotacaoExercicioProps {
   aba: AbaUnidade;
   codigoEol: string;
   tipoLotacao?: string;
+  aoSelecionarAba: (aba: AbaUnidade) => void;
+  desabilitado?: boolean;
 }
 
 export function CardLotacaoExercicio({
   aba,
   codigoEol,
   tipoLotacao,
+  aoSelecionarAba,
+  desabilitado = false,
 }: CardLotacaoExercicioProps) {
   const unidade = aba === "lotacao" ? lotacaoEstatica : exercicioEstatico;
 
   return (
-    <Form layout="vertical">
-      <AlternadorUnidade block value={aba} options={OPCOES_ABA} />
+    <Form layout="vertical" disabled={desabilitado}>
+      <ConfigProvider componentDisabled={false}>
+        <AlternadorUnidade
+          block
+          value={aba}
+          options={OPCOES_ABA}
+          onChange={(valor) => aoSelecionarAba(valor as AbaUnidade)}
+        />
+      </ConfigProvider>
 
       <Form.Item
         label="Código EOL"

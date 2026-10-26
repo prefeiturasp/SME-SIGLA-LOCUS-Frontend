@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from "axios";
-import { servidoresExemplo } from "@/paginas/AtualizacaoRegistroFuncional/dados/dadosEstaticos";
+import { servidoresExemplo } from "@/paginas/BuscaServidorRF/dados/dadosEstaticos";
 import {
   ehTermoNumerico,
   normalizarTexto,

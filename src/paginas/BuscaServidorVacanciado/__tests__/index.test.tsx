@@ -1,14 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { AtualizacaoServidorVacanciado } from "@/paginas/AtualizacaoServidorVacanciado";
 import {
   CAMINHOS,
   caminhoAtualizacaoVacanciaServidor,
 } from "@/rotas/caminhos";
 import { ComProvedores } from "@/testes/renderizarComTema";
-import { AtualizacaoVacancia } from "../index";
-import { VacanciaServidor } from "../Servidor";
+import { BuscaServidorVacanciado } from "../index";
 
+const RF_GABRIEL = "1234567";
 const RF_MARIA_CLARA = "8123417";
 const SUGESTAO_MARIA_CLARA =
   "812.341.7 - Maria Clara Souza Ribeiro [CPF 628.493.157-04]";
@@ -31,11 +32,11 @@ function renderNaRota() {
         <Route element={<Casca />}>
           <Route
             path={CAMINHOS.cadastroAtualizacaoVacancia}
-            element={<AtualizacaoVacancia />}
+            element={<BuscaServidorVacanciado />}
           />
           <Route
             path={CAMINHOS.cadastroAtualizacaoVacanciaServidor}
-            element={<VacanciaServidor />}
+            element={<AtualizacaoServidorVacanciado />}
           />
         </Route>
       </Routes>
@@ -61,16 +62,44 @@ function sugestao(texto: string): Promise<HTMLElement> {
   );
 }
 
-describe("AtualizacaoVacancia", () => {
+describe("BuscaServidorVacanciado", () => {
   it("abre a ficha ao buscar um RF existente", async () => {
     renderNaRota();
 
-    await userEvent.type(campoBusca(), RF_MARIA_CLARA);
+    await userEvent.type(campoBusca(), RF_GABRIEL);
     await buscar();
 
     expect(
-      await screen.findByText(caminhoAtualizacaoVacanciaServidor(RF_MARIA_CLARA)),
+      await screen.findByText(caminhoAtualizacaoVacanciaServidor(RF_GABRIEL)),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Vacância" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Gabriel Nascimento Arantes")).toBeInTheDocument();
+    expect(screen.getByText("Vacanciado")).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: /Dados funcionais/ }),
+    );
+    expect(
+      screen.getByRole("combobox", {
+        name: "Situação funcional do cargo base",
+      }),
+    ).toBeDisabled();
+    await userEvent.click(
+      screen.getByRole("button", { name: /Lotação e exercício/ }),
+    );
+    expect(screen.getByText("Definitiva")).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("radio", { name: "Unidade de exercício" }),
+    );
+    expect(screen.getByText("Precária")).toBeInTheDocument();
+    expect(screen.queryByText("Definitiva")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Nova atualização" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Encerramento do vínculo"),
+    ).not.toBeInTheDocument();
   });
 
   it("abre a ficha pelo RF da sugestao escolhida", async () => {
