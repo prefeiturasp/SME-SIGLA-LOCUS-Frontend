@@ -1,7 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Outlet, Route, Routes, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  type InitialEntry,
+} from "react-router-dom";
+import { ROTULO_FECHAR_MODAL } from "@/componentes/ModalBase";
 import { AtualizacaoServidorVacanciado } from "@/paginas/AtualizacaoServidorVacanciado";
+import { BuscaServidorRF } from "@/paginas/BuscaServidorRF";
 import {
   CAMINHOS,
   caminhoAtualizacaoVacanciaServidor,
@@ -16,18 +25,24 @@ const SUGESTAO_MARIA_CLARA =
 
 function Casca() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
       <p>{pathname}</p>
+      <button type="button" onClick={() => navigate(-1)}>
+        Voltar no histórico
+      </button>
       <Outlet />
     </>
   );
 }
 
-function renderNaRota() {
+function renderNaRota(
+  rota: InitialEntry = CAMINHOS.cadastroAtualizacaoVacancia,
+) {
   return render(
-    <ComProvedores rota={CAMINHOS.cadastroAtualizacaoVacancia}>
+    <ComProvedores rota={rota}>
       <Routes>
         <Route element={<Casca />}>
           <Route
@@ -37,6 +52,10 @@ function renderNaRota() {
           <Route
             path={CAMINHOS.cadastroAtualizacaoVacanciaServidor}
             element={<AtualizacaoServidorVacanciado />}
+          />
+          <Route
+            path={CAMINHOS.cadastroAtualizacaoRF}
+            element={<BuscaServidorRF />}
           />
         </Route>
       </Routes>
@@ -132,5 +151,98 @@ describe("BuscaServidorVacanciado", () => {
     expect(
       screen.queryByText("Não encontramos nenhuma pessoa"),
     ).not.toBeInTheDocument();
+  });
+});
+
+describe("modal de perfil reativado", () => {
+  const BUSCA_COM_RF_REATIVADO: InitialEntry = {
+    pathname: CAMINHOS.cadastroAtualizacaoVacancia,
+    state: { rfReativado: RF_GABRIEL },
+  };
+
+  function modalSucesso(): Promise<HTMLElement> {
+    return screen.findByRole("dialog", { name: "Perfil reativado!" });
+  }
+
+  function aguardarFechar(): Promise<void> {
+    return waitFor(() =>
+      expect(
+        screen.queryByRole("dialog", { name: "Perfil reativado!" }),
+      ).not.toBeInTheDocument(),
+    );
+  }
+
+  async function pesquisarPorRF() {
+    await userEvent.click(
+      within(await modalSucesso()).getByRole("button", {
+        name: "Pesquisar por RF",
+      }),
+    );
+    expect(
+      await screen.findByText(CAMINHOS.cadastroAtualizacaoRF),
+    ).toBeInTheDocument();
+  }
+
+  it("nao abre sem uma reativacao", () => {
+    renderNaRota();
+
+    expect(
+      screen.queryByRole("dialog", { name: "Perfil reativado!" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("abre ao chegar da reativacao e fecha sem sair da busca", async () => {
+    renderNaRota(BUSCA_COM_RF_REATIVADO);
+    const sucesso = await modalSucesso();
+
+    expect(within(sucesso).getByText("“pesquisar por RF”").tagName).toBe(
+      "STRONG",
+    );
+
+    await userEvent.click(
+      within(sucesso).getByRole("button", { name: "Fechar" }),
+    );
+
+    await aguardarFechar();
+    expect(
+      screen.getByText(CAMINHOS.cadastroAtualizacaoVacancia),
+    ).toBeInTheDocument();
+  });
+
+  it("fecha pelo X sem sair da busca", async () => {
+    renderNaRota(BUSCA_COM_RF_REATIVADO);
+
+    await userEvent.click(
+      within(await modalSucesso()).getByRole("button", {
+        name: ROTULO_FECHAR_MODAL,
+      }),
+    );
+
+    await aguardarFechar();
+    expect(
+      screen.getByText(CAMINHOS.cadastroAtualizacaoVacancia),
+    ).toBeInTheDocument();
+  });
+
+  it("leva para a busca por RF com o RF reativado preenchido", async () => {
+    renderNaRota(BUSCA_COM_RF_REATIVADO);
+
+    await pesquisarPorRF();
+
+    expect(campoBusca()).toHaveValue(RF_GABRIEL);
+  });
+
+  it("nao reabre ao voltar da busca por RF", async () => {
+    renderNaRota(BUSCA_COM_RF_REATIVADO);
+    await pesquisarPorRF();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Voltar no histórico" }),
+    );
+
+    expect(
+      await screen.findByText(CAMINHOS.cadastroAtualizacaoVacancia),
+    ).toBeInTheDocument();
+    await aguardarFechar();
   });
 });

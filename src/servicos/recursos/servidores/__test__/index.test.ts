@@ -1,6 +1,9 @@
 import {
   filtrarServidores,
   pesquisarServidores,
+  reativarServidor,
+  ServidorNaoEncontradoError,
+  URL,
   type ServidorResumo,
 } from "..";
 
@@ -89,6 +92,43 @@ describe("pesquisarServidores", () => {
 
   it("permite cancelar a consulta", () => {
     const { abort } = pesquisarServidores("maria");
+
+    expect(() => abort()).not.toThrow();
+  });
+});
+
+describe("reativarServidor", () => {
+  afterEach(() => window.history.pushState({}, "", "/"));
+
+  it("monta a URL de reativacao pelo RF", () => {
+    expect(URL.reativar("1234567")).toBe(
+      "/api/v1/servidores/1234567/reativar/",
+    );
+  });
+
+  it("resolve a reativacao de um servidor existente", async () => {
+    await expect(reativarServidor("1234567").response).resolves.toEqual({
+      sucesso: true,
+      mensagem: "O perfil do servidor foi reativado.",
+    });
+  });
+
+  it("rejeita quando o servidor nao existe", async () => {
+    await expect(reativarServidor("0000000").response).rejects.toBeInstanceOf(
+      ServidorNaoEncontradoError,
+    );
+  });
+
+  it("simula erro com ?erro=1", async () => {
+    window.history.pushState({}, "", "/?erro=1");
+
+    await expect(reativarServidor("1234567").response).rejects.toThrow(
+      "Erro simulado na reativação do servidor",
+    );
+  });
+
+  it("permite cancelar a reativacao", () => {
+    const { abort } = reativarServidor("1234567");
 
     expect(() => abort()).not.toThrow();
   });

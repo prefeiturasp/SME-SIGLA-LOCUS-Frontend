@@ -1,9 +1,11 @@
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
+import { ModalBase } from "@/componentes/ModalBase";
 import { PaginaErro } from "@/componentes/PaginaErro";
 import { ConteudoPagina } from "@/estilos";
 import { CardBuscarServidor } from "@/paginas/BuscaServidorRF/componentes/CardBuscarServidor";
 import { useAtualizacaoRegistroFuncional } from "@/paginas/BuscaServidorRF/hooks/useAtualizacaoRegistroFuncional";
 import { caminhoAtualizacaoVacanciaServidor } from "@/rotas/caminhos";
+import { usePerfilReativado } from "./hooks/usePerfilReativado";
 
 export function BuscaServidorVacanciado() {
   const {
@@ -16,6 +18,7 @@ export function BuscaServidorVacanciado() {
     selecionarServidor,
     buscarServidor,
   } = useAtualizacaoRegistroFuncional(caminhoAtualizacaoVacanciaServidor);
+  const perfilReativado = usePerfilReativado();
 
   return (
     <>
@@ -43,6 +46,23 @@ export function BuscaServidorVacanciado() {
           />
         ) : null}
       </ConteudoPagina>
+
+      <ModalBase
+        aberto={perfilReativado.aberto}
+        titulo="Perfil reativado!"
+        mensagem={
+          <>
+            Você pode conferir ou atualizar as informações do servidor clicando
+            em <strong>“pesquisar por RF”</strong>.
+          </>
+        }
+        textoAcaoSecundaria="Pesquisar por RF"
+        aoAcaoSecundaria={perfilReativado.pesquisarPorRF}
+        textoConfirmar="Fechar"
+        confirmarPrimario
+        aoConfirmar={perfilReativado.fechar}
+        aoCancelar={perfilReativado.fechar}
+      />
     </>
   );
 }

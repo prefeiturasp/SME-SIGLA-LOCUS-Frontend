@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { App as AntdApp, ConfigProvider } from "antd";
 import { StyleProvider } from "@ant-design/cssinjs";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, type InitialEntry } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { temaAntd } from "@/estilos/temas/temaAntd";
 import { tema } from "@/estilos/tokens/tokens";
@@ -30,7 +30,7 @@ export function renderizarComTema(
 export interface ComProvedoresProps {
   children: ReactNode;
   /** Rota inicial do MemoryRouter. */
-  rota?: string;
+  rota?: InitialEntry;
 }
 
 export function ComProvedores({ children, rota = "/" }: ComProvedoresProps) {

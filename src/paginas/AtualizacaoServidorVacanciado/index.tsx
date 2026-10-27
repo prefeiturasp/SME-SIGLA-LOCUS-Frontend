@@ -3,6 +3,7 @@ import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
+import { ModalBase } from "@/componentes/ModalBase";
 import { ConteudoPagina } from "@/estilos";
 import { CardServidor } from "@/paginas/AtualizacaoServidorRF/componentes/CardServidor";
 import { ListaInformacoesCadastro } from "@/paginas/AtualizacaoServidorRF/componentes/ListaInformacoesCadastro";
@@ -14,6 +15,7 @@ import {
 } from "@/paginas/AtualizacaoServidorRF/Estilos";
 import { useDetalheServidor } from "@/paginas/AtualizacaoServidorRF/hooks/useDetalheServidor";
 import { CAMINHOS } from "@/rotas/caminhos";
+import { useReativarPerfil } from "./hooks/useReativarPerfil";
 
 const DATA_VAZIA = "00/00/0000";
 
@@ -25,6 +27,7 @@ const DATAS_VACANCIA = [
 export function AtualizacaoServidorVacanciado() {
   const estado = useDetalheServidor();
   const navigate = useNavigate();
+  const reativacao = useReativarPerfil(estado.registroFuncional);
 
   return (
     <>
@@ -49,6 +52,7 @@ export function AtualizacaoServidorVacanciado() {
             <Button
               type="default"
               icon={<ReplayOutlinedIcon fontSize="small" />}
+              onClick={reativacao.abrirModal}
             >
               Reativar perfil
             </Button>
@@ -79,6 +83,17 @@ export function AtualizacaoServidorVacanciado() {
         aberto={estado.painelHistoricoAberto}
         registros={estado.historico}
         aoFechar={estado.fecharPainelHistorico}
+      />
+
+      <ModalBase
+        aberto={reativacao.modalAberto}
+        titulo="Reativar perfil"
+        mensagem="Este perfil está inativo por motivo de vacância. Ao reativar, o servidor será contabilizado entre os lotados da unidade educacional. Deseja reativar o perfil?"
+        textoConfirmar="Reativar perfil"
+        confirmarPrimario
+        confirmando={reativacao.reativando}
+        aoConfirmar={reativacao.confirmarReativacao}
+        aoCancelar={reativacao.fecharModal}
       />
     </>
   );
