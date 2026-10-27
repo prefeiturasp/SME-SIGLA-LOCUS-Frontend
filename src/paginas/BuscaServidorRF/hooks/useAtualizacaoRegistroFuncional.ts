@@ -1,8 +1,11 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useNotificacao } from "@/hooks/useNotificacao";
 import { validarTermoBuscaServidor } from "@/paginas/validacoes/buscarServidor";
-import { caminhoAtualizacaoRegistroFuncional } from "@/rotas/caminhos";
+import {
+  caminhoAtualizacaoRegistroFuncional,
+  type EstadoNavegacaoBuscaServidor,
+} from "@/rotas/caminhos";
 import { API } from "@/servicos";
 import type { ServidorResumo } from "@/servicos/recursos/servidores";
 import { resolverServidorDaBusca, textoDaSugestao } from "../utilitarios";
@@ -25,8 +28,11 @@ export function useAtualizacaoRegistroFuncional(
   caminhoDoServidor: (rf: string) => string = caminhoAtualizacaoRegistroFuncional,
 ): EstadoAtualizacaoRegistroFuncional {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const notificacao = useNotificacao();
-  const [termo, setTermo] = useState("");
+  const [termo, setTermo] = useState(
+    () => (state as EstadoNavegacaoBuscaServidor | null)?.termoBusca ?? "",
+  );
   const [sugestoes, setSugestoes] = useState<ServidorResumo[]>([]);
   const [servidorEncontrado, setServidorEncontrado] = useState<
     ServidorResumo | undefined

@@ -14,6 +14,14 @@ export const CAMINHOS = {
 
 export type Caminho = (typeof CAMINHOS)[keyof typeof CAMINHOS];
 
+export interface EstadoNavegacaoVacancia {
+  rfReativado?: string;
+}
+
+export interface EstadoNavegacaoBuscaServidor {
+  termoBusca?: string;
+}
+
 export function caminhoDetalheUE(codigoLotacao: string): string {
   return CAMINHOS.cadastroDetalheUE.replace(
     ":codigoLotacao",

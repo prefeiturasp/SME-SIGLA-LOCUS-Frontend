@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { act, renderHook, screen, waitFor } from "@testing-library/react";
+import type { InitialEntry } from "react-router-dom";
 import { MENSAGENS_BUSCA_SERVIDOR } from "@/paginas/validacoes/buscarServidor";
 import {
   pesquisarServidores,
@@ -16,10 +17,10 @@ jest.mock("@/servicos/recursos/servidores", () => {
 
 const pesquisarMock = jest.mocked(pesquisarServidores);
 
-function renderizarHook() {
+function renderizarHook(rota?: InitialEntry) {
   return renderHook(() => useAtualizacaoRegistroFuncional(), {
     wrapper: ({ children }: { children: ReactNode }) => (
-      <ComProvedores>{children}</ComProvedores>
+      <ComProvedores rota={rota}>{children}</ComProvedores>
     ),
   });
 }
@@ -257,5 +258,20 @@ describe("useAtualizacaoRegistroFuncional", () => {
       ),
     ).toBeInTheDocument();
     expect(result.current.buscando).toBe(false);
+  });
+
+  it("comeca com o termo recebido na navegacao", () => {
+    const { result } = renderizarHook({
+      pathname: "/",
+      state: { termoBusca: "1234567" },
+    });
+
+    expect(result.current.termo).toBe("1234567");
+  });
+
+  it("comeca com o termo vazio sem estado de navegacao", () => {
+    const { result } = renderizarHook();
+
+    expect(result.current.termo).toBe("");
   });
 });

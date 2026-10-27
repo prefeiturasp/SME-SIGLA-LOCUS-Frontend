@@ -8,3 +8,12 @@ export const servidorResumoSchema = z.object({
 export type ServidorResumo = z.infer<typeof servidorResumoSchema>;
 
 export const listaServidoresSchema = z.array(servidorResumoSchema);
+
+export class ServidorNaoEncontradoError extends Error {
+  readonly codigo = "SERVIDOR_NAO_ENCONTRADO" as const;
+
+  constructor(mensagem = "Servidor não encontrado") {
+    super(mensagem);
+    this.name = "ServidorNaoEncontradoError";
+  }
+}

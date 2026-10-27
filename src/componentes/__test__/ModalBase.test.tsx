@@ -1,36 +1,42 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ModalBase } from "../ModalBase";
+import {
+  ModalBase,
+  ROTULO_FECHAR_MODAL,
+  type ModalBaseProps,
+} from "../ModalBase";
 import { ComProvedores } from "@/testes/renderizarComTema";
 
-interface Opcoes {
-  aberto?: boolean;
-  confirmando?: boolean;
-  aoConfirmar?: jest.Mock;
-  aoCancelar?: jest.Mock;
-}
+function renderizarModal(props: Partial<ModalBaseProps> = {}) {
+  const aoConfirmar = jest.fn();
+  const aoCancelar = jest.fn();
 
-function renderizarModal({
-  aberto = true,
-  confirmando = false,
-  aoConfirmar = jest.fn(),
-  aoCancelar = jest.fn(),
-}: Opcoes = {}) {
   render(
     <ComProvedores>
       <ModalBase
-        aberto={aberto}
+        aberto
         titulo="Excluir Unidade Educacional"
         mensagem="A ação não poderá ser desfeita e as informações serão deletadas. Tem certeza que deseja continuar?"
         textoConfirmar="Excluir UE"
         perigo
-        confirmando={confirmando}
         aoConfirmar={aoConfirmar}
         aoCancelar={aoCancelar}
+        {...props}
       />
     </ComProvedores>,
   );
   return { aoConfirmar, aoCancelar };
+}
+
+function botaoFechar(): HTMLElement {
+  return screen.getByRole("button", { name: ROTULO_FECHAR_MODAL });
+}
+
+function pressionarEsc() {
+  fireEvent.keyDown(screen.getByRole("dialog"), {
+    key: "Escape",
+    keyCode: 27,
+  });
 }
 
 describe("ModalBase", () => {
@@ -68,5 +74,74 @@ describe("ModalBase", () => {
     expect(
       screen.getByRole("button", { name: /Excluir UE/ }),
     ).toHaveClass("ant-btn-loading");
+  });
+
+  it("mantem o botao de confirmacao sem destaque por padrao", () => {
+    renderizarModal();
+
+    expect(screen.getByRole("button", { name: "Excluir UE" })).not.toHaveClass(
+      "ant-btn-primary",
+    );
+  });
+
+  it("destaca o botao de confirmacao quando primario", () => {
+    renderizarModal({ confirmarPrimario: true });
+
+    expect(screen.getByRole("button", { name: "Excluir UE" })).toHaveClass(
+      "ant-btn-primary",
+    );
+  });
+
+  it("fecha pelo X e pelo Esc com aoCancelar", async () => {
+    const { aoCancelar } = renderizarModal();
+
+    await userEvent.click(botaoFechar());
+    pressionarEsc();
+
+    expect(aoCancelar).toHaveBeenCalledTimes(2);
+  });
+
+  it("troca o cancelar pela acao secundaria e mantem o X fechando", async () => {
+    const aoAcaoSecundaria = jest.fn();
+    const { aoCancelar } = renderizarModal({
+      textoAcaoSecundaria: "Pesquisar por RF",
+      aoAcaoSecundaria,
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Cancelar" }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Pesquisar por RF" }),
+    );
+    expect(aoAcaoSecundaria).toHaveBeenCalledTimes(1);
+    expect(aoCancelar).not.toHaveBeenCalled();
+
+    await userEvent.click(botaoFechar());
+    expect(aoCancelar).toHaveBeenCalledTimes(1);
+  });
+
+  it("bloqueia o fechamento enquanto confirma", () => {
+    const { aoCancelar } = renderizarModal({ confirmando: true });
+
+    expect(screen.getByRole("button", { name: "Cancelar" })).toBeDisabled();
+    expect(botaoFechar()).toBeDisabled();
+
+    pressionarEsc();
+
+    expect(aoCancelar).not.toHaveBeenCalled();
+  });
+
+  it("bloqueia as demais acoes enquanto a acao extra executa", () => {
+    renderizarModal({
+      textoAcaoExtra: "Salvar",
+      aoAcaoExtra: jest.fn(),
+      confirmandoAcaoExtra: true,
+    });
+
+    expect(screen.getByRole("button", { name: "Cancelar" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Excluir UE" })).toBeDisabled();
+    expect(botaoFechar()).toBeDisabled();
   });
 });
