@@ -1,7 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
-import { AtualizacaoRegistroFuncional } from "@/paginas/AtualizacaoRegistroFuncional";
-import { DetalheServidor } from "@/paginas/DetalheServidor";
+import { AtualizacaoServidorRF } from "@/paginas/AtualizacaoServidorRF";
+import { AtualizacaoServidorVacanciado } from "@/paginas/AtualizacaoServidorVacanciado";
+import { BuscaServidorRF } from "@/paginas/BuscaServidorRF";
+import { BuscaServidorVacanciado } from "@/paginas/BuscaServidorVacanciado";
 import { DetalheUnidadeEducacional } from "@/paginas/DetalheUnidadeEducacional";
 import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais";
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
@@ -28,11 +30,19 @@ export function RotasApp() {
         />
         <Route
           path={CAMINHOS.cadastroAtualizacaoRF}
-          element={<AtualizacaoRegistroFuncional />}
+          element={<BuscaServidorRF />}
         />
         <Route
           path={CAMINHOS.cadastroAtualizacaoRegistroFuncional}
-          element={<DetalheServidor />}
+          element={<AtualizacaoServidorRF />}
+        />
+        <Route
+          path={CAMINHOS.cadastroAtualizacaoVacancia}
+          element={<BuscaServidorVacanciado />}
+        />
+        <Route
+          path={CAMINHOS.cadastroAtualizacaoVacanciaServidor}
+          element={<AtualizacaoServidorVacanciado />}
         />
         <Route
           index

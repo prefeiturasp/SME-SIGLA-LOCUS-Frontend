@@ -6,10 +6,21 @@ export const CAMINHOS = {
   cadastroAtualizacaoRF: "/cadastro/atualizacao/registro-funcional",
   cadastroAtualizacaoRegistroFuncional:
     "/cadastro/atualizacao/registro-funcional/:rf",
+  cadastroAtualizacaoVacancia: "/cadastro/atualizacao/vacancia",
+  cadastroAtualizacaoVacanciaServidor:
+    "/cadastro/atualizacao/vacancia-servidor/:rf",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
 export type Caminho = (typeof CAMINHOS)[keyof typeof CAMINHOS];
+
+export interface EstadoNavegacaoVacancia {
+  rfReativado?: string;
+}
+
+export interface EstadoNavegacaoBuscaServidor {
+  termoBusca?: string;
+}
 
 export function caminhoDetalheUE(codigoLotacao: string): string {
   return CAMINHOS.cadastroDetalheUE.replace(
@@ -20,6 +31,13 @@ export function caminhoDetalheUE(codigoLotacao: string): string {
 
 export function caminhoAtualizacaoRegistroFuncional(rf: string): string {
   return CAMINHOS.cadastroAtualizacaoRegistroFuncional.replace(
+    ":rf",
+    encodeURIComponent(rf),
+  );
+}
+
+export function caminhoAtualizacaoVacanciaServidor(rf: string): string {
+  return CAMINHOS.cadastroAtualizacaoVacanciaServidor.replace(
     ":rf",
     encodeURIComponent(rf),
   );
@@ -47,6 +65,12 @@ export const BREADCRUMB_POR_ROTA: Record<string, ItemBreadcrumb[]> = {
     { titulo: "Atualização" },
     { titulo: "Por registro funcional (RF)" },
   ],
+  [CAMINHOS.cadastroAtualizacaoVacancia]: [
+    INICIO,
+    { titulo: "Cadastro" },
+    { titulo: "Atualização" },
+    { titulo: "Vacância" },
+  ],
   [CAMINHOS.naoEncontrado]: [INICIO, { titulo: "Página não encontrada" }],
 };
 
@@ -64,6 +88,10 @@ const BREADCRUMB_POR_PADRAO: PadraoBreadcrumb[] = [
       { titulo: "Atualização" },
       { titulo: "Por registro funcional (RF)" },
     ],
+  },
+  {
+    padrao: CAMINHOS.cadastroAtualizacaoVacanciaServidor,
+    itens: () => [INICIO, { titulo: "Cadastro" }, { titulo: "Vacância" }],
   },
   {
     padrao: CAMINHOS.cadastroDetalheUE,

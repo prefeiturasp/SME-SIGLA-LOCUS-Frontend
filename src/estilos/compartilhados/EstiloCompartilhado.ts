@@ -30,7 +30,9 @@ export const ModalPadrao = styled(Modal).attrs({
   width: LARGURA_MODAL_PADRAO,
 })`
   .ant-modal-content {
-    height: ${ALTURA_MODAL_PADRAO}px;
+    display: flex;
+    flex-direction: column;
+    min-height: ${ALTURA_MODAL_PADRAO}px;
   }
 
   .ant-modal-header {
