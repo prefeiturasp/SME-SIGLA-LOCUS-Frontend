@@ -12,6 +12,7 @@ jest.mock("@/servicos/recursos/autenticacao", () => ({
 const ROTA_GESTAO = "/cadastro/gestao-unidades-educacionais";
 const ROTA_REGISTRAR = "/cadastro/registrar-unidade-educacional";
 const ROTA_RF = "/cadastro/atualizacao/registro-funcional";
+const ROTA_SERVIDORES_ATIVOS = "/relatorios-consultas/servidores-ativos";
 const SELECIONADO = "ant-menu-item-selected";
 
 function renderComRota(rota: string) {
@@ -25,6 +26,10 @@ function renderComRota(rota: string) {
           <Route path={ROTA_GESTAO} element={<p>Tela de gestão</p>} />
           <Route path={ROTA_REGISTRAR} element={<p>Tela de registrar</p>} />
           <Route path={ROTA_RF} element={<p>Tela de atualização por RF</p>} />
+          <Route
+            path={ROTA_SERVIDORES_ATIVOS}
+            element={<p>Tela de servidores ativos</p>}
+          />
         </Routes>
       </MemoryRouter>
     </ComTema>,
@@ -61,18 +66,16 @@ describe("MenuLateral", () => {
     ]);
   });
 
-  it("habilita so Início e Cadastro, os unicos com destino", () => {
+  it("habilita Início, Cadastro e Relatórios e consultas", () => {
     renderComRota(ROTA_GESTAO);
 
     expect(itemDoMenu("Início")).not.toHaveAttribute("aria-disabled", "true");
     expect(itemDoMenu("Cadastro")).not.toHaveAttribute("aria-disabled", "true");
-    [
-      "Relatórios consultas",
-      "Data base",
-      "Vagas",
-      "Remoção",
-      "Integração",
-    ].forEach((rotulo) =>
+    expect(itemDoMenu("Relatórios consultas")).not.toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    ["Data base", "Vagas", "Remoção", "Integração"].forEach((rotulo) =>
       expect(itemDoMenu(rotulo)).toHaveAttribute("aria-disabled", "true"),
     );
   });
@@ -176,6 +179,26 @@ describe("MenuLateral", () => {
 
     expect(await screen.findByText("Tela de gestão")).toBeInTheDocument();
     expect(painel()).not.toBeInTheDocument();
+  });
+
+  it("vai para Servidores ativos pelo submenu de Relatórios e consultas", async () => {
+    renderComRota(ROTA_GESTAO);
+
+    await userEvent.click(itemDoMenu("Relatórios consultas"));
+    await waitFor(() => expect(painel()).toBeInTheDocument());
+    expect(painel()).toHaveTextContent("Servidores ativos");
+    expect(painel()).toHaveTextContent("Servidores vacanciados");
+    expect(
+      screen.getByText("Servidores vacanciados").closest('[role="menuitem"]'),
+    ).toHaveAttribute("aria-disabled", "true");
+
+    await userEvent.click(screen.getByText("Servidores ativos"));
+
+    expect(
+      await screen.findByText("Tela de servidores ativos"),
+    ).toBeInTheDocument();
+    await waitFor(() => expect(painel()).not.toBeInTheDocument());
+    expect(itemDoMenu("Relatórios consultas")).toHaveClass(SELECIONADO);
   });
 
   it("encerra a sessao pelo botao Sair", async () => {
