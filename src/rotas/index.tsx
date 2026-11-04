@@ -8,6 +8,7 @@ import { DetalheUnidadeEducacional } from "@/paginas/DetalheUnidadeEducacional";
 import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais";
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
 import { NaoEncontrado } from "@/paginas/NaoEncontrado";
+import { ServidoresAtivos } from "@/paginas/ServidoresAtivos";
 import { SiglaApp } from "../../modules/sigla/app/App";
 import { CAMINHOS } from "./caminhos";
 
@@ -43,6 +44,10 @@ export function RotasApp() {
         <Route
           path={CAMINHOS.cadastroAtualizacaoVacanciaServidor}
           element={<AtualizacaoServidorVacanciado />}
+        />
+        <Route
+          path={CAMINHOS.relatoriosConsultasServidoresAtivos}
+          element={<ServidoresAtivos />}
         />
         <Route
           index
