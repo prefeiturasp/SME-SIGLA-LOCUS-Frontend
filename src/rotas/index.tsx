@@ -9,13 +9,11 @@ import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
 import { NaoEncontrado } from "@/paginas/NaoEncontrado";
 import { ServidoresAtivos } from "@/paginas/RelatoriosConsultasServidoresAtivos";
-import { SiglaApp } from "../../modules/sigla/app/App";
 import { CAMINHOS } from "./caminhos";
 
 export function RotasApp() {
   return (
     <Routes>
-      <Route path="/sigla/*" element={<SiglaApp />} />
       <Route element={<LayoutBase />}>
         <Route
           path={CAMINHOS.cadastroGestaoUnidades}

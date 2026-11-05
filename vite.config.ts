@@ -33,7 +33,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        "@sigla": path.resolve(__dirname, "./modules/sigla"),
       },
     },
   };

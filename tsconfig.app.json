@@ -24,9 +24,8 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@sigla/*": ["modules/sigla/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["src", "src/global.d.ts", "modules/sigla"]
+  "include": ["src", "src/global.d.ts"]
 }
