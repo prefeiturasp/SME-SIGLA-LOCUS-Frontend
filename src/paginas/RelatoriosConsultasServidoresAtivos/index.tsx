@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ConteudoPagina } from "@/estilos";
+import { CardFormFiltrosServidores } from "./componentes/CardFormFiltrosServidores";
 import { PainelMaisDetalhes } from "./componentes/PainelMaisDetalhes";
 import { useServidoresAtivos } from "./hooks/useServidoresAtivos";
 
@@ -17,7 +18,9 @@ export function ServidoresAtivos() {
           </Button>
         }
       />
-      <ConteudoPagina />
+      <ConteudoPagina>
+        <CardFormFiltrosServidores />
+      </ConteudoPagina>
 
       <PainelMaisDetalhes
         aberto={estado.painelDetalhesAberto}
