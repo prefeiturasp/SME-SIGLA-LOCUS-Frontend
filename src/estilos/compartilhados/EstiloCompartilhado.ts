@@ -203,8 +203,9 @@ export function criarPaginacaoPadrao({
   return {
     total,
     pageSize,
-    current: paginaAtual,
+    ...(paginaAtual !== undefined ? { current: paginaAtual } : {}),
     showSizeChanger,
+    pageSizeOptions: showSizeChanger ? ["10", "20", "50", "100"] : undefined,
     showTotal: (totalReg, intervalo) =>
       textoContagemPaginacao(totalReg, intervalo),
   };

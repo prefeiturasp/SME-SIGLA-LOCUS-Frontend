@@ -2,6 +2,7 @@ import { Button } from "antd";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ConteudoPagina } from "@/estilos";
 import { CardFormFiltrosServidores } from "./componentes/CardFormFiltrosServidores";
+import { CardTabelaServidores } from "./componentes/CardTabelaServidores";
 import { PainelMaisDetalhes } from "./componentes/PainelMaisDetalhes";
 import { useServidoresAtivos } from "./hooks/useServidoresAtivos";
 
@@ -19,7 +20,20 @@ export function ServidoresAtivos() {
         }
       />
       <ConteudoPagina>
-        <CardFormFiltrosServidores />
+        <CardFormFiltrosServidores
+          aoBuscar={estado.buscarServidores}
+          aoLimpar={estado.limparFiltros}
+        />
+        {estado.buscaRealizada ? (
+          <CardTabelaServidores
+            servidores={estado.servidores}
+            total={estado.totalServidores}
+            colunas={estado.colunas}
+            colunasVisiveis={estado.colunasVisiveis}
+            aoAlterarColuna={estado.definirVisibilidadeColuna}
+            aoVerDetalhes={estado.abrirPainelDetalhes}
+          />
+        ) : null}
       </ConteudoPagina>
 
       <PainelMaisDetalhes

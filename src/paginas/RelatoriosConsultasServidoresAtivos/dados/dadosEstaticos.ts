@@ -105,6 +105,108 @@ export const detalhesServidorEstatico: SecaoDetalheServidor[] = [
 export const MENSAGEM_FILTRO_OBRIGATORIO =
   "Preencha pelo menos um campo para buscar.";
 
+export const TOTAL_SERVIDORES = 100;
+export const TAMANHO_PAGINA_SERVIDORES = 10;
+
+export type ChaveColunaServidor =
+  | "nome"
+  | "rf"
+  | "cpf"
+  | "cl"
+  | "vinculo"
+  | "cargoAtual"
+  | "funcao"
+  | "atividade"
+  | "classificacao"
+  | "dataConvocacao"
+  | "dataEscolha"
+  | "dataRetornoAfastamento"
+  | "grupoAtividade"
+  | "liminar"
+  | "localExercicio"
+  | "lotacao";
+
+export interface DefinicaoColunaServidor {
+  chave: ChaveColunaServidor;
+  titulo: string;
+  /** Controla se a coluna aparece na tabela. */
+  visivel: boolean;
+  /** Coluna permanente (ex.: Nome). Não entra no seletor. */
+  fixa?: boolean;
+}
+
+/** Ordem de exibição na tabela. 7 visíveis + demais ocultas. */
+export const COLUNAS_TABELA_SERVIDORES: DefinicaoColunaServidor[] = [
+  { chave: "nome", titulo: "Nome", visivel: true, fixa: true },
+  { chave: "rf", titulo: "R.F", visivel: true },
+  { chave: "cpf", titulo: "CPF", visivel: true },
+  { chave: "cl", titulo: "CL", visivel: true },
+  { chave: "vinculo", titulo: "Vínculo", visivel: true },
+  { chave: "cargoAtual", titulo: "Cargo atual", visivel: true },
+  { chave: "funcao", titulo: "Função", visivel: true },
+  { chave: "atividade", titulo: "Atividade", visivel: false },
+  { chave: "classificacao", titulo: "Classificação", visivel: false },
+  { chave: "dataConvocacao", titulo: "Data da convocação", visivel: false },
+  { chave: "dataEscolha", titulo: "Data da escolha", visivel: false },
+  {
+    chave: "dataRetornoAfastamento",
+    titulo: "Data do retorno do afastamento",
+    visivel: false,
+  },
+  { chave: "grupoAtividade", titulo: "Grupo de atividade", visivel: false },
+  { chave: "liminar", titulo: "Liminar", visivel: false },
+  { chave: "localExercicio", titulo: "Local de exercício", visivel: false },
+  { chave: "lotacao", titulo: "Lotação", visivel: false },
+];
+
+export interface ServidorAtivo {
+  id: string;
+  nome: string;
+  rf: string;
+  cpf: string;
+  cl: string;
+  vinculo: string;
+  cargoAtual: string;
+  funcao: string;
+  atividade: string;
+  classificacao: string;
+  dataConvocacao: string;
+  dataEscolha: string;
+  dataRetornoAfastamento: string;
+  grupoAtividade: string;
+  liminar: string;
+  localExercicio: string;
+  lotacao: string;
+}
+
+const servidorBase: Omit<ServidorAtivo, "id" | "nome"> = {
+  rf: "123.456.7",
+  cpf: "000.000.000-00",
+  cl: "01",
+  vinculo: "1",
+  cargoAtual: "1234567 - Professor Ensino Infantil",
+  funcao: "Professor Ensino Infantil",
+  atividade: "Regência",
+  classificacao: "52",
+  dataConvocacao: "00/00/0000",
+  dataEscolha: "00/00/0000",
+  dataRetornoAfastamento: "00/00/0000",
+  grupoAtividade: "Apoio à secretaria escolar e famílias",
+  liminar: "Sim",
+  localExercicio: "Alípio Correa Neto, Prof.",
+  lotacao: "Alípio Correa Neto, Prof.",
+};
+
+/** Quantidade suficiente para o seletor de pageSize (10/20/50/100) refletir na tabela. */
+export const servidoresAtivosEstaticos: ServidorAtivo[] = Array.from(
+  { length: 100 },
+  (_, indice) => ({
+    id: String(indice + 1),
+    nome: `João Passos de Almeida ${indice + 1}`,
+    ...servidorBase,
+  }),
+);
+
 export const opcoesFiltrosServidores = {
   dre: opcoesGestao.dre,
   unidadeEducacional: [
