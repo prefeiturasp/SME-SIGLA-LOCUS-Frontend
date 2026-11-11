@@ -126,37 +126,58 @@ export type ChaveColunaServidor =
   | "localExercicio"
   | "lotacao";
 
+export interface SubcolunaServidor {
+  chave: keyof ServidorAtivo;
+  titulo: string;
+}
+
 export interface DefinicaoColunaServidor {
   chave: ChaveColunaServidor;
   titulo: string;
-  /** Controla se a coluna aparece na tabela. */
-  visivel: boolean;
-  /** Coluna permanente (ex.: Nome). Não entra no seletor. */
   fixa?: boolean;
+  subcolunas?: SubcolunaServidor[];
 }
 
-/** Ordem de exibição na tabela. 7 visíveis + demais ocultas. */
+export const LIMITE_COLUNAS_SERVIDORES = 7;
+
 export const COLUNAS_TABELA_SERVIDORES: DefinicaoColunaServidor[] = [
-  { chave: "nome", titulo: "Nome", visivel: true, fixa: true },
-  { chave: "rf", titulo: "R.F", visivel: true },
-  { chave: "cpf", titulo: "CPF", visivel: true },
-  { chave: "cl", titulo: "CL", visivel: true },
-  { chave: "vinculo", titulo: "Vínculo", visivel: true },
-  { chave: "cargoAtual", titulo: "Cargo atual", visivel: true },
-  { chave: "funcao", titulo: "Função", visivel: true },
-  { chave: "atividade", titulo: "Atividade", visivel: false },
-  { chave: "classificacao", titulo: "Classificação", visivel: false },
-  { chave: "dataConvocacao", titulo: "Data da convocação", visivel: false },
-  { chave: "dataEscolha", titulo: "Data da escolha", visivel: false },
+  { chave: "nome", titulo: "Nome", fixa: true },
+  { chave: "rf", titulo: "R.F" },
+  { chave: "cpf", titulo: "CPF" },
+  { chave: "cl", titulo: "CL" },
+  { chave: "vinculo", titulo: "Vínculo" },
+  { chave: "cargoAtual", titulo: "Cargo atual" },
+  { chave: "funcao", titulo: "Função" },
+  { chave: "atividade", titulo: "Atividade" },
+  {
+    chave: "classificacao",
+    titulo: "Classificação",
+    subcolunas: [
+      { chave: "classificacaoGeral", titulo: "Geral" },
+      { chave: "classificacaoPcd", titulo: "PCD" },
+      { chave: "classificacaoNna", titulo: "NNA" },
+    ],
+  },
+  { chave: "dataConvocacao", titulo: "Data da convocação" },
+  { chave: "dataEscolha", titulo: "Data da escolha" },
   {
     chave: "dataRetornoAfastamento",
     titulo: "Data do retorno do afastamento",
-    visivel: false,
   },
-  { chave: "grupoAtividade", titulo: "Grupo de atividade", visivel: false },
-  { chave: "liminar", titulo: "Liminar", visivel: false },
-  { chave: "localExercicio", titulo: "Local de exercício", visivel: false },
-  { chave: "lotacao", titulo: "Lotação", visivel: false },
+  { chave: "grupoAtividade", titulo: "Grupo de atividade" },
+  { chave: "liminar", titulo: "Liminar" },
+  { chave: "localExercicio", titulo: "Local de exercício" },
+  { chave: "lotacao", titulo: "Lotação" },
+];
+
+export const CHAVES_COLUNAS_PADRAO: ChaveColunaServidor[] = [
+  "nome",
+  "rf",
+  "cpf",
+  "cl",
+  "vinculo",
+  "cargoAtual",
+  "funcao",
 ];
 
 export interface ServidorAtivo {
@@ -169,7 +190,9 @@ export interface ServidorAtivo {
   cargoAtual: string;
   funcao: string;
   atividade: string;
-  classificacao: string;
+  classificacaoGeral: string;
+  classificacaoPcd: string;
+  classificacaoNna: string;
   dataConvocacao: string;
   dataEscolha: string;
   dataRetornoAfastamento: string;
@@ -187,7 +210,9 @@ const servidorBase: Omit<ServidorAtivo, "id" | "nome"> = {
   cargoAtual: "1234567 - Professor Ensino Infantil",
   funcao: "Professor Ensino Infantil",
   atividade: "Regência",
-  classificacao: "52",
+  classificacaoGeral: "52",
+  classificacaoPcd: "0",
+  classificacaoNna: "0",
   dataConvocacao: "00/00/0000",
   dataEscolha: "00/00/0000",
   dataRetornoAfastamento: "00/00/0000",

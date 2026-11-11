@@ -1,11 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import {
-  COLUNAS_TABELA_SERVIDORES,
   detalhesServidorEstatico,
   servidoresAtivosEstaticos,
   TOTAL_SERVIDORES,
-  type ChaveColunaServidor,
-  type DefinicaoColunaServidor,
   type SecaoDetalheServidor,
   type ServidorAtivo,
 } from "../dados/dadosEstaticos";
@@ -18,12 +15,6 @@ export interface EstadoServidoresAtivos {
   buscaRealizada: boolean;
   buscarServidores: (filtros: FiltrosServidores) => void;
   limparFiltros: () => void;
-  colunas: DefinicaoColunaServidor[];
-  colunasVisiveis: DefinicaoColunaServidor[];
-  definirVisibilidadeColuna: (
-    chave: ChaveColunaServidor,
-    visivel: boolean,
-  ) => void;
   painelDetalhesAberto: boolean;
   abrirPainelDetalhes: () => void;
   fecharPainelDetalhes: () => void;
@@ -32,9 +23,6 @@ export interface EstadoServidoresAtivos {
 export function useServidoresAtivos(): EstadoServidoresAtivos {
   const [painelDetalhesAberto, setPainelDetalhesAberto] = useState(false);
   const [buscaRealizada, setBuscaRealizada] = useState(false);
-  const [colunas, setColunas] = useState<DefinicaoColunaServidor[]>(
-    COLUNAS_TABELA_SERVIDORES,
-  );
 
   const abrirPainelDetalhes = useCallback(
     () => setPainelDetalhesAberto(true),
@@ -53,23 +41,6 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
     setBuscaRealizada(false);
   }, []);
 
-  const definirVisibilidadeColuna = useCallback(
-    (chave: ChaveColunaServidor, visivel: boolean) => {
-      setColunas((atuais) =>
-        atuais.map((coluna) => {
-          if (coluna.chave !== chave || coluna.fixa) return coluna;
-          return { ...coluna, visivel };
-        }),
-      );
-    },
-    [],
-  );
-
-  const colunasVisiveis = useMemo(
-    () => colunas.filter((coluna) => coluna.visivel || coluna.fixa),
-    [colunas],
-  );
-
   return useMemo(
     () => ({
       detalhes: detalhesServidorEstatico,
@@ -78,9 +49,6 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
       buscaRealizada,
       buscarServidores,
       limparFiltros,
-      colunas,
-      colunasVisiveis,
-      definirVisibilidadeColuna,
       painelDetalhesAberto,
       abrirPainelDetalhes,
       fecharPainelDetalhes,
@@ -89,9 +57,6 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
       buscaRealizada,
       buscarServidores,
       limparFiltros,
-      colunas,
-      colunasVisiveis,
-      definirVisibilidadeColuna,
       painelDetalhesAberto,
       abrirPainelDetalhes,
       fecharPainelDetalhes,
