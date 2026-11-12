@@ -1,4 +1,5 @@
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
+import { useExportarXlsx } from "@/hooks/useExportarXlsx";
 import { ConteudoPagina } from "@/estilos";
 import { CardFormFiltrosServidores } from "./componentes/CardFormFiltrosServidores";
 import { CardTabelaServidores } from "./componentes/CardTabelaServidores";
@@ -10,6 +11,7 @@ import { useServidoresAtivos } from "./hooks/useServidoresAtivos";
 export function ServidoresAtivos() {
   const estado = useServidoresAtivos();
   const colunas = useColunasServidores();
+  const { exportarXlsx, exportando } = useExportarXlsx();
 
   return (
     <>
@@ -26,6 +28,14 @@ export function ServidoresAtivos() {
             colunasVisiveis={colunas.colunasVisiveis}
             aoPersonalizarColunas={colunas.abrirPainel}
             aoVerDetalhes={estado.abrirPainelDetalhes}
+            exportando={exportando}
+            aoExportar={() =>
+              exportarXlsx(
+                estado.servidores,
+                colunas.colunasVisiveis,
+                "relatorio-banco-servidores",
+              )
+            }
           />
         ) : null}
       </ConteudoPagina>

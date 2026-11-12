@@ -6,6 +6,15 @@ import { CAMINHOS } from "@/rotas/caminhos";
 import { ComTema } from "@/testes/renderizarComTema";
 import { ServidoresAtivos } from "../index";
 
+const mockExportarXlsx = jest.fn();
+
+jest.mock("@/hooks/useExportarXlsx", () => ({
+  useExportarXlsx: () => ({
+    exportarXlsx: mockExportarXlsx,
+    exportando: false,
+  }),
+}));
+
 function renderPagina() {
   return render(
     <ComTema>
@@ -52,6 +61,10 @@ async function aguardarPainelFechado() {
 }
 
 describe("ServidoresAtivos", () => {
+  beforeEach(() => {
+    mockExportarXlsx.mockClear();
+  });
+
   it("renderiza titulo e breadcrumb da tela", () => {
     renderPagina();
 
@@ -67,6 +80,30 @@ describe("ServidoresAtivos", () => {
     expect(
       within(breadcrumb).getByText("Servidores ativos"),
     ).toBeInTheDocument();
+  });
+
+  it("exporta XLSX dos servidores filtrados apos a busca", async () => {
+    renderPagina();
+
+    await userEvent.type(
+      screen.getByPlaceholderText("Exemplo: João da Silva"),
+      "Maria",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Buscar" }));
+
+    const botaoExportar = await screen.findByRole("button", {
+      name: "Exportar relatório",
+    });
+    await userEvent.click(botaoExportar);
+
+    expect(mockExportarXlsx).toHaveBeenCalledTimes(1);
+    expect(mockExportarXlsx).toHaveBeenCalledWith(
+      expect.any(Array),
+      expect.arrayContaining([
+        expect.objectContaining({ chave: "nome", titulo: "Nome" }),
+      ]),
+      "relatorio-banco-servidores",
+    );
   });
 
   it("abre e fecha o painel de mais detalhes pela linha da tabela", async () => {
