@@ -85,6 +85,14 @@ export const TabelaServidores = styled.div`
     font-weight: 700;
   }
 
+  .ant-table-thead > tr + tr > th {
+    background: ${({ theme }) => theme.colors.tableSubheaderBackground};
+  }
+
+  .ant-table-thead > tr > th.ant-table-cell[colspan]:not([colspan="1"]) {
+    text-align: start;
+  }
+
   .ant-pagination-options {
     position: absolute;
     inset-inline-end: 0;
@@ -98,10 +106,16 @@ export const TituloSeletorColunas = styled.p`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
+export const ConteudoPersonalizarColunas = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+`;
+
 export const ListaColunasSeletor = styled.div`
   display: flex;
-  min-width: 280px;
-  max-height: 360px;
+  min-height: 160px;
+  flex: 1;
   flex-direction: column;
   overflow: auto;
 `;
@@ -110,7 +124,28 @@ export const ItemColunaSeletor = styled.div`
   padding: ${({ theme }) => theme.spacing.sm}px
     ${({ theme }) => theme.spacing.md}px;
 
-  &:nth-child(odd) {
+  &:nth-child(even) {
     background: ${({ theme }) => theme.colors.blueBackgroundSoft};
+  }
+`;
+
+export const ContadorColunasSelecionadas = styled.p`
+  margin: ${({ theme }) => theme.spacing.md}px 0 0;
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
+export const AlertaLimiteColunas = styled(Alert)`
+  margin-top: ${({ theme }) => theme.spacing.md}px;
+  border: 1px solid ${({ theme }) => theme.colors.errorBackground};
+  border-radius: ${({ theme }) => theme.layout.radius}px;
+  background: ${({ theme }) => theme.colors.errorBackground};
+
+  .ant-alert-icon {
+    color: ${({ theme }) => theme.colors.error};
+  }
+
+  .ant-alert-message {
+    color: ${({ theme }) => theme.colors.primaryText};
   }
 `;

@@ -1,50 +1,65 @@
 import { useMemo, useState } from "react";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import TuneIcon from "@mui/icons-material/Tune";
-import { Button, Card, Flex, Popover, Table } from "antd";
+import { Button, Card, Flex, Table, Tooltip } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { CabecalhoSecao } from "@/componentes/CabecalhoSecao";
 import { criarPaginacaoPadrao } from "@/estilos";
 import {
   TAMANHO_PAGINA_SERVIDORES,
-  type ChaveColunaServidor,
   type DefinicaoColunaServidor,
   type ServidorAtivo,
 } from "../dados/dadosEstaticos";
 import { TabelaServidores } from "../Estilos";
-import { SeletorColunasServidores } from "./SeletorColunasServidores";
+
+const LARGURA_SUBCOLUNA = 80;
+
+function criarColuna(
+  coluna: DefinicaoColunaServidor,
+): ColumnsType<ServidorAtivo>[number] {
+  if (coluna.subcolunas) {
+    return {
+      title: coluna.titulo,
+      key: coluna.chave,
+      children: coluna.subcolunas.map((subcoluna) => ({
+        title: subcoluna.titulo,
+        dataIndex: subcoluna.chave,
+        key: subcoluna.chave,
+        width: LARGURA_SUBCOLUNA,
+      })),
+    };
+  }
+
+  return {
+    title: coluna.titulo,
+    dataIndex: coluna.chave,
+    key: coluna.chave,
+    fixed: coluna.fixa ? "left" : undefined,
+    ellipsis: true,
+  };
+}
 
 export interface CardTabelaServidoresProps {
   servidores: ServidorAtivo[];
   total: number;
-  colunas: DefinicaoColunaServidor[];
   colunasVisiveis: DefinicaoColunaServidor[];
-  aoAlterarColuna: (chave: ChaveColunaServidor, visivel: boolean) => void;
+  aoPersonalizarColunas: () => void;
   aoVerDetalhes: (servidor: ServidorAtivo) => void;
 }
 
 export function CardTabelaServidores({
   servidores,
   total,
-  colunas,
   colunasVisiveis,
-  aoAlterarColuna,
+  aoPersonalizarColunas,
   aoVerDetalhes,
 }: CardTabelaServidoresProps) {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [tamanhoPagina, setTamanhoPagina] = useState(TAMANHO_PAGINA_SERVIDORES);
 
   const colunasTabela = useMemo<ColumnsType<ServidorAtivo>>(() => {
-    const dados: ColumnsType<ServidorAtivo> = colunasVisiveis.map((coluna) => ({
-      title: coluna.titulo,
-      dataIndex: coluna.chave,
-      key: coluna.chave,
-      fixed: coluna.fixa ? "left" : undefined,
-      ellipsis: true,
-    }));
-
     return [
-      ...dados,
+      ...colunasVisiveis.map(criarColuna),
       {
         title: "",
         key: "acoes",
@@ -66,22 +81,14 @@ export function CardTabelaServidores({
         descricao="A lista reúne os servidores que correspondem aos filtros aplicados. Para mais informações sobre um servidor, clique em 'Mais detalhes'."
         acao={
           <Flex gap="small">
-            <Popover
-              trigger="click"
-              placement="bottomRight"
-              content={
-                <SeletorColunasServidores
-                  colunas={colunas}
-                  aoAlterar={aoAlterarColuna}
-                />
-              }
-            >
+            <Tooltip title="Personalizar colunas">
               <Button
                 type="default"
-                aria-label="Colunas da tabela"
+                aria-label="Personalizar colunas"
                 icon={<TuneIcon fontSize="small" />}
+                onClick={aoPersonalizarColunas}
               />
-            </Popover>
+            </Tooltip>
             <Button
               type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
