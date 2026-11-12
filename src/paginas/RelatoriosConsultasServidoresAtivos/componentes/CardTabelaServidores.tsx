@@ -45,6 +45,8 @@ export interface CardTabelaServidoresProps {
   colunasVisiveis: DefinicaoColunaServidor[];
   aoPersonalizarColunas: () => void;
   aoVerDetalhes: (servidor: ServidorAtivo) => void;
+  exportando?: boolean;
+  aoExportar?: () => void;
 }
 
 export function CardTabelaServidores({
@@ -53,6 +55,8 @@ export function CardTabelaServidores({
   colunasVisiveis,
   aoPersonalizarColunas,
   aoVerDetalhes,
+  exportando = false,
+  aoExportar,
 }: CardTabelaServidoresProps) {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [tamanhoPagina, setTamanhoPagina] = useState(TAMANHO_PAGINA_SERVIDORES);
@@ -92,6 +96,8 @@ export function CardTabelaServidores({
             <Button
               type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
+              loading={exportando}
+              onClick={aoExportar}
             >
               Exportar relatório
             </Button>
