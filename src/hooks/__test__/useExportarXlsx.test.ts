@@ -3,8 +3,8 @@ import { useExportarXlsx } from "../useExportarXlsx";
 
 const mockWriteFile = jest.fn();
 const mockBookAppendSheet = jest.fn();
-const mockBookNew = jest.fn(() => ({}));
-const mockAoaToSheet = jest.fn(() => ({}));
+const mockBookNew = jest.fn((..._args: unknown[]) => ({}));
+const mockAoaToSheet = jest.fn((..._args: unknown[]) => ({}));
 
 jest.mock("xlsx", () => ({
   utils: {
