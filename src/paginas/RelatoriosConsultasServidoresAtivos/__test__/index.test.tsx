@@ -6,6 +6,15 @@ import { CAMINHOS } from "@/rotas/caminhos";
 import { ComTema } from "@/testes/renderizarComTema";
 import { ServidoresAtivos } from "../index";
 
+const mockExportarXlsx = jest.fn();
+
+jest.mock("@/hooks/useExportarXlsx", () => ({
+  useExportarXlsx: () => ({
+    exportarXlsx: mockExportarXlsx,
+    exportando: false,
+  }),
+}));
+
 function renderPagina() {
   return render(
     <ComTema>
@@ -26,6 +35,10 @@ function renderPagina() {
 }
 
 describe("ServidoresAtivos", () => {
+  beforeEach(() => {
+    mockExportarXlsx.mockClear();
+  });
+
   it("renderiza titulo e breadcrumb da tela", () => {
     renderPagina();
 
@@ -43,14 +56,45 @@ describe("ServidoresAtivos", () => {
     ).toBeInTheDocument();
   });
 
+  it("exporta XLSX dos servidores filtrados apos a busca", async () => {
+    renderPagina();
+
+    await userEvent.type(
+      screen.getByPlaceholderText("Exemplo: João da Silva"),
+      "Maria",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Buscar" }));
+
+    const botaoExportar = await screen.findByRole("button", {
+      name: "Exportar relatório",
+    });
+    await userEvent.click(botaoExportar);
+
+    expect(mockExportarXlsx).toHaveBeenCalledTimes(1);
+    expect(mockExportarXlsx).toHaveBeenCalledWith(
+      expect.any(Array),
+      expect.arrayContaining([
+        expect.objectContaining({ chave: "nome", titulo: "Nome" }),
+      ]),
+      "relatorio-banco-servidores",
+    );
+  });
+
   it("abre e fecha o painel de mais detalhes", async () => {
     renderPagina();
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Mais detalhes" }),
+    await userEvent.type(
+      screen.getByPlaceholderText("Exemplo: João da Silva"),
+      "Maria",
     );
+    await userEvent.click(screen.getByRole("button", { name: "Buscar" }));
+
+    const botoesMaisDetalhes = await screen.findAllByRole("button", {
+      name: "Mais detalhes",
+    });
+    await userEvent.click(botoesMaisDetalhes[0]);
 
     const painel = await screen.findByRole("dialog");
     expect(within(painel).getByText("Mais detalhes")).toBeInTheDocument();
