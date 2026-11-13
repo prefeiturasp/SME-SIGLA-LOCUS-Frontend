@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { CardServidoresSemResultados } from "../componentes/CardServidoresSemResultados";
 import {
