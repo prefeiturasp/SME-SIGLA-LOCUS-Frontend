@@ -2,10 +2,10 @@ import { useCallback, useMemo, useState } from "react";
 import {
   detalhesServidorEstatico,
   servidoresAtivosEstaticos,
-  TOTAL_SERVIDORES,
   type SecaoDetalheServidor,
   type ServidorAtivo,
 } from "../dados/dadosEstaticos";
+import { filtrarServidores } from "../dados/filtrarServidores";
 import type { FiltrosServidores } from "../componentes/CardFormFiltrosServidores";
 
 export interface EstadoServidoresAtivos {
@@ -23,6 +23,7 @@ export interface EstadoServidoresAtivos {
 export function useServidoresAtivos(): EstadoServidoresAtivos {
   const [painelDetalhesAberto, setPainelDetalhesAberto] = useState(false);
   const [buscaRealizada, setBuscaRealizada] = useState(false);
+  const [servidores, setServidores] = useState<ServidorAtivo[]>([]);
 
   const abrirPainelDetalhes = useCallback(
     () => setPainelDetalhesAberto(true),
@@ -33,19 +34,21 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
     [],
   );
 
-  const buscarServidores = useCallback((_filtros: FiltrosServidores) => {
+  const buscarServidores = useCallback((filtros: FiltrosServidores) => {
+    setServidores(filtrarServidores(servidoresAtivosEstaticos, filtros));
     setBuscaRealizada(true);
   }, []);
 
   const limparFiltros = useCallback(() => {
+    setServidores([]);
     setBuscaRealizada(false);
   }, []);
 
   return useMemo(
     () => ({
       detalhes: detalhesServidorEstatico,
-      servidores: servidoresAtivosEstaticos,
-      totalServidores: TOTAL_SERVIDORES,
+      servidores,
+      totalServidores: servidores.length,
       buscaRealizada,
       buscarServidores,
       limparFiltros,
@@ -54,6 +57,7 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
       fecharPainelDetalhes,
     }),
     [
+      servidores,
       buscaRealizada,
       buscarServidores,
       limparFiltros,

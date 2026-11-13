@@ -2,6 +2,7 @@ import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { useExportarXlsx } from "@/hooks/useExportarXlsx";
 import { ConteudoPagina } from "@/estilos";
 import { CardFormFiltrosServidores } from "./componentes/CardFormFiltrosServidores";
+import { CardServidoresSemResultados } from "./componentes/CardServidoresSemResultados";
 import { CardTabelaServidores } from "./componentes/CardTabelaServidores";
 import { PainelMaisDetalhes } from "./componentes/PainelMaisDetalhes";
 import { PainelPersonalizarColunas } from "./componentes/PainelPersonalizarColunas";
@@ -21,7 +22,10 @@ export function ServidoresAtivos() {
           aoBuscar={estado.buscarServidores}
           aoLimpar={estado.limparFiltros}
         />
-        {estado.buscaRealizada ? (
+        {estado.buscaRealizada && estado.servidores.length === 0 ? (
+          <CardServidoresSemResultados />
+        ) : null}
+        {estado.buscaRealizada && estado.servidores.length > 0 ? (
           <CardTabelaServidores
             servidores={estado.servidores}
             total={estado.totalServidores}

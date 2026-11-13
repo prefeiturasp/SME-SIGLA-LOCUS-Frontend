@@ -18,7 +18,7 @@ export const detalhesServidorEstatico: SecaoDetalheServidor[] = [
     descricao:
       "Informações que permitem identificar a pessoa e localizar seu registro.",
     campos: [
-      { rotulo: "Nome completo", valor: "João Passos de Almeida" },
+      { rotulo: "Nome completo", valor: "Maria Silva Santos" },
       { rotulo: "R.F", valor: "123.456.7" },
       { rotulo: "CPF", valor: "123.456.789-10" },
     ],
@@ -105,7 +105,17 @@ export const detalhesServidorEstatico: SecaoDetalheServidor[] = [
 export const MENSAGEM_FILTRO_OBRIGATORIO =
   "Preencha pelo menos um campo para buscar.";
 
-export const TOTAL_SERVIDORES = 100;
+export const TITULO_CARD_RESULTADOS_SERVIDORES = "Filtrar servidores";
+
+export const DESCRICAO_CARD_RESULTADOS_SERVIDORES =
+  "A lista reúne os servidores que correspondem aos filtros aplicados. Para mais informações sobre um servidor, clique em 'Mais detalhes'.";
+
+export const MENSAGEM_SEM_RESULTADOS_TITULO =
+  "Não encontramos dados para esta busca";
+
+export const MENSAGEM_SEM_RESULTADOS_DESCRICAO =
+  "Experimente remover alguns filtros ou selecionar outros critérios de busca.";
+
 export const TAMANHO_PAGINA_SERVIDORES = 10;
 
 export type ChaveColunaServidor =
@@ -188,6 +198,7 @@ export interface ServidorAtivo {
   cl: string;
   vinculo: string;
   cargoAtual: string;
+  cargoAtualCodigo: string;
   funcao: string;
   atividade: string;
   classificacaoGeral: string;
@@ -197,40 +208,159 @@ export interface ServidorAtivo {
   dataEscolha: string;
   dataRetornoAfastamento: string;
   grupoAtividade: string;
+  grupoAtividadesCodigo: string;
   liminar: string;
+  liminarCodigo: string;
   localExercicio: string;
   lotacao: string;
+  dre: string;
+  unidadeEducacional: string;
+  tipoLaudo: string;
+  tipoVaga: string;
 }
 
-const servidorBase: Omit<ServidorAtivo, "id" | "nome"> = {
-  rf: "123.456.7",
-  cpf: "000.000.000-00",
-  cl: "01",
-  vinculo: "1",
-  cargoAtual: "1234567 - Professor Ensino Infantil",
-  funcao: "Professor Ensino Infantil",
-  atividade: "Regência",
-  classificacaoGeral: "52",
-  classificacaoPcd: "0",
-  classificacaoNna: "0",
-  dataConvocacao: "00/00/0000",
-  dataEscolha: "00/00/0000",
-  dataRetornoAfastamento: "00/00/0000",
-  grupoAtividade: "Apoio à secretaria escolar e famílias",
-  liminar: "Sim",
-  localExercicio: "Alípio Correa Neto, Prof.",
-  lotacao: "Alípio Correa Neto, Prof.",
+/**
+ * 30 nomes (sempre 3 palavras), com o padrão:
+ * 3 Maria → 2 Pedro → 20 nomes distintos → 2 Ricardo → 3 Lúcia.
+ * Alguns sobrenomes se repetem (Silva, Costa, Lima, Rocha, Santos, etc.).
+ */
+export const NOMES_SERVIDORES_ESTATICOS = [
+  // 3 com mesmo primeiro nome
+  "Maria Silva Santos",
+  "Maria Oliveira Costa",
+  "Maria Souza Lima Campos",
+  // 2 com mesmo primeiro nome
+  "Pedro Almeida Rocha",
+  "Pedro Ferreira Dias",
+  // nomes distintos (com sobrenomes compartilhados)
+  "Ana Beatriz Nunes",
+  "Carlos Farias Eduardo Silva Campos",
+  "Fernanda Ribeiro Alves",
+  "Lucas Mendes Costa",
+  "Juliana  Farias Barbosa Freitas",
+  "Rafael Campos Duarte",
+  "Patricia Araujo Lima",
+  "Bruno Teixeira Lopes",
+  "Camila Martins Vieira",
+  "Gustavo Pereira Rocha",
+  "Larissa Correia Monteiro",
+  "Thiago Batista Santos",
+  "Amanda Cardoso Nogueira",
+  "Diego Moreira Cunha Nunes",
+  "Beatriz Farias Rezende",
+  "Henrique Vasconcelos Prado",
+  "Isabela Henriques Paiva",
+  "Felipe Borges Tavares",
+  "Natalia Aparicio Gomes",
+  "Eduardo Duarte Brandao Nunes",
+  // 2 com mesmo primeiro nome
+  "Ricardo Nascimento Prado",
+  "Ricardo Borges Alves Campos",
+  // 3 com mesmo primeiro nome
+  "Lucia Aparicio Gomes",
+  "Lucia Henriques Paiva",
+  "Lucia Vasconcelos Brandao",
+] as const;
+
+const cargosRotulo: Record<string, string> = {
+  pei: "Professor de Ensino Fundamental II e Médio",
+  pef1: "Professor de Ensino Fundamental I",
+  adjunto: "Professor Adjunto",
 };
 
-/** Quantidade suficiente para o seletor de pageSize (10/20/50/100) refletir na tabela. */
-export const servidoresAtivosEstaticos: ServidorAtivo[] = Array.from(
-  { length: 100 },
-  (_, indice) => ({
+const gruposRotulo: Record<string, string> = {
+  "grupo-a": "Grupo A",
+  "grupo-b": "Grupo B",
+};
+
+const unidadesRotulo: Record<string, string> = {
+  "emef-1": "EMEF João da Silva",
+  "emei-1": "EMEI Maria Aparecida",
+  "cei-1": "CEI Jardim das Flores",
+};
+
+function montarServidor(
+  indice: number,
+  nome: string,
+  extras: Partial<ServidorAtivo> = {},
+): ServidorAtivo {
+  const cargoAtualCodigo = extras.cargoAtualCodigo ?? "pei";
+  const grupoAtividadesCodigo = extras.grupoAtividadesCodigo ?? "grupo-a";
+  const liminarCodigo =
+    extras.liminarCodigo ?? (indice % 3 === 0 ? "sim" : "nao");
+  const unidadeEducacional = extras.unidadeEducacional ?? "emef-1";
+
+  return {
     id: String(indice + 1),
-    nome: `João Passos de Almeida ${indice + 1}`,
-    ...servidorBase,
-  }),
-);
+    nome,
+    rf: `${String(100 + indice).padStart(3, "0")}.${String(200 + indice).padStart(3, "0")}.${indice % 10}`,
+    cpf: `${String(100 + indice).padStart(3, "0")}.${String(200 + indice).padStart(3, "0")}.${String(300 + indice).padStart(3, "0")}-${String(indice).padStart(2, "0")}`,
+    cl: String((indice % 5) + 1).padStart(2, "0"),
+    vinculo: String((indice % 3) + 1),
+    cargoAtualCodigo,
+    cargoAtual: `${1000000 + indice} - ${cargosRotulo[cargoAtualCodigo]}`,
+    funcao: cargosRotulo[cargoAtualCodigo],
+    atividade: indice % 2 === 0 ? "Regência" : "Apoio pedagógico",
+    classificacaoGeral: String(40 + (indice % 30)),
+    classificacaoPcd: indice % 7 === 0 ? "1" : "0",
+    classificacaoNna: indice % 11 === 0 ? "1" : "0",
+    dataConvocacao: "01/02/2020",
+    dataEscolha: "15/03/2020",
+    dataRetornoAfastamento:
+      extras.dataRetornoAfastamento ??
+      (indice % 4 === 0 ? "10/01/2024" : "00/00/0000"),
+    grupoAtividadesCodigo,
+    grupoAtividade: gruposRotulo[grupoAtividadesCodigo],
+    liminarCodigo,
+    liminar: liminarCodigo === "sim" ? "Sim" : "Não",
+    unidadeEducacional,
+    localExercicio: unidadesRotulo[unidadeEducacional],
+    lotacao: unidadesRotulo[unidadeEducacional],
+    dre: extras.dre ?? (indice % 2 === 0 ? "butanta" : "itaquera"),
+    tipoLaudo:
+      extras.tipoLaudo ?? (indice % 2 === 0 ? "readaptacao" : "restricao"),
+    tipoVaga: extras.tipoVaga ?? (indice % 2 === 0 ? "livre" : "ocupada"),
+  };
+}
+
+export const servidoresAtivosEstaticos: ServidorAtivo[] =
+  NOMES_SERVIDORES_ESTATICOS.map((nome, indice) => {
+    if (indice < 3) {
+      return montarServidor(indice, nome, {
+        dre: "butanta",
+        unidadeEducacional: "emef-1",
+        cargoAtualCodigo: "pei",
+        liminarCodigo: "sim",
+      });
+    }
+    if (indice < 5) {
+      return montarServidor(indice, nome, {
+        dre: "itaquera",
+        unidadeEducacional: "emei-1",
+        cargoAtualCodigo: "pef1",
+        liminarCodigo: "nao",
+      });
+    }
+    if (indice >= 25 && indice < 27) {
+      return montarServidor(indice, nome, {
+        dre: "sao-miguel",
+        unidadeEducacional: "cei-1",
+        cargoAtualCodigo: "adjunto",
+        grupoAtividadesCodigo: "grupo-b",
+      });
+    }
+    if (indice >= 27) {
+      return montarServidor(indice, nome, {
+        dre: "butanta",
+        unidadeEducacional: "emef-1",
+        tipoLaudo: "restricao",
+        tipoVaga: "ocupada",
+      });
+    }
+    return montarServidor(indice, nome);
+  });
+
+export const TOTAL_SERVIDORES = servidoresAtivosEstaticos.length;
 
 export const opcoesFiltrosServidores = {
   dre: opcoesGestao.dre,

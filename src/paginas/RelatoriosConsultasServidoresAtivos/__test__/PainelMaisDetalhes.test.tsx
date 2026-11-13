@@ -50,7 +50,7 @@ describe("PainelMaisDetalhes", () => {
       within(identificacao).getByText("Nome completo"),
     ).toBeInTheDocument();
     expect(
-      within(identificacao).getByText("João Passos de Almeida"),
+      within(identificacao).getByText("Maria Silva Santos"),
     ).toBeInTheDocument();
     expect(within(identificacao).getByText("123.456.7")).toBeInTheDocument();
     expect(
