@@ -35,7 +35,7 @@ function renderPagina() {
 }
 
 async function buscarServidores() {
-  await userEvent.type(screen.getByLabelText("Nome do servidor"), "João");
+  await userEvent.type(screen.getByLabelText("Nome do servidor"), "Maria");
   await userEvent.click(screen.getByRole("button", { name: /Buscar/ }));
   await screen.findByRole("button", { name: "Personalizar colunas" });
 }
@@ -98,12 +98,36 @@ describe("ServidoresAtivos", () => {
 
     expect(mockExportarXlsx).toHaveBeenCalledTimes(1);
     expect(mockExportarXlsx).toHaveBeenCalledWith(
-      expect.any(Array),
+      expect.arrayContaining([
+        expect.objectContaining({ nome: "Maria Silva Santos" }),
+      ]),
       expect.arrayContaining([
         expect.objectContaining({ chave: "nome", titulo: "Nome" }),
       ]),
       "relatorio-banco-servidores",
     );
+  });
+
+  it("mostra mensagem quando nenhum servidor e encontrado", async () => {
+    renderPagina();
+
+    await userEvent.type(
+      screen.getByPlaceholderText("Exemplo: João da Silva"),
+      "Nome Inexistente Xyz",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Buscar" }));
+
+    expect(
+      await screen.findByText("Não encontramos dados para esta busca"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Experimente remover alguns filtros ou selecionar outros critérios de busca.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Exportar relatório" }),
+    ).toBeInTheDocument();
   });
 
   it("abre e fecha o painel de mais detalhes pela linha da tabela", async () => {

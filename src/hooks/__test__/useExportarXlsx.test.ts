@@ -3,17 +3,21 @@ import { useExportarXlsx } from "../useExportarXlsx";
 
 const mockWriteFile = jest.fn();
 const mockBookAppendSheet = jest.fn();
-const mockBookNew = jest.fn((..._args: unknown[]) => ({}));
-const mockAoaToSheet = jest.fn((..._args: unknown[]) => ({}));
+const mockBookNew = jest.fn(() => ({}));
+const mockAoaToSheet = jest.fn(() => ({}));
 
-jest.mock("xlsx", () => ({
-  utils: {
-    aoa_to_sheet: (...args: unknown[]) => mockAoaToSheet(...args),
-    book_new: (...args: unknown[]) => mockBookNew(...args),
-    book_append_sheet: (...args: unknown[]) => mockBookAppendSheet(...args),
-  },
-  writeFile: (...args: unknown[]) => mockWriteFile(...args),
-}));
+jest.mock(
+  "xlsx",
+  () => ({
+    utils: {
+      aoa_to_sheet: (...args: any[]) => mockAoaToSheet(...args),
+      book_new: (...args: any[]) => mockBookNew(...args),
+      book_append_sheet: (...args: any[]) => mockBookAppendSheet(...args),
+    },
+    writeFile: (...args: any[]) => mockWriteFile(...args),
+  }),
+  { virtual: true },
+);
 
 describe("useExportarXlsx", () => {
   beforeEach(() => {
@@ -63,5 +67,46 @@ describe("useExportarXlsx", () => {
         /^relatorio-banco-servidores-\d{4}-\d{2}-\d{2}\.xlsx$/,
       ),
     );
+  });
+
+  it("monta classificacao com Geral, PCD e NNA na mesma celula", async () => {
+    const { result } = renderHook(() => useExportarXlsx());
+
+    await act(async () => {
+      await result.current.exportarXlsx(
+        [
+          {
+            nome: "Ana",
+            classificacaoGeral: "52",
+            classificacaoPcd: "0",
+            classificacaoNna: "0",
+          },
+          {
+            nome: "Bruno",
+            classificacaoGeral: "10",
+            classificacaoPcd: "",
+            classificacaoNna: undefined,
+          },
+        ],
+        [
+          { chave: "nome", titulo: "Nome" },
+          {
+            chave: "classificacao",
+            titulo: "Classificação",
+            subcolunas: [
+              { chave: "classificacaoGeral", titulo: "Geral" },
+              { chave: "classificacaoPcd", titulo: "PCD" },
+              { chave: "classificacaoNna", titulo: "NNA" },
+            ],
+          },
+        ],
+      );
+    });
+
+    expect(mockAoaToSheet).toHaveBeenCalledWith([
+      ["Nome", "Classificação"],
+      ["Ana", "Geral: 52|PCD: 0|NNA: 0"],
+      ["Bruno", "Geral: 10|PCD: 0|NNA: 0"],
+    ]);
   });
 });

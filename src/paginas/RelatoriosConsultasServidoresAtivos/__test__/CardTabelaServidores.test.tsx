@@ -88,7 +88,7 @@ describe("CardTabelaServidores", () => {
       .getAllByRole("cell")
       .map((celula) => celula.textContent);
     expect(celulas).toEqual(
-      expect.arrayContaining(["52", "0", "0"]),
+      expect.arrayContaining(["40", "1", "1"]),
     );
   });
 

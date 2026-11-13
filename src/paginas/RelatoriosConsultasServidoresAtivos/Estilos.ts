@@ -77,6 +77,28 @@ export const AlertaErroFiltro = styled(Alert)`
   }
 `;
 
+export const ConteudoSemResultadosServidores = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+  margin-top: ${({ theme }) => theme.spacing.lg}px;
+  padding: ${({ theme }) => theme.spacing.xl}px
+    ${({ theme }) => theme.spacing.md}px;
+  text-align: center;
+`;
+
+export const TituloSemResultadosServidores = styled(Typography.Text)`
+  font-size: ${({ theme }) => theme.typography.fontSizeSubtitle}px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+
+export const DescricaoSemResultadosServidores = styled(Typography.Text)`
+  font-size: ${({ theme }) => theme.typography.fontSizeBase}px;
+  color: ${({ theme }) => theme.colors.secondaryText};
+`;
+
 export const TabelaServidores = styled.div`
   margin-top: ${({ theme }) => theme.spacing.lg}px;
 

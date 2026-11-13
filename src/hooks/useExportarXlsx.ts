@@ -1,15 +1,45 @@
 import { useCallback, useState } from "react";
 import * as XLSX from "xlsx";
 
+export interface SubcolunaExportacaoXlsx {
+  chave: string;
+  titulo: string;
+}
+
 export interface ColunaExportacaoXlsx {
   chave: string;
   titulo: string;
+  subcolunas?: readonly SubcolunaExportacaoXlsx[];
 }
 
 function valorCelula(valor: unknown): string | number {
   if (valor == null) return "";
   if (typeof valor === "string" || typeof valor === "number") return valor;
   return String(valor);
+}
+
+function valorClassificacao(
+  registro: Record<string, unknown>,
+  subcolunas: readonly SubcolunaExportacaoXlsx[],
+): string {
+  return subcolunas
+    .map((subcoluna) => {
+      const valor = registro[subcoluna.chave];
+      const texto = valor == null || valor === "" ? "0" : valorCelula(valor);
+      return `${subcoluna.titulo}: ${texto}`;
+    })
+    .join("|");
+}
+
+function valorColuna(
+  registro: Record<string, unknown>,
+  coluna: ColunaExportacaoXlsx,
+): string | number {
+  if (coluna.chave === "classificacao" && coluna.subcolunas?.length) {
+    return valorClassificacao(registro, coluna.subcolunas);
+  }
+
+  return valorCelula(registro[coluna.chave]);
 }
 
 /** Monta e baixa um .xlsx com as colunas informadas (ordem/visibilidade do chamador). */
@@ -30,7 +60,7 @@ export function useExportarXlsx() {
         const cabecalho = colunas.map((coluna) => coluna.titulo);
         const corpo = linhas.map((linha) => {
           const registro = linha as Record<string, unknown>;
-          return colunas.map((coluna) => valorCelula(registro[coluna.chave]));
+          return colunas.map((coluna) => valorColuna(registro, coluna));
         });
 
         const planilha = XLSX.utils.aoa_to_sheet([cabecalho, ...corpo]);
