@@ -136,15 +136,21 @@ describe("ServidoresAtivos", () => {
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
-    const [primeiroBotao] = screen.getAllByRole("button", {
+    const [, segundoBotao] = screen.getAllByRole("button", {
       name: "Mais detalhes",
     });
-    await userEvent.click(primeiroBotao);
+    await userEvent.click(segundoBotao);
 
     const painel = await screen.findByRole("dialog");
+    const identificacao = within(painel).getByRole("region", {
+      name: "Identificação do servidor",
+    });
     expect(
-      within(painel).getByText("Identificação do servidor"),
+      within(identificacao).getByText("Maria Oliveira Costa"),
     ).toBeInTheDocument();
+    expect(
+      within(identificacao).queryByText("Maria Silva Santos"),
+    ).not.toBeInTheDocument();
     expect(
       within(painel).getByText("Atualização cadastral e afastamento"),
     ).toBeInTheDocument();

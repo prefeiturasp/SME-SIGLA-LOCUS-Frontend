@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 import {
-  detalhesServidorEstatico,
   servidoresAtivosEstaticos,
   type SecaoDetalheServidor,
   type ServidorAtivo,
 } from "../dados/dadosEstaticos";
 import { filtrarServidores } from "../dados/filtrarServidores";
+import { montarDetalhesServidor } from "../dados/montarDetalhesServidor";
 import type { FiltrosServidores } from "../componentes/CardFormFiltrosServidores";
 
 export interface EstadoServidoresAtivos {
@@ -16,19 +16,21 @@ export interface EstadoServidoresAtivos {
   buscarServidores: (filtros: FiltrosServidores) => void;
   limparFiltros: () => void;
   painelDetalhesAberto: boolean;
-  abrirPainelDetalhes: () => void;
+  abrirPainelDetalhes: (servidor: ServidorAtivo) => void;
   fecharPainelDetalhes: () => void;
 }
 
 export function useServidoresAtivos(): EstadoServidoresAtivos {
   const [painelDetalhesAberto, setPainelDetalhesAberto] = useState(false);
+  const [servidorSelecionado, setServidorSelecionado] =
+    useState<ServidorAtivo | null>(null);
   const [buscaRealizada, setBuscaRealizada] = useState(false);
   const [servidores, setServidores] = useState<ServidorAtivo[]>([]);
 
-  const abrirPainelDetalhes = useCallback(
-    () => setPainelDetalhesAberto(true),
-    [],
-  );
+  const abrirPainelDetalhes = useCallback((servidor: ServidorAtivo) => {
+    setServidorSelecionado(servidor);
+    setPainelDetalhesAberto(true);
+  }, []);
   const fecharPainelDetalhes = useCallback(
     () => setPainelDetalhesAberto(false),
     [],
@@ -44,9 +46,15 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
     setBuscaRealizada(false);
   }, []);
 
+  const detalhes = useMemo(
+    () =>
+      servidorSelecionado ? montarDetalhesServidor(servidorSelecionado) : [],
+    [servidorSelecionado],
+  );
+
   return useMemo(
     () => ({
-      detalhes: detalhesServidorEstatico,
+      detalhes,
       servidores,
       totalServidores: servidores.length,
       buscaRealizada,
@@ -57,6 +65,7 @@ export function useServidoresAtivos(): EstadoServidoresAtivos {
       fecharPainelDetalhes,
     }),
     [
+      detalhes,
       servidores,
       buscaRealizada,
       buscarServidores,
