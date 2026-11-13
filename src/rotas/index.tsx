@@ -8,13 +8,12 @@ import { DetalheUnidadeEducacional } from "@/paginas/DetalheUnidadeEducacional";
 import { GestaoUnidadesEducacionais } from "@/paginas/GestaoUnidadesEducacionais";
 import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacional";
 import { NaoEncontrado } from "@/paginas/NaoEncontrado";
-import { SiglaApp } from "../../modules/sigla/app/App";
+import { ServidoresAtivos } from "@/paginas/RelatoriosConsultasServidoresAtivos";
 import { CAMINHOS } from "./caminhos";
 
 export function RotasApp() {
   return (
     <Routes>
-      <Route path="/sigla/*" element={<SiglaApp />} />
       <Route element={<LayoutBase />}>
         <Route
           path={CAMINHOS.cadastroGestaoUnidades}
@@ -43,6 +42,10 @@ export function RotasApp() {
         <Route
           path={CAMINHOS.cadastroAtualizacaoVacanciaServidor}
           element={<AtualizacaoServidorVacanciado />}
+        />
+        <Route
+          path={CAMINHOS.relatoriosConsultasServidoresAtivos}
+          element={<ServidoresAtivos />}
         />
         <Route
           index

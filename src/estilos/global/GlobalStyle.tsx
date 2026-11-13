@@ -124,6 +124,11 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 700;
   }
 
+  .ant-pagination-options {
+    position: absolute;
+    inset-inline-end: 0;
+  }
+
   .ant-pagination-item {
     margin-inline-end: ${({ theme }) => theme.spacing.sm}px;
   }
