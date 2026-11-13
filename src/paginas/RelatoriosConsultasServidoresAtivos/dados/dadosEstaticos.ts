@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import type { OpcaoSelecao } from "@/servicos/recursos/unidadesEducacionais/tipos";
 import { opcoesFiltros as opcoesGestao } from "@/paginas/GestaoUnidadesEducacionais/dados/dadosEstaticos";
 
@@ -11,96 +12,6 @@ export interface SecaoDetalheServidor {
   descricao: string;
   campos: CampoDetalheServidor[];
 }
-
-export const detalhesServidorEstatico: SecaoDetalheServidor[] = [
-  {
-    titulo: "Identificação do servidor",
-    descricao:
-      "Informações que permitem identificar a pessoa e localizar seu registro.",
-    campos: [
-      { rotulo: "Nome completo", valor: "Maria Silva Santos" },
-      { rotulo: "R.F", valor: "123.456.7" },
-      { rotulo: "CPF", valor: "123.456.789-10" },
-    ],
-  },
-  {
-    titulo: "Vínculo funcional",
-    descricao:
-      "Informações sobre o vínculo administrativo do servidor e seu cargo.",
-    campos: [
-      { rotulo: "Vínculo", valor: "1" },
-      { rotulo: "CL", valor: "01" },
-      { rotulo: "Cargo atual", valor: "1234567 - Professor Ensino Infantil" },
-      { rotulo: "Função", valor: "Professor Ensino Infantil" },
-    ],
-  },
-  {
-    titulo: "Lotação",
-    descricao:
-      "Permite identificar a unidade à qual o servidor está vinculado.",
-    campos: [
-      { rotulo: "Código", valor: "1234567" },
-      { rotulo: "Tipo de lotação", valor: "Definitiva" },
-      { rotulo: "DRE", valor: "Butantã" },
-      { rotulo: "UE", valor: "Alípio Correa Neto, Prof." },
-      { rotulo: "Tipo da unidade", valor: "EMEF" },
-    ],
-  },
-  {
-    titulo: "Local de exercício",
-    descricao:
-      "Permite identificar a unidade onde o servidor exerce suas atividades.",
-    campos: [
-      { rotulo: "Código", valor: "1234567" },
-      { rotulo: "DRE", valor: "Butantã" },
-      { rotulo: "UE", valor: "Alípio Correa Neto, Prof." },
-      { rotulo: "Tipo da unidade", valor: "EMEF" },
-    ],
-  },
-  {
-    titulo: "Atuação profissional",
-    descricao:
-      "Informações que caracterizam a atividade desempenhada pelo servidor.",
-    campos: [
-      {
-        rotulo: "Grupo de atividade",
-        valor: "Apoio à secretaria escolar e famílias",
-      },
-      { rotulo: "Atividade", valor: "Regência" },
-    ],
-  },
-  {
-    titulo: "Classificação e condições do vínculo",
-    descricao:
-      "Informações complementares que podem influenciar a situação funcional do servidor.",
-    campos: [
-      { rotulo: "Classificação geral", valor: "52" },
-      { rotulo: "Classificação PCD", valor: "0" },
-      { rotulo: "Classificação NNA", valor: "0" },
-      { rotulo: "Tipo de vaga", valor: "xxx" },
-      { rotulo: "Liminar", valor: "Sim" },
-      { rotulo: "Tipo de laudo", valor: "xxx" },
-    ],
-  },
-  {
-    titulo: "Ingresso e movimentação funcional",
-    descricao: "Informações sobre as etapas de ingresso do servidor.",
-    campos: [
-      { rotulo: "Data da convocação", valor: "00/00/0000" },
-      { rotulo: "Data da escolha", valor: "00/00/0000" },
-      { rotulo: "Data da nomeação", valor: "00/00/0000" },
-    ],
-  },
-  {
-    titulo: "Atualização cadastral e afastamento",
-    descricao:
-      "O motivo da última atualização é um dado de histórico cadastral; já o retorno do afastamento está relacionado à situação funcional.",
-    campos: [
-      { rotulo: "Retorno do afastamento", valor: "00/00/0000" },
-      { rotulo: "Motivo da última atualização", valor: "xxx" },
-    ],
-  },
-];
 
 export const MENSAGEM_FILTRO_OBRIGATORIO =
   "Preencha pelo menos um campo para buscar.";
@@ -217,6 +128,15 @@ export interface ServidorAtivo {
   unidadeEducacional: string;
   tipoLaudo: string;
   tipoVaga: string;
+  tipoLotacao: string;
+  codigoLotacao: string;
+  tipoUnidadeLotacao: string;
+  codigoExercicio: string;
+  dreExercicio: string;
+  tipoUnidadeExercicio: string;
+  dataNomeacao: string;
+  dataUltimaAtualizacao: string;
+  motivoUltimaAtualizacao: string;
 }
 
 /**
@@ -273,11 +193,63 @@ const gruposRotulo: Record<string, string> = {
   "grupo-b": "Grupo B",
 };
 
-const unidadesRotulo: Record<string, string> = {
-  "emef-1": "EMEF João da Silva",
-  "emei-1": "EMEI Maria Aparecida",
-  "cei-1": "CEI Jardim das Flores",
+interface UnidadeEstatica {
+  nome: string;
+  codigo: string;
+  tipo: string;
+  dre: string;
+}
+
+const unidadesEstaticas: Record<string, UnidadeEstatica> = {
+  "emef-1": {
+    nome: "EMEF João da Silva",
+    codigo: "019453",
+    tipo: "EMEF",
+    dre: "butanta",
+  },
+  "emei-1": {
+    nome: "EMEI Maria Aparecida",
+    codigo: "092118",
+    tipo: "EMEI",
+    dre: "itaquera",
+  },
+  "cei-1": {
+    nome: "CEI Jardim das Flores",
+    codigo: "400567",
+    tipo: "CEI DIRET",
+    dre: "sao-miguel",
+  },
+  "emef-alipio": {
+    nome: "EMEF Alípio Correa Neto, Prof.",
+    codigo: "017205",
+    tipo: "EMEF",
+    dre: "butanta",
+  },
 };
+
+const funcoesPorCargo: Record<string, string[]> = {
+  pei: [
+    "Professor regente",
+    "Professor de apoio pedagógico (PAP)",
+    "Professor orientador de informática educativa (POIE)",
+  ],
+  pef1: ["Professor regente", "Professor orientador de sala de leitura"],
+  adjunto: ["Professor em módulo", "Professor regente"],
+};
+
+const motivosAtualizacao = [
+  "Atualização de endereço",
+  "Alteração de jornada de trabalho",
+  "Mudança de lotação",
+  "Inclusão de laudo médico",
+  "Atualização de dados bancários",
+];
+
+export const SEM_RETORNO_AFASTAMENTO = "00/00/0000";
+
+function formatarData(data: dayjs.Dayjs): string {
+  return data.format("DD/MM/YYYY");
+}
 
 function montarServidor(
   indice: number,
@@ -289,6 +261,19 @@ function montarServidor(
   const liminarCodigo =
     extras.liminarCodigo ?? (indice % 3 === 0 ? "sim" : "nao");
   const unidadeEducacional = extras.unidadeEducacional ?? "emef-1";
+  const dre = extras.dre ?? (indice % 2 === 0 ? "butanta" : "itaquera");
+  const unidadeLotacao = unidadesEstaticas[unidadeEducacional];
+  const exerceEmOutraUnidade = indice % 5 === 4;
+  const unidadeExercicio = exerceEmOutraUnidade
+    ? unidadesEstaticas["emef-alipio"]
+    : unidadeLotacao;
+  const funcoes = funcoesPorCargo[cargoAtualCodigo];
+  const dataRetornoAfastamento =
+    extras.dataRetornoAfastamento ??
+    (indice % 4 === 0 ? "10/01/2024" : SEM_RETORNO_AFASTAMENTO);
+  const convocacao = dayjs(
+    new Date(2016 + (indice % 7), indice % 12, (indice % 27) + 1),
+  );
 
   return {
     id: String(indice + 1),
@@ -299,27 +284,41 @@ function montarServidor(
     vinculo: String((indice % 3) + 1),
     cargoAtualCodigo,
     cargoAtual: `${1000000 + indice} - ${cargosRotulo[cargoAtualCodigo]}`,
-    funcao: cargosRotulo[cargoAtualCodigo],
+    funcao: funcoes[indice % funcoes.length],
     atividade: indice % 2 === 0 ? "Regência" : "Apoio pedagógico",
     classificacaoGeral: String(40 + (indice % 30)),
     classificacaoPcd: indice % 7 === 0 ? "1" : "0",
     classificacaoNna: indice % 11 === 0 ? "1" : "0",
-    dataConvocacao: "01/02/2020",
-    dataEscolha: "15/03/2020",
-    dataRetornoAfastamento:
-      extras.dataRetornoAfastamento ??
-      (indice % 4 === 0 ? "10/01/2024" : "00/00/0000"),
+    dataConvocacao: formatarData(convocacao),
+    dataEscolha: formatarData(convocacao.add(14 + (indice % 5), "day")),
+    dataRetornoAfastamento,
     grupoAtividadesCodigo,
     grupoAtividade: gruposRotulo[grupoAtividadesCodigo],
     liminarCodigo,
     liminar: liminarCodigo === "sim" ? "Sim" : "Não",
     unidadeEducacional,
-    localExercicio: unidadesRotulo[unidadeEducacional],
-    lotacao: unidadesRotulo[unidadeEducacional],
-    dre: extras.dre ?? (indice % 2 === 0 ? "butanta" : "itaquera"),
+    localExercicio: unidadeExercicio.nome,
+    lotacao: unidadeLotacao.nome,
+    dre,
     tipoLaudo:
       extras.tipoLaudo ?? (indice % 2 === 0 ? "readaptacao" : "restricao"),
     tipoVaga: extras.tipoVaga ?? (indice % 2 === 0 ? "livre" : "ocupada"),
+    tipoLotacao: indice % 4 === 1 ? "Provisória" : "Definitiva",
+    codigoLotacao: unidadeLotacao.codigo,
+    tipoUnidadeLotacao: unidadeLotacao.tipo,
+    codigoExercicio: unidadeExercicio.codigo,
+    dreExercicio: exerceEmOutraUnidade ? unidadeExercicio.dre : dre,
+    tipoUnidadeExercicio: unidadeExercicio.tipo,
+    dataNomeacao: formatarData(convocacao.add(45 + (indice % 10), "day")),
+    dataUltimaAtualizacao: formatarData(
+      dayjs(
+        new Date(2024 + (indice % 2), (indice * 5) % 12, (indice % 27) + 1),
+      ),
+    ),
+    motivoUltimaAtualizacao:
+      dataRetornoAfastamento === SEM_RETORNO_AFASTAMENTO
+        ? motivosAtualizacao[indice % motivosAtualizacao.length]
+        : "Retorno de afastamento",
   };
 }
 

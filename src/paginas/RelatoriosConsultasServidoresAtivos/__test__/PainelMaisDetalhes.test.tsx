@@ -2,16 +2,16 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ComProvedores } from "@/testes/renderizarComTema";
 import { PainelMaisDetalhes } from "../componentes/PainelMaisDetalhes";
-import { detalhesServidorEstatico } from "../dados/dadosEstaticos";
+import { servidoresAtivosEstaticos } from "../dados/dadosEstaticos";
+import { montarDetalhesServidor } from "../dados/montarDetalhesServidor";
+
+const servidor = servidoresAtivosEstaticos[0];
+const detalhes = montarDetalhesServidor(servidor);
 
 function renderizarPainel(aoFechar = jest.fn()) {
   render(
     <ComProvedores>
-      <PainelMaisDetalhes
-        aberto
-        secoes={detalhesServidorEstatico}
-        aoFechar={aoFechar}
-      />
+      <PainelMaisDetalhes aberto secoes={detalhes} aoFechar={aoFechar} />
     </ComProvedores>,
   );
   return aoFechar;
@@ -33,7 +33,7 @@ describe("PainelMaisDetalhes", () => {
   it("exibe todas as secoes com titulo e descricao", () => {
     renderizarPainel();
 
-    for (const secao of detalhesServidorEstatico) {
+    for (const secao of detalhes) {
       const regiao = screen.getByRole("region", { name: secao.titulo });
       expect(within(regiao).getByText(secao.titulo)).toBeInTheDocument();
       expect(within(regiao).getByText(secao.descricao)).toBeInTheDocument();
@@ -49,13 +49,9 @@ describe("PainelMaisDetalhes", () => {
     expect(
       within(identificacao).getByText("Nome completo"),
     ).toBeInTheDocument();
-    expect(
-      within(identificacao).getByText("Maria Silva Santos"),
-    ).toBeInTheDocument();
-    expect(within(identificacao).getByText("123.456.7")).toBeInTheDocument();
-    expect(
-      within(identificacao).getByText("123.456.789-10"),
-    ).toBeInTheDocument();
+    expect(within(identificacao).getByText(servidor.nome)).toBeInTheDocument();
+    expect(within(identificacao).getByText(servidor.rf)).toBeInTheDocument();
+    expect(within(identificacao).getByText(servidor.cpf)).toBeInTheDocument();
 
     const lotacao = screen.getByRole("region", { name: "Lotação" });
     expect(within(lotacao).getByText("Tipo de lotação")).toBeInTheDocument();
