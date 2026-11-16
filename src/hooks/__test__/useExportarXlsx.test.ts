@@ -26,19 +26,22 @@ describe("useExportarXlsx", () => {
 
   it("nao exporta quando nao ha colunas", async () => {
     const { result } = renderHook(() => useExportarXlsx());
+    let exportou = true;
 
     await act(async () => {
-      await result.current.exportarXlsx([{ nome: "Ana" }], []);
+      exportou = await result.current.exportarXlsx([{ nome: "Ana" }], []);
     });
 
+    expect(exportou).toBe(false);
     expect(mockWriteFile).not.toHaveBeenCalled();
   });
 
   it("gera planilha com cabecalho e linhas na ordem das colunas", async () => {
     const { result } = renderHook(() => useExportarXlsx());
+    let exportou = false;
 
     await act(async () => {
-      await result.current.exportarXlsx(
+      exportou = await result.current.exportarXlsx(
         [
           { nome: "Ana", rf: "1", oculto: "x" },
           { nome: "Bruno", rf: "2", oculto: "y" },
@@ -51,6 +54,7 @@ describe("useExportarXlsx", () => {
       );
     });
 
+    expect(exportou).toBe(true);
     expect(mockAoaToSheet).toHaveBeenCalledWith([
       ["Nome", "R.F"],
       ["Ana", "1"],
@@ -67,6 +71,24 @@ describe("useExportarXlsx", () => {
         /^relatorio-banco-servidores-\d{4}-\d{2}-\d{2}\.xlsx$/,
       ),
     );
+  });
+
+  it("propaga o erro quando a geracao do arquivo falha", async () => {
+    mockWriteFile.mockImplementationOnce(() => {
+      throw new Error("falha ao gravar");
+    });
+    const { result } = renderHook(() => useExportarXlsx());
+
+    await expect(
+      act(async () => {
+        await result.current.exportarXlsx(
+          [{ nome: "Ana" }],
+          [{ chave: "nome", titulo: "Nome" }],
+        );
+      }),
+    ).rejects.toThrow("falha ao gravar");
+
+    expect(result.current.exportando).toBe(false);
   });
 
   it("monta classificacao com Geral, PCD e NNA na mesma celula", async () => {

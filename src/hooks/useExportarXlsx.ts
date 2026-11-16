@@ -51,8 +51,8 @@ export function useExportarXlsx() {
       linhas: readonly T[],
       colunas: readonly ColunaExportacaoXlsx[],
       nomeArquivo = "relatorio",
-    ) => {
-      if (exportando || colunas.length === 0) return;
+    ): Promise<boolean> => {
+      if (exportando || colunas.length === 0) return false;
 
       setExportando(true);
 
@@ -69,6 +69,7 @@ export function useExportarXlsx() {
 
         const hoje = new Date().toISOString().slice(0, 10);
         XLSX.writeFile(pasta, `${nomeArquivo}-${hoje}.xlsx`);
+        return true;
       } finally {
         setExportando(false);
       }
