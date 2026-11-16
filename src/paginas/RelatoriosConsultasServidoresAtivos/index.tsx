@@ -1,5 +1,7 @@
+import { useCallback } from "react";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { useExportarXlsx } from "@/hooks/useExportarXlsx";
+import { useNotificacao } from "@/hooks/useNotificacao";
 import { ConteudoPagina } from "@/estilos";
 import { CardFormFiltrosServidores } from "./componentes/CardFormFiltrosServidores";
 import { CardTabelaServidores } from "./componentes/CardTabelaServidores";
@@ -12,6 +14,34 @@ export function ServidoresAtivos() {
   const estado = useServidoresAtivos();
   const colunas = useColunasServidores();
   const { exportarXlsx, exportando } = useExportarXlsx();
+  const notificacao = useNotificacao();
+
+  const aoExportarRelatorio = useCallback(async () => {
+    try {
+      const exportou = await exportarXlsx(
+        estado.servidores,
+        colunas.colunasVisiveis,
+        "relatorio-banco-servidores",
+      );
+      if (!exportou) return;
+
+      notificacao.sucesso({
+        titulo: "Sucesso!",
+        texto: "O relatório foi baixado.",
+      });
+    } catch {
+      notificacao.erro({
+        titulo: "Erro!",
+        texto:
+          "Não conseguimos baixar o relatório. Por favor, tente novamente!",
+      });
+    }
+  }, [
+    colunas.colunasVisiveis,
+    estado.servidores,
+    exportarXlsx,
+    notificacao,
+  ]);
 
   return (
     <>
@@ -29,13 +59,7 @@ export function ServidoresAtivos() {
             aoPersonalizarColunas={colunas.abrirPainel}
             aoVerDetalhes={estado.abrirPainelDetalhes}
             exportando={exportando}
-            aoExportar={() =>
-              exportarXlsx(
-                estado.servidores,
-                colunas.colunasVisiveis,
-                "relatorio-banco-servidores",
-              )
-            }
+            aoExportar={aoExportarRelatorio}
           />
         ) : null}
       </ConteudoPagina>

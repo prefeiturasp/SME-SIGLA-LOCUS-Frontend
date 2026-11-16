@@ -1,5 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { App as AntdApp } from "antd";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { CAMINHOS } from "@/rotas/caminhos";
@@ -18,18 +19,20 @@ jest.mock("@/hooks/useExportarXlsx", () => ({
 function renderPagina() {
   return render(
     <ComTema>
-      <MemoryRouter
-        initialEntries={[CAMINHOS.relatoriosConsultasServidoresAtivos]}
-      >
-        <Routes>
-          <Route element={<LayoutBase />}>
-            <Route
-              path={CAMINHOS.relatoriosConsultasServidoresAtivos}
-              element={<ServidoresAtivos />}
-            />
-          </Route>
-        </Routes>
-      </MemoryRouter>
+      <AntdApp>
+        <MemoryRouter
+          initialEntries={[CAMINHOS.relatoriosConsultasServidoresAtivos]}
+        >
+          <Routes>
+            <Route element={<LayoutBase />}>
+              <Route
+                path={CAMINHOS.relatoriosConsultasServidoresAtivos}
+                element={<ServidoresAtivos />}
+              />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </AntdApp>
     </ComTema>,
   );
 }
@@ -82,7 +85,8 @@ describe("ServidoresAtivos", () => {
     ).toBeInTheDocument();
   });
 
-  it("exporta XLSX dos servidores filtrados apos a busca", async () => {
+  it("exporta XLSX e mostra sucesso apos a busca", async () => {
+    mockExportarXlsx.mockResolvedValueOnce(true);
     renderPagina();
 
     await userEvent.type(
@@ -104,6 +108,30 @@ describe("ServidoresAtivos", () => {
       ]),
       "relatorio-banco-servidores",
     );
+    expect(await screen.findByText("Sucesso!")).toBeInTheDocument();
+    expect(screen.getByText("O relatório foi baixado.")).toBeInTheDocument();
+  });
+
+  it("mostra erro quando a exportacao XLSX falha", async () => {
+    mockExportarXlsx.mockRejectedValueOnce(new Error("falha"));
+    renderPagina();
+
+    await userEvent.type(
+      screen.getByPlaceholderText("Exemplo: João da Silva"),
+      "Maria",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Buscar" }));
+
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Exportar relatório" }),
+    );
+
+    expect(await screen.findByText("Erro!")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Não conseguimos baixar o relatório. Por favor, tente novamente!",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("abre e fecha o painel de mais detalhes pela linha da tabela", async () => {
