@@ -16,6 +16,7 @@ export const colors = {
 
   appBackground: "#fafafa",
   stripedBackground: "#f8f9fa",
+  tableSubheaderBackground: "#f5f5f5",
   white: "#ffffff",
 
   success: "#009c0a",

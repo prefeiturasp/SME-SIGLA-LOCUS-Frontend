@@ -102,6 +102,16 @@ describe("breadcrumbDaRota", () => {
     ]);
   });
 
+  it("nomeia a rota de servidores ativos", () => {
+    expect(
+      breadcrumbDaRota(CAMINHOS.relatoriosConsultasServidoresAtivos),
+    ).toEqual([
+      INICIO_COM_LINK,
+      { titulo: "Relatórios consultas" },
+      { titulo: "Servidores ativos" },
+    ]);
+  });
+
   it("nomeia a rota de pagina nao encontrada", () => {
     expect(breadcrumbDaRota(CAMINHOS.naoEncontrado)).toEqual([
       INICIO_COM_LINK,

@@ -3,12 +3,11 @@ module.exports = {
  
   testTimeout: 10000,
   maxWorkers: 4,
-  roots: ["<rootDir>/src", "<rootDir>/modules/sigla"],
+  roots: ["<rootDir>/src"],
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "\\.(svg|jpg|jpeg|png|gif)(\\?.*)?$": "<rootDir>/__mocks__/fileMock.cjs",
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^@sigla/(.*)$": "<rootDir>/modules/sigla/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.cjs"],
   coverageReporters: ["text", "html", "lcov"],

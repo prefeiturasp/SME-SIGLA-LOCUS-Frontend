@@ -1,6 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { hidratarEnvLocal } from "@/config/hidratarEnvLocal";
+import { aplicarSessaoDaQuery } from "@/servicos/recursos/autenticacao";
 import { App } from "./App";
+
+hidratarEnvLocal();
+aplicarSessaoDaQuery();
 
 const container = document.getElementById("root");
 if (!container) {

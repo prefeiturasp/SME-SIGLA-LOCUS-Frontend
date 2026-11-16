@@ -61,6 +61,18 @@ const SUBMENU_CADASTRO: SubitemMenu[] = [
   { key: "cadastro-classificacao", label: "Classificação" },
 ];
 
+const SUBMENU_RELATORIOS_CONSULTAS: SubitemMenu[] = [
+  {
+    key: "relatorios-consultas-servidores-ativos",
+    label: "Servidores ativos",
+    path: CAMINHOS.relatoriosConsultasServidoresAtivos,
+  },
+  {
+    key: "relatorios-consultas-servidores-vacanciados",
+    label: "Servidores vacanciados",
+  },
+];
+
 export const ITENS_MENU: ItemMenu[] = [
   {
     key: "inicio",
@@ -84,7 +96,8 @@ export const ITENS_MENU: ItemMenu[] = [
     key: "relatorios-consultas",
     label: "Relatórios consultas",
     icone: SummarizeOutlinedIcon,
-    prefix: ["/relatorios"],
+    prefix: ["/relatorios-consultas"],
+    submenu: SUBMENU_RELATORIOS_CONSULTAS,
   },
   {
     key: "data-base",
