@@ -10,11 +10,11 @@ jest.mock(
   "xlsx",
   () => ({
     utils: {
-      aoa_to_sheet: (...args: any[]) => mockAoaToSheet(...args),
-      book_new: (...args: any[]) => mockBookNew(...args),
-      book_append_sheet: (...args: any[]) => mockBookAppendSheet(...args),
+      aoa_to_sheet: (...args: unknown[]) => mockAoaToSheet(...args),
+      book_new: (...args: unknown[]) => mockBookNew(...args),
+      book_append_sheet: (...args: unknown[]) => mockBookAppendSheet(...args),
     },
-    writeFile: (...args: any[]) => mockWriteFile(...args),
+    writeFile: (...args: unknown[]) => mockWriteFile(...args),
   }),
   { virtual: true },
 );
@@ -130,5 +130,81 @@ describe("useExportarXlsx", () => {
       ["Ana", "Geral: 52|PCD: 0|NNA: 0"],
       ["Bruno", "Geral: 10|PCD: 0|NNA: 0"],
     ]);
+  });
+
+  describe("exportarAbasXlsx", () => {
+    it("nao exporta quando nao ha abas", async () => {
+      const { result } = renderHook(() => useExportarXlsx());
+      let exportou = true;
+
+      await act(async () => {
+        exportou = await result.current.exportarAbasXlsx([]);
+      });
+
+      expect(exportou).toBe(false);
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    it("gera uma planilha por aba, na ordem e com o nome informado", async () => {
+      const { result } = renderHook(() => useExportarXlsx());
+      let exportou = false;
+
+      await act(async () => {
+        exportou = await result.current.exportarAbasXlsx(
+          [
+            {
+              nome: "Painel",
+              linhas: [["Componente curricular", "Arte"], [], ["Módulos", 105]],
+            },
+            {
+              nome: "Unidades educacionais",
+              linhas: [
+                ["Código de lotação", "Vagas"],
+                ["091488", "+5 disponíveis"],
+              ],
+            },
+          ],
+          "relatorio-gestao-unidades",
+        );
+      });
+
+      expect(exportou).toBe(true);
+      expect(mockAoaToSheet).toHaveBeenNthCalledWith(1, [
+        ["Componente curricular", "Arte"],
+        [],
+        ["Módulos", 105],
+      ]);
+      expect(mockAoaToSheet).toHaveBeenNthCalledWith(2, [
+        ["Código de lotação", "Vagas"],
+        ["091488", "+5 disponíveis"],
+      ]);
+      expect(
+        mockBookAppendSheet.mock.calls.map((chamada) => chamada[2]),
+      ).toEqual(["Painel", "Unidades educacionais"]);
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.stringMatching(
+          /^relatorio-gestao-unidades-\d{4}-\d{2}-\d{2}\.xlsx$/,
+        ),
+      );
+    });
+
+    it("propaga o erro e libera o estado de exportacao", async () => {
+      mockWriteFile.mockImplementationOnce(() => {
+        throw new Error("falha ao gravar");
+      });
+      const { result } = renderHook(() => useExportarXlsx());
+
+      await expect(
+        act(async () => {
+          await result.current.exportarAbasXlsx([
+            { nome: "Painel", linhas: [["Componente curricular", "Arte"]] },
+          ]);
+        }),
+      ).rejects.toThrow("falha ao gravar");
+
+      expect(result.current.exportando).toBe(false);
+    });
   });
 });

@@ -12,7 +12,14 @@ export interface ColunaExportacaoXlsx {
   subcolunas?: readonly SubcolunaExportacaoXlsx[];
 }
 
-function valorCelula(valor: unknown): string | number {
+export type CelulaXlsx = string | number;
+
+export interface AbaExportacaoXlsx {
+  nome: string;
+  linhas: readonly (readonly CelulaXlsx[])[];
+}
+
+function valorCelula(valor: unknown): CelulaXlsx {
   if (valor == null) return "";
   if (typeof valor === "string" || typeof valor === "number") return valor;
   return String(valor);
@@ -34,12 +41,26 @@ function valorClassificacao(
 function valorColuna(
   registro: Record<string, unknown>,
   coluna: ColunaExportacaoXlsx,
-): string | number {
+): CelulaXlsx {
   if (coluna.chave === "classificacao" && coluna.subcolunas?.length) {
     return valorClassificacao(registro, coluna.subcolunas);
   }
 
   return valorCelula(registro[coluna.chave]);
+}
+
+function baixarPasta(
+  abas: readonly AbaExportacaoXlsx[],
+  nomeArquivo: string,
+): void {
+  const pasta = XLSX.utils.book_new();
+  abas.forEach((aba) => {
+    const planilha = XLSX.utils.aoa_to_sheet(aba.linhas as CelulaXlsx[][]);
+    XLSX.utils.book_append_sheet(pasta, planilha, aba.nome);
+  });
+
+  const hoje = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(pasta, `${nomeArquivo}-${hoje}.xlsx`);
 }
 
 /** Monta e baixa um .xlsx com as colunas informadas (ordem/visibilidade do chamador). */
@@ -63,12 +84,10 @@ export function useExportarXlsx() {
           return colunas.map((coluna) => valorColuna(registro, coluna));
         });
 
-        const planilha = XLSX.utils.aoa_to_sheet([cabecalho, ...corpo]);
-        const pasta = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(pasta, planilha, "Servidores");
-
-        const hoje = new Date().toISOString().slice(0, 10);
-        XLSX.writeFile(pasta, `${nomeArquivo}-${hoje}.xlsx`);
+        baixarPasta(
+          [{ nome: "Servidores", linhas: [cabecalho, ...corpo] }],
+          nomeArquivo,
+        );
         return true;
       } finally {
         setExportando(false);
@@ -77,7 +96,26 @@ export function useExportarXlsx() {
     [exportando],
   );
 
-  return { exportarXlsx, exportando };
+  const exportarAbasXlsx = useCallback(
+    async (
+      abas: readonly AbaExportacaoXlsx[],
+      nomeArquivo = "relatorio",
+    ): Promise<boolean> => {
+      if (exportando || abas.length === 0) return false;
+
+      setExportando(true);
+
+      try {
+        baixarPasta(abas, nomeArquivo);
+        return true;
+      } finally {
+        setExportando(false);
+      }
+    },
+    [exportando],
+  );
+
+  return { exportarXlsx, exportarAbasXlsx, exportando };
 }
 
 export default useExportarXlsx;

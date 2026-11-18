@@ -4,7 +4,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Button, Result } from "antd";
-import { useRef } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
 import { ModalBase } from "@/componentes/ModalBase";
@@ -18,15 +18,38 @@ import { LinhaHistoricoAlteracoes } from "./componentes/LinhaHistoricoAlteracoes
 import { PainelHistorico } from "./componentes/PainelHistorico";
 import { PainelAfastados } from "./componentes/PainelAfastados";
 import { PainelLotacao } from "./componentes/PainelLotacao";
+import { montarAbaRelatorioDetalhe } from "./dados/montarPlanilhaDetalhe";
 import { useDetalheUnidade } from "./hooks/useDetalheUnidade";
-import { useExportarPdf } from "@/hooks/useExportarPdf";
+import { useExportarXlsx } from "@/hooks/useExportarXlsx";
+import { useNotificacao } from "@/hooks/useNotificacao";
 
 export function DetalheUnidadeEducacional() {
   const navigate = useNavigate();
   const estado = useDetalheUnidade();
-  const { exportarPdf, exportando } = useExportarPdf();
-  const refConteudo = useRef<HTMLDivElement>(null);
-  const { unidade, somenteLeitura, versaoVisualizada } = estado;
+  const { exportarAbasXlsx, exportando } = useExportarXlsx();
+  const notificacao = useNotificacao();
+  const { unidade, linhas, somenteLeitura, versaoVisualizada } = estado;
+
+  const aoExportarRelatorio = useCallback(async () => {
+    try {
+      const exportou = await exportarAbasXlsx(
+        [montarAbaRelatorioDetalhe(unidade, linhas)],
+        unidade ? `relatorio-ue-${unidade.codigoLotacao}` : "relatorio-ue",
+      );
+      if (!exportou) return;
+
+      notificacao.sucesso({
+        titulo: "Sucesso!",
+        texto: "O relatório foi baixado.",
+      });
+    } catch {
+      notificacao.erro({
+        titulo: "Erro!",
+        texto:
+          "Não conseguimos baixar o relatório. Por favor, tente novamente!",
+      });
+    }
+  }, [exportarAbasXlsx, linhas, notificacao, unidade]);
 
   if (estado.indisponivel) {
     return (
@@ -107,14 +130,7 @@ export function DetalheUnidadeEducacional() {
               type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
               loading={exportando}
-              onClick={() =>
-                exportarPdf(
-                  refConteudo,
-                  unidade
-                    ? `relatorio-ue-${unidade.codigoLotacao}`
-                    : "relatorio-ue",
-                )
-              }
+              onClick={aoExportarRelatorio}
             >
               Exportar relatório
             </Button>
@@ -142,7 +158,7 @@ export function DetalheUnidadeEducacional() {
         }
       />
 
-      <ConteudoPagina ref={refConteudo}>
+      <ConteudoPagina>
         {somenteLeitura && versaoVisualizada ? (
           <BannerVersaoHistorica
             data={versaoVisualizada.data}
@@ -150,7 +166,7 @@ export function DetalheUnidadeEducacional() {
           />
         ) : null}
 
-        <CardInformacoesUnidade />
+        <CardInformacoesUnidade estatisticas={unidade?.estatisticas ?? []} />
 
         <CardComponentesDetalhe
           linhas={estado.linhas}
