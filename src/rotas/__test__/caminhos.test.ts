@@ -112,6 +112,16 @@ describe("breadcrumbDaRota", () => {
     ]);
   });
 
+  it("nomeia a rota de servidores vacanciados", () => {
+    expect(
+      breadcrumbDaRota(CAMINHOS.relatoriosConsultasServidoresVacanciados),
+    ).toEqual([
+      INICIO_COM_LINK,
+      { titulo: "Relatórios consultas" },
+      { titulo: "Servidores vacanciados" },
+    ]);
+  });
+
   it("nomeia a rota de pagina nao encontrada", () => {
     expect(breadcrumbDaRota(CAMINHOS.naoEncontrado)).toEqual([
       INICIO_COM_LINK,
