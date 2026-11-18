@@ -70,6 +70,7 @@ const SUBMENU_RELATORIOS_CONSULTAS: SubitemMenu[] = [
   {
     key: "relatorios-consultas-servidores-vacanciados",
     label: "Servidores vacanciados",
+    path: CAMINHOS.relatoriosConsultasServidoresVacanciados,
   },
 ];
 

@@ -11,6 +11,8 @@ export const CAMINHOS = {
     "/cadastro/atualizacao/vacancia-servidor/:rf",
   relatoriosConsultasServidoresAtivos:
     "/relatorios-consultas/servidores-ativos",
+  relatoriosConsultasServidoresVacanciados:
+    "/relatorios-consultas/servidores-vacanciados",
   naoEncontrado: "/pagina-nao-encontrada",
 } as const;
 
@@ -77,6 +79,11 @@ export const BREADCRUMB_POR_ROTA: Record<string, ItemBreadcrumb[]> = {
     INICIO,
     { titulo: "Relatórios consultas" },
     { titulo: "Servidores ativos" },
+  ],
+  [CAMINHOS.relatoriosConsultasServidoresVacanciados]: [
+    INICIO,
+    { titulo: "Relatórios consultas" },
+    { titulo: "Servidores vacanciados" },
   ],
   [CAMINHOS.naoEncontrado]: [INICIO, { titulo: "Página não encontrada" }],
 };

@@ -32,6 +32,7 @@ describe("menuItemAtivo", () => {
     ["/cadastro/rota-ainda-inexistente", "cadastro"],
     ["/vagas/listagem", "vagas"],
     ["/relatorios-consultas/servidores-ativos", "relatorios-consultas"],
+    ["/relatorios-consultas/servidores-vacanciados", "relatorios-consultas"],
     ["/pagina-nao-encontrada", ""],
   ])("em %s ativa o item '%s'", (rota, chaveEsperada) => {
     expect(menuItemAtivo(rota)).toBe(chaveEsperada);

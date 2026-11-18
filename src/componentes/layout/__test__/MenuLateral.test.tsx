@@ -13,6 +13,8 @@ const ROTA_GESTAO = "/cadastro/gestao-unidades-educacionais";
 const ROTA_REGISTRAR = "/cadastro/registrar-unidade-educacional";
 const ROTA_RF = "/cadastro/atualizacao/registro-funcional";
 const ROTA_SERVIDORES_ATIVOS = "/relatorios-consultas/servidores-ativos";
+const ROTA_SERVIDORES_VACANCIADOS =
+  "/relatorios-consultas/servidores-vacanciados";
 const SELECIONADO = "ant-menu-item-selected";
 
 function renderComRota(rota: string) {
@@ -29,6 +31,10 @@ function renderComRota(rota: string) {
           <Route
             path={ROTA_SERVIDORES_ATIVOS}
             element={<p>Tela de servidores ativos</p>}
+          />
+          <Route
+            path={ROTA_SERVIDORES_VACANCIADOS}
+            element={<p>Tela de servidores vacanciados</p>}
           />
         </Routes>
       </MemoryRouter>
@@ -188,14 +194,26 @@ describe("MenuLateral", () => {
     await waitFor(() => expect(painel()).toBeInTheDocument());
     expect(painel()).toHaveTextContent("Servidores ativos");
     expect(painel()).toHaveTextContent("Servidores vacanciados");
-    expect(
-      screen.getByText("Servidores vacanciados").closest('[role="menuitem"]'),
-    ).toHaveAttribute("aria-disabled", "true");
 
     await userEvent.click(screen.getByText("Servidores ativos"));
 
     expect(
       await screen.findByText("Tela de servidores ativos"),
+    ).toBeInTheDocument();
+    await waitFor(() => expect(painel()).not.toBeInTheDocument());
+    expect(itemDoMenu("Relatórios consultas")).toHaveClass(SELECIONADO);
+  });
+
+  it("vai para Servidores vacanciados pelo submenu de Relatórios e consultas", async () => {
+    renderComRota(ROTA_GESTAO);
+
+    await userEvent.click(itemDoMenu("Relatórios consultas"));
+    await waitFor(() => expect(painel()).toBeInTheDocument());
+
+    await userEvent.click(screen.getByText("Servidores vacanciados"));
+
+    expect(
+      await screen.findByText("Tela de servidores vacanciados"),
     ).toBeInTheDocument();
     await waitFor(() => expect(painel()).not.toBeInTheDocument());
     expect(itemDoMenu("Relatórios consultas")).toHaveClass(SELECIONADO);
