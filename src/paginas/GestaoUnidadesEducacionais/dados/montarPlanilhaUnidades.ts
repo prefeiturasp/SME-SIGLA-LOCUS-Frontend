@@ -1,8 +1,14 @@
 import type { AbaExportacaoXlsx, CelulaXlsx } from "@/hooks/useExportarXlsx";
 import { textoSaldoVagas } from "@/servicos/recursos/unidadesEducacionais/textos";
-import type { UnidadeEducacional } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import type {
+  EstatisticaPainel,
+  PainelComponente,
+  UnidadeEducacional,
+} from "@/servicos/recursos/unidadesEducacionais/tipos";
 
 export const NOME_ABA_UNIDADES = "Unidades educacionais";
+
+const CABECALHO_INDICADORES: CelulaXlsx[] = ["Indicador", "Valor", "Descrição"];
 
 const CABECALHO_UNIDADES: CelulaXlsx[] = [
   "Código de lotação",
@@ -15,10 +21,24 @@ const CABECALHO_UNIDADES: CelulaXlsx[] = [
   "Vagas",
 ];
 
+export function montarLinhasIndicadores(
+  estatisticas: readonly EstatisticaPainel[],
+): CelulaXlsx[][] {
+  return [
+    CABECALHO_INDICADORES,
+    ...estatisticas.map((estatistica) => [
+      estatistica.rotulo,
+      estatistica.valor,
+      estatistica.legenda,
+    ]),
+  ];
+}
+
 export function montarAbaRelatorioUnidades(
+  painel: PainelComponente | undefined,
   unidades: readonly UnidadeEducacional[],
 ): AbaExportacaoXlsx {
-  const linhas = unidades.map((unidade) => [
+  const linhasUnidades = unidades.map((unidade) => [
     unidade.codigoLotacao,
     unidade.tipo,
     unidade.nome,
@@ -31,6 +51,15 @@ export function montarAbaRelatorioUnidades(
 
   return {
     nome: NOME_ABA_UNIDADES,
-    linhas: [CABECALHO_UNIDADES, ...linhas],
+    linhas: [
+      ["Painel de informações por componente curricular"],
+      ["Componente curricular", painel?.componente ?? ""],
+      [],
+      ...montarLinhasIndicadores(painel?.estatisticas ?? []),
+      [],
+      ["Unidades educacionais"],
+      CABECALHO_UNIDADES,
+      ...linhasUnidades,
+    ],
   };
 }

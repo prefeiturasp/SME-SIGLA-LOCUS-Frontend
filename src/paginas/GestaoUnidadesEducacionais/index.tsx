@@ -22,6 +22,7 @@ export function GestaoUnidadesEducacionais() {
   const {
     unidades,
     total,
+    painel,
     componenteSelecionado,
     statusListagem,
     carregando,
@@ -33,7 +34,7 @@ export function GestaoUnidadesEducacionais() {
   const aoExportarRelatorio = useCallback(async () => {
     try {
       const exportou = await exportarAbasXlsx(
-        [montarAbaRelatorioUnidades(unidades)],
+        [montarAbaRelatorioUnidades(painel, unidades)],
         "relatorio-gestao-unidades",
       );
       if (!exportou) return;
@@ -49,7 +50,7 @@ export function GestaoUnidadesEducacionais() {
           "Não conseguimos baixar o relatório. Por favor, tente novamente!",
       });
     }
-  }, [exportarAbasXlsx, notificacao, unidades]);
+  }, [exportarAbasXlsx, notificacao, painel, unidades]);
 
   return (
     <>

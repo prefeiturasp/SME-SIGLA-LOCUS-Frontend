@@ -3,18 +3,27 @@ import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
 import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
 import { Card, Typography } from "antd";
+import type { ReactNode } from "react";
 import { CardDados } from "@/componentes/CardDados";
 import { GridCardsDados } from "@/estilos";
 import type { EstatisticaPainel } from "@/servicos/recursos/unidadesEducacionais/tipos";
 
 const { Title, Paragraph } = Typography;
 
+const ICONES_ESTATISTICA: Record<string, ReactNode> = {
+  modulos: <ViewModuleOutlinedIcon />,
+  lotacao: <GroupsOutlinedIcon />,
+  afastados: <PersonRemoveOutlinedIcon />,
+  vagas: <EventSeatOutlinedIcon />,
+};
+
 export interface CardInformacoesUnidadeProps {
   estatisticas: EstatisticaPainel[];
 }
 
-export function CardInformacoesUnidade() { 
-
+export function CardInformacoesUnidade({
+  estatisticas,
+}: CardInformacoesUnidadeProps) {
   return (
     <Card>
       <Title level={4} style={{ marginTop: 0 }}>
@@ -25,31 +34,16 @@ export function CardInformacoesUnidade() {
         a quantidade de afastados dentro da unidade educacional.
       </Paragraph>
 
-      <GridCardsDados  $colunas={4}>
-        <CardDados
-          valor="105"
-          titulo="Módulos"
-          descricao="Quantidade de vagas disponibilizadas"
-          icone={<ViewModuleOutlinedIcon />}
-        />
-        <CardDados
-          valor="108"
-          titulo="Lotação"
-          descricao="Quantidade de professores alocados"
-          icone={<GroupsOutlinedIcon />}
-        />
-        <CardDados
-          valor="8"
-          titulo="Afastados"
-          descricao="Quantidade de afastamentos temporários"
-          icone={<PersonRemoveOutlinedIcon />}
-        />
-        <CardDados
-          valor="5"
-          titulo="Vagas"
-          descricao="Quantidade de vagas ainda disponíveis"
-          icone={<EventSeatOutlinedIcon />}
-        />
+      <GridCardsDados $colunas={4}>
+        {estatisticas.map((estatistica) => (
+          <CardDados
+            key={estatistica.chave}
+            valor={estatistica.valor}
+            titulo={estatistica.rotulo}
+            descricao={estatistica.legenda}
+            icone={ICONES_ESTATISTICA[estatistica.chave]}
+          />
+        ))}
       </GridCardsDados>
     </Card>
   );
