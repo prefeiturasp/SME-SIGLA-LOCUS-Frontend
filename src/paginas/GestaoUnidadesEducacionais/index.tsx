@@ -1,13 +1,15 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Button } from "antd";
-import { useRef } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { CabecalhoPagina } from "@/componentes/CabecalhoPagina";
-import { useExportarPdf } from "@/hooks/useExportarPdf";
+import { useExportarXlsx } from "@/hooks/useExportarXlsx";
+import { useNotificacao } from "@/hooks/useNotificacao";
 import { ConteudoPagina } from "@/estilos";
 import { CAMINHOS, caminhoDetalheUE } from "@/rotas/caminhos";
 import { opcoesComponenteCurricular } from "./dados/dadosEstaticos";
+import { montarAbaRelatorioUnidades } from "./dados/montarPlanilhaUnidades";
 import { useGestaoUnidades } from "./hooks/useGestaoUnidades";
 import { CardComponenteCurricular } from "./componentes/CardComponenteCurricular";
 import { CardFormFiltrosUnidades } from "./componentes/CardFormFiltrosUnidades";
@@ -15,11 +17,12 @@ import { TabelaUnidades } from "./componentes/TabelaUnidades";
 
 export function GestaoUnidadesEducacionais() {
   const navigate = useNavigate();
-  const { exportarPdf, exportando } = useExportarPdf();
-  const refConteudo = useRef<HTMLDivElement>(null);
+  const { exportarAbasXlsx, exportando } = useExportarXlsx();
+  const notificacao = useNotificacao();
   const {
     unidades,
     total,
+    painel,
     componenteSelecionado,
     statusListagem,
     carregando,
@@ -27,6 +30,27 @@ export function GestaoUnidadesEducacionais() {
     aplicarFiltros,
     limparFiltros,
   } = useGestaoUnidades();
+
+  const aoExportarRelatorio = useCallback(async () => {
+    try {
+      const exportou = await exportarAbasXlsx(
+        [montarAbaRelatorioUnidades(painel, unidades)],
+        "relatorio-gestao-unidades",
+      );
+      if (!exportou) return;
+
+      notificacao.sucesso({
+        titulo: "Sucesso!",
+        texto: "O relatório foi baixado.",
+      });
+    } catch {
+      notificacao.erro({
+        titulo: "Erro!",
+        texto:
+          "Não conseguimos baixar o relatório. Por favor, tente novamente!",
+      });
+    }
+  }, [exportarAbasXlsx, notificacao, painel, unidades]);
 
   return (
     <>
@@ -45,9 +69,7 @@ export function GestaoUnidadesEducacionais() {
               type="default"
               icon={<FileUploadOutlinedIcon fontSize="small" />}
               loading={exportando}
-              onClick={() =>
-                exportarPdf(refConteudo, "relatorio-gestao-unidades")
-              }
+              onClick={aoExportarRelatorio}
             >
               Exportar relatório
             </Button>
@@ -55,7 +77,7 @@ export function GestaoUnidadesEducacionais() {
         }
       />
 
-      <ConteudoPagina ref={refConteudo}>
+      <ConteudoPagina>
         <CardComponenteCurricular
           opcoesComponente={opcoesComponenteCurricular}
           componenteSelecionado={componenteSelecionado}
