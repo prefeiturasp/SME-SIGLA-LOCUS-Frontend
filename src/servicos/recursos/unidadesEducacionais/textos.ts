@@ -5,6 +5,8 @@
  * que os dois lugares nao divirjam.
  */
 
+import { situacaoDoSaldo } from "./tipos";
+
 /** Legendas dos cartoes de estatistica (listagem e detalhe). */
 export const LEGENDAS_ESTATISTICA = {
   modulos: "Quantidade de vagas disponibilizadas",
@@ -43,3 +45,11 @@ export const DICAS_COLUNAS_COMPONENTE = {
     "Quantidade de professores deste componente curricular cuja situação resultou na abertura de vagas na unidade escolar.",
   vagas: DICA_VAGAS,
 } as const;
+
+export function textoSaldoVagas(saldo: number): string {
+  return {
+    disponivel: `+${saldo} disponíveis`,
+    excedente: `${saldo} excedentes`,
+    completo: "Completo",
+  }[situacaoDoSaldo(saldo)];
+}

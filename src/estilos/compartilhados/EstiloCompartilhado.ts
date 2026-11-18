@@ -20,6 +20,7 @@ import {
   type OpcoesNotificacao,
 } from "@/hooks/useNotificacao";
 import { situacaoDoSaldo } from "@/servicos/recursos/unidadesEducacionais/tipos";
+import { textoSaldoVagas } from "@/servicos/recursos/unidadesEducacionais/textos";
 
 /* ======= modal ======= */
 
@@ -140,19 +141,10 @@ export interface TagVagasProps {
 export function TagVagas({ saldo }: TagVagasProps) {
   const situacao = situacaoDoSaldo(saldo);
 
-  const { Icone, texto } = {
-    disponivel: {
-      Icone: CheckCircleOutlinedIcon,
-      texto: `+${saldo} disponíveis`,
-    },
-    excedente: {
-      Icone: TrendingDownOutlinedIcon,
-      texto: `${saldo} excedentes`,
-    },
-    completo: {
-      Icone: RemoveCircleOutlineOutlinedIcon,
-      texto: "Completo",
-    },
+  const Icone = {
+    disponivel: CheckCircleOutlinedIcon,
+    excedente: TrendingDownOutlinedIcon,
+    completo: RemoveCircleOutlineOutlinedIcon,
   }[situacao];
 
   return createElement(
@@ -162,7 +154,7 @@ export function TagVagas({ saldo }: TagVagasProps) {
       "data-situacao": situacao,
     } as ComponentProps<typeof Tag> & { "data-situacao": string },
     createElement(Icone, { fontSize: "inherit", "aria-hidden": true }),
-    texto,
+    textoSaldoVagas(saldo),
   );
 }
 
