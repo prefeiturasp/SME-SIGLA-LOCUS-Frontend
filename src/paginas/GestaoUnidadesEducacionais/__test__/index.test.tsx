@@ -70,7 +70,7 @@ describe("GestaoUnidadesEducacionais (integração com a casca)", () => {
     expect(screen.getByText(/Versão v2.3 - Homologada/)).toBeInTheDocument();
   });
 
-  it("exporta o relatorio em XLSX so com a aba de unidades e mostra sucesso", async () => {
+  it("exporta o relatorio em XLSX com o painel acima da tabela e mostra sucesso", async () => {
     mockExportarAbasXlsx.mockResolvedValueOnce(true);
     renderNaCasca(<GestaoUnidadesEducacionais />);
 
@@ -83,8 +83,26 @@ describe("GestaoUnidadesEducacionais (integração com a casca)", () => {
     expect(nomeArquivo).toBe("relatorio-gestao-unidades");
     expect(abas).toHaveLength(1);
     expect(abas[0].nome).toBe("Unidades educacionais");
-    expect(abas[0].linhas).toHaveLength(11);
-    expect(abas[0].linhas[1]).toEqual([
+    const linhas = abas[0].linhas;
+    expect(linhas).toHaveLength(23);
+    expect(linhas[0]).toEqual([
+      "Painel de informações por componente curricular",
+    ]);
+    expect(linhas[1]).toEqual(["Componente curricular", "Arte"]);
+    expect(linhas[3]).toEqual(["Indicador", "Valor", "Descrição"]);
+    expect(linhas[4]).toEqual([
+      "Módulos",
+      105,
+      "Quantidade de vagas disponibilizadas",
+    ]);
+    expect(linhas[9]).toEqual([
+      "Turmas ativas",
+      16,
+      "Quantidade de turmas ativas no EOL.",
+    ]);
+    expect(linhas[11]).toEqual(["Unidades educacionais"]);
+    expect(linhas[12][0]).toBe("Código de lotação");
+    expect(linhas[13]).toEqual([
       "091488",
       "CECI",
       "Cidade Tiradentes",
