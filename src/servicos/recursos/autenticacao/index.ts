@@ -13,6 +13,20 @@ export const USUARIO_MOCK: UsuarioLogado = {
   email: "marcus.andrade@sme.prefeitura.sp.gov.br",
 };
 
+export const URL_SIGLA = "/sigla/";
+
+export function usuarioLogado(): boolean {
+  try {
+    return Boolean(localStorage.getItem("TOKEN"));
+  } catch {
+    return false;
+  }
+}
+
+export function redirectSigla(): void {
+  window.location.replace(URL_SIGLA);
+}
+
 export function obterUsuarioLogado(): UsuarioLogado {
   try {
     const bruto = localStorage.getItem("USUARIO");

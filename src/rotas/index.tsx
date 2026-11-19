@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LayoutBase } from "@/componentes/layout/LayoutBase";
 import { AtualizacaoServidorRF } from "@/paginas/AtualizacaoServidorRF";
@@ -10,11 +11,33 @@ import { RegistrarUnidadeEducacional } from "@/paginas/RegistrarUnidadeEducacion
 import { NaoEncontrado } from "@/paginas/NaoEncontrado";
 import { ServidoresAtivos } from "@/paginas/RelatoriosConsultasServidoresAtivos";
 import { ServidoresVacanciados } from "@/paginas/RelatoriosConsultasServidoresVacanciados";
+import {
+  redirectSigla,
+  usuarioLogado,
+} from "@/servicos/recursos/autenticacao";
 import { CAMINHOS } from "./caminhos";
+
+/** Compatibilidade da URL antiga /locus/sigla */
+function RedirectSigla() {
+  const logado = usuarioLogado();
+
+  useEffect(() => {
+    if (!logado) {
+      redirectSigla();
+    }
+  }, [logado]);
+
+  if (logado) {
+    return <Navigate to={CAMINHOS.cadastroGestaoUnidades} replace />;
+  }
+
+  return null;
+}
 
 export function RotasApp() {
   return (
     <Routes>
+      <Route path="/sigla/*" element={<RedirectSigla />} />
       <Route element={<LayoutBase />}>
         <Route
           path={CAMINHOS.cadastroGestaoUnidades}

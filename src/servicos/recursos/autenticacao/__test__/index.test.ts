@@ -1,6 +1,7 @@
 import {
   encerrarSessao,
   obterUsuarioLogado,
+  usuarioLogado,
   USUARIO_MOCK,
 } from "../index";
 
@@ -10,6 +11,19 @@ describe("obterUsuarioLogado", () => {
   it("cai no mock quando o JSON do storage e invalido", () => {
     localStorage.setItem("USUARIO", "{ nao e json");
     expect(obterUsuarioLogado()).toEqual(USUARIO_MOCK);
+  });
+});
+
+describe("usuarioLogado", () => {
+  afterEach(() => localStorage.clear());
+
+  it("retorna true quando existe TOKEN", () => {
+    localStorage.setItem("TOKEN", "abc");
+    expect(usuarioLogado()).toBe(true);
+  });
+
+  it("retorna false quando nao existe TOKEN", () => {
+    expect(usuarioLogado()).toBe(false);
   });
 });
 
