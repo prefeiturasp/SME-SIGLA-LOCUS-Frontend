@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_BASE_PATH?: string;
   /** Somente uso local: quando "local", aplica sessão via query string. */
   readonly ENVIRONMENT?: string;
+  readonly SIGLA_URL?: string;
   readonly BASE_URL: string;
 }
 

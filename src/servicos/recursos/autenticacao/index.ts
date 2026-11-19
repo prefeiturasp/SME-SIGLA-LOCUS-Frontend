@@ -13,6 +13,41 @@ export const USUARIO_MOCK: UsuarioLogado = {
   email: "marcus.andrade@sme.prefeitura.sp.gov.br",
 };
 
+export const SIGLA_LOGIN_PATH = "/sigla/login";
+
+export function usuarioLogado(): boolean {
+  try {
+    return Boolean(localStorage.getItem("TOKEN"));
+  } catch {
+    return false;
+  }
+}
+
+export function obterEnvironment(): string | undefined {
+  const valor = window.__ENV__?.ENVIRONMENT;
+  return valor || undefined;
+}
+
+export function obterSiglaUrl(): string | undefined {
+  const valor = window.__ENV__?.SIGLA_URL;
+  return valor || undefined;
+}
+
+export function urlLogin(
+  environment: string | undefined = obterEnvironment(),
+  siglaUrl: string | undefined = obterSiglaUrl(),
+): string {
+  if (environment === "local" && siglaUrl) {
+    const base = siglaUrl.replace(/\/$/, "");
+    return `${base}/login`;
+  }
+  return SIGLA_LOGIN_PATH;
+}
+
+export function redirectSigla(): void {
+  window.location.replace(urlLogin());
+}
+
 export function obterUsuarioLogado(): UsuarioLogado {
   try {
     const bruto = localStorage.getItem("USUARIO");
@@ -25,9 +60,8 @@ export function obterUsuarioLogado(): UsuarioLogado {
   return USUARIO_MOCK;
 }
 
-
 export function encerrarSessao(
-  aoFinalizar: () => void = () => window.location.reload(),
+  aoFinalizar: () => void = redirectSigla,
 ): void {
   try {
     localStorage.removeItem("TOKEN");
@@ -36,11 +70,6 @@ export function encerrarSessao(
     // ignora storage indisponivel
   }
   aoFinalizar();
-}
-
-export function obterEnvironment(): string | undefined {
-  const valor = window.__ENV__?.ENVIRONMENT;
-  return valor || undefined;
 }
 
 /**
