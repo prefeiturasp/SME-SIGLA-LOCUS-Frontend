@@ -1,7 +1,3 @@
-/**
- * Expõe ENVIRONMENT no window.__ENV__ a partir do Vite (uso local).
- * Importar só no entry (main) para o Jest não carregar import.meta.
- */
 export function hidratarEnvLocal(): void {
   if (typeof window === "undefined") return;
 
@@ -9,5 +5,6 @@ export function hidratarEnvLocal(): void {
     ...(window.__ENV__ ?? {}),
     ENVIRONMENT:
       import.meta.env.ENVIRONMENT || window.__ENV__?.ENVIRONMENT || "",
+    SIGLA_URL: import.meta.env.SIGLA_URL || window.__ENV__?.SIGLA_URL || "",
   };
 }

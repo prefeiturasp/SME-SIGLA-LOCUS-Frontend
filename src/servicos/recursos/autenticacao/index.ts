@@ -23,8 +23,28 @@ export function usuarioLogado(): boolean {
   }
 }
 
+export function obterEnvironment(): string | undefined {
+  const valor = window.__ENV__?.ENVIRONMENT;
+  return valor || undefined;
+}
+
+export function obterSiglaUrl(): string | undefined {
+  const valor = window.__ENV__?.SIGLA_URL;
+  return valor || undefined;
+}
+
+export function urlPortalSigla(
+  environment: string | undefined = obterEnvironment(),
+  siglaUrl: string | undefined = obterSiglaUrl(),
+): string {
+  if (environment === "local" && siglaUrl) {
+    return siglaUrl.endsWith("/") ? siglaUrl : `${siglaUrl}/`;
+  }
+  return URL_SIGLA;
+}
+
 export function redirectSigla(): void {
-  window.location.replace(URL_SIGLA);
+  window.location.replace(urlPortalSigla());
 }
 
 export function obterUsuarioLogado(): UsuarioLogado {
@@ -39,9 +59,8 @@ export function obterUsuarioLogado(): UsuarioLogado {
   return USUARIO_MOCK;
 }
 
-
 export function encerrarSessao(
-  aoFinalizar: () => void = () => window.location.reload(),
+  aoFinalizar: () => void = redirectSigla,
 ): void {
   try {
     localStorage.removeItem("TOKEN");
@@ -50,11 +69,6 @@ export function encerrarSessao(
     // ignora storage indisponivel
   }
   aoFinalizar();
-}
-
-export function obterEnvironment(): string | undefined {
-  const valor = window.__ENV__?.ENVIRONMENT;
-  return valor || undefined;
 }
 
 /**

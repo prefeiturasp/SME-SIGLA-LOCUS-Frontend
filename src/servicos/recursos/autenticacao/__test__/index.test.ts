@@ -1,6 +1,8 @@
 import {
   encerrarSessao,
   obterUsuarioLogado,
+  URL_SIGLA,
+  urlPortalSigla,
   usuarioLogado,
   USUARIO_MOCK,
 } from "../index";
@@ -24,6 +26,27 @@ describe("usuarioLogado", () => {
 
   it("retorna false quando nao existe TOKEN", () => {
     expect(usuarioLogado()).toBe(false);
+  });
+});
+
+describe("urlPortalSigla", () => {
+  it("expõe o path do portal fora do ambiente local", () => {
+    expect(URL_SIGLA).toBe("/sigla/");
+    expect(urlPortalSigla("qa")).toBe("/sigla/");
+    expect(urlPortalSigla(undefined)).toBe("/sigla/");
+  });
+
+  it("usa SIGLA_URL quando ENVIRONMENT=local", () => {
+    expect(urlPortalSigla("local", "http://localhost:5173")).toBe(
+      "http://localhost:5173/",
+    );
+    expect(urlPortalSigla("local", "http://localhost:5173/")).toBe(
+      "http://localhost:5173/",
+    );
+  });
+
+  it("mantém URL_SIGLA em local sem SIGLA_URL", () => {
+    expect(urlPortalSigla("local", undefined)).toBe("/sigla/");
   });
 });
 
