@@ -1,8 +1,8 @@
 import {
   encerrarSessao,
   obterUsuarioLogado,
-  URL_SIGLA,
-  urlPortalSigla,
+  SIGLA_LOGIN_PATH,
+  urlLogin,
   usuarioLogado,
   USUARIO_MOCK,
 } from "../index";
@@ -29,24 +29,24 @@ describe("usuarioLogado", () => {
   });
 });
 
-describe("urlPortalSigla", () => {
-  it("expõe o path do portal fora do ambiente local", () => {
-    expect(URL_SIGLA).toBe("/sigla/");
-    expect(urlPortalSigla("qa")).toBe("/sigla/");
-    expect(urlPortalSigla(undefined)).toBe("/sigla/");
+describe("urlLogin", () => {
+  it("expõe o path de login do portal fora do ambiente local", () => {
+    expect(SIGLA_LOGIN_PATH).toBe("/sigla/login");
+    expect(urlLogin("qa")).toBe("/sigla/login");
+    expect(urlLogin(undefined)).toBe("/sigla/login");
   });
 
-  it("usa SIGLA_URL quando ENVIRONMENT=local", () => {
-    expect(urlPortalSigla("local", "http://localhost:5173")).toBe(
-      "http://localhost:5173/",
+  it("usa SIGLA_URL/login quando ENVIRONMENT=local", () => {
+    expect(urlLogin("local", "http://localhost:5173")).toBe(
+      "http://localhost:5173/login",
     );
-    expect(urlPortalSigla("local", "http://localhost:5173/")).toBe(
-      "http://localhost:5173/",
+    expect(urlLogin("local", "http://localhost:5173/")).toBe(
+      "http://localhost:5173/login",
     );
   });
 
-  it("mantém URL_SIGLA em local sem SIGLA_URL", () => {
-    expect(urlPortalSigla("local", undefined)).toBe("/sigla/");
+  it("mantém SIGLA_LOGIN_PATH em local sem SIGLA_URL", () => {
+    expect(urlLogin("local", undefined)).toBe("/sigla/login");
   });
 });
 

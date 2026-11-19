@@ -13,7 +13,7 @@ export const USUARIO_MOCK: UsuarioLogado = {
   email: "marcus.andrade@sme.prefeitura.sp.gov.br",
 };
 
-export const URL_SIGLA = "/sigla/";
+export const SIGLA_LOGIN_PATH = "/sigla/login";
 
 export function usuarioLogado(): boolean {
   try {
@@ -33,18 +33,19 @@ export function obterSiglaUrl(): string | undefined {
   return valor || undefined;
 }
 
-export function urlPortalSigla(
+export function urlLogin(
   environment: string | undefined = obterEnvironment(),
   siglaUrl: string | undefined = obterSiglaUrl(),
 ): string {
   if (environment === "local" && siglaUrl) {
-    return siglaUrl.endsWith("/") ? siglaUrl : `${siglaUrl}/`;
+    const base = siglaUrl.replace(/\/$/, "");
+    return `${base}/login`;
   }
-  return URL_SIGLA;
+  return SIGLA_LOGIN_PATH;
 }
 
 export function redirectSigla(): void {
-  window.location.replace(urlPortalSigla());
+  window.location.replace(urlLogin());
 }
 
 export function obterUsuarioLogado(): UsuarioLogado {
